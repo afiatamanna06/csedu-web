@@ -1,14 +1,13 @@
 import Navbar from "@/components/navigation/navbar";
-import About from "@/pages/about/about";
-import Contact from "@/pages/contact/contact";
-import Home from "@/pages/home/home";
 import {
   Outlet,
   createRouter,
-  createRoute,
   createRootRoute,
+  type RouteComponent,
+  createRoute,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { routeConfigs } from "./route-configs";
 const rootRoute = createRootRoute({
   component: () => (
     <>
@@ -19,24 +18,26 @@ const rootRoute = createRootRoute({
   ),
 });
 
-const homeRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/",
-  component: Home,
-});
+function createChildRoute<TPath extends string>(
+  path: TPath,
+  component: RouteComponent
+) {
+  return createRoute({
+    getParentRoute: () => rootRoute,
+    path,
+    component,
+  });
+}
 
-const aboutRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/about",
-  component: About,
-});
+const childRoutes = routeConfigs.map((config) =>
+  createChildRoute(config.path, config.component)
+);
 
-const contactRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/contact",
-  component: Contact,
-});
-
-const routeTree = rootRoute.addChildren([homeRoute, aboutRoute, contactRoute]);
+const routeTree = rootRoute.addChildren(childRoutes);
 
 export const router = createRouter({ routeTree });
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}

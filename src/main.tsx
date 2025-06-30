@@ -5,12 +5,6 @@ import App from "./App.tsx";
 import { RouterProvider } from "@tanstack/react-router";
 import { router } from "./route/route.tsx";
 
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
-}
-
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />
