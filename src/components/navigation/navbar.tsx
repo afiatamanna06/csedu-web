@@ -55,8 +55,27 @@ export const Navbar: React.FC = () => {
     <>
       {/* Top Navbar */}
       <nav className="w-full bg-white shadow-sm fixed top-0 z-50">
+        <div className="flex items-center justify-between px-4 py-3 shadow-md lg:px-0 lg:py-0">
         <Banner />
-        <div className="px-4 py-3 flex justify-between items-center">
+        {/* Mobile Menu Button */}
+          <div className="lg:hidden flex items-center">
+            {/* Mobile Search */}
+            <Button
+              variant="ghost"
+              className="flex justify-start p-4"
+              onClick={() => setSearchOpen(true)}
+            >
+              <Search className="mr-2" />
+            </Button>
+            <button
+              className=""
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X /> : <Menu />}
+            </button>
+          </div>
+          </div>
+        <div className="hidden lg:flex bg-[#EFEFFF] px-4 py-3 justify-between items-center">
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-6 items-center">
             {navItems.map((item, index) => (
@@ -83,13 +102,7 @@ export const Navbar: React.FC = () => {
             </Drawer>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X /> : <Menu />}
-          </button>
+          
         </div>
 
         {/* Mobile Menu */}
@@ -98,14 +111,6 @@ export const Navbar: React.FC = () => {
             {navItems.map((item, index) => (
               <MobileMenuItem key={index} item={item} />
             ))}
-            {/* Mobile Search */}
-            <Button
-              variant="ghost"
-              className="w-full flex justify-start p-4"
-              onClick={() => setSearchOpen(true)}
-            >
-              <Search className="mr-2" /> Search
-            </Button>
           </div>
         )}
       </nav>
