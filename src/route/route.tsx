@@ -10,11 +10,11 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { routeConfigs } from "./route-configs";
 const rootRoute = createRootRoute({
   component: () => (
-    <>
+    <div className="flex flex-col min-h-[120vh]">
       <Navbar />
       <Outlet />
       <TanStackRouterDevtools />
-    </>
+    </div>
   ),
 });
 

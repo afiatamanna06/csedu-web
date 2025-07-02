@@ -1,8 +1,9 @@
-import * as React from 'react';
-import { Link } from '@tanstack/react-router';
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { Button } from '@/components/ui/button';
-import { Menu, X, Search } from 'lucide-react';
+import * as React from "react";
+import { Link } from "@tanstack/react-router";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { Button } from "@/components/ui/button";
+import { Menu, X, Search } from "lucide-react";
+import Banner from "../banner/banner";
 
 type NavItem = {
   name: string;
@@ -15,46 +16,55 @@ export const Navbar: React.FC = () => {
   const [searchOpen, setSearchOpen] = React.useState(false);
 
   const navItems: NavItem[] = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Academic', href: '/academic' },
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Academic", href: "/academic" },
     {
-      name: 'People',
+      name: "People",
       submenu: [
         {
-          name: 'Faculty Members',
+          name: "Faculty Members",
           submenu: [
-            { name: 'All', href: '/people/faculty/all' },
-            { name: 'Position', href: '/people/faculty/position' },
-            { name: 'Research', href: '/people/faculty/research' },
+            { name: "All", href: "/people/faculty/all" },
+            { name: "Position", href: "/people/faculty/position" },
+            { name: "Research", href: "/people/faculty/research" },
           ],
         },
-        { name: 'Officers and Staffs', href: '/people/staffs' },
+        { name: "Officers and Staffs", href: "/people/staffs" },
       ],
     },
-    { name: 'Research', href: '/research' },
-    { name: 'Student', href: '/student' },
-    { name: 'Alumni', href: '/alumni' },
-    { name: 'Contact', href: '/contact' },
+    {
+      name: "Research",
+      submenu: [
+        {
+          name: "ML and AI",
+          submenu: [
+            { name: "All", href: "/research/mlai/all" },
+            { name: "ML", href: "/research/mlai/ml" },
+          ],
+        },
+        { name: "Security", href: "/research/security" },
+      ],
+    },
+    { name: "Student", href: "/student" },
+    { name: "Alumni", href: "/alumni" },
+    { name: "Contact", href: "/contact" },
   ];
 
   return (
     <>
       {/* Top Navbar */}
-      <nav className="w-full bg-white shadow-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          {/* Logo */}
-          <Link to="/" className="font-bold text-lg">
-            CSE DU
-          </Link>
-
+      <nav className="w-full bg-white shadow-sm fixed top-0 z-50">
+        <Banner />
+        <div className="px-4 py-3 flex justify-between items-center">
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-6 items-center">
             {navItems.map((item, index) => (
               <DesktopMenuItem key={index} item={item} />
             ))}
-
-            {/* Search Button */}
+          </div>
+          {/* Search Button */}
+          <div className="hidden lg:flex">
             <Drawer open={searchOpen} onOpenChange={setSearchOpen}>
               <DrawerTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -74,14 +84,17 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <button className="lg:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button
+            className="lg:hidden"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
             {mobileMenuOpen ? <X /> : <Menu />}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white border-t shadow-sm">
+          <div className="lg:hidden bg-white border-t shadow-sm max-h-[80vh] overflow-auto">
             {navItems.map((item, index) => (
               <MobileMenuItem key={index} item={item} />
             ))}
@@ -117,7 +130,7 @@ const DesktopMenuItem: React.FC<{ item: NavItem }> = ({ item }) => {
           <div key={idx} className="relative group">
             {sub.submenu ? (
               <>
-                <button className="w-full text-left px-4 py-2 hover:bg-gray-100">
+                <button className="w-[10rem] text-left px-4 py-2 hover:bg-gray-100">
                   {sub.name}
                 </button>
                 <div className="absolute left-full top-0 bg-white shadow-md rounded-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200">
@@ -171,7 +184,10 @@ const MobileMenuItem: React.FC<{ item: NavItem }> = ({ item }) => {
           {item.submenu.map((sub, idx) => (
             <div key={idx}>
               {!sub.submenu ? (
-                <Link to={sub.href!} className="block px-4 py-2 hover:bg-gray-100">
+                <Link
+                  to={sub.href!}
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
                   {sub.name}
                 </Link>
               ) : (
@@ -199,7 +215,11 @@ const MobileSubMenu: React.FC<{ item: NavItem }> = ({ item }) => {
       {open && (
         <div className="pl-4 border-l">
           {item.submenu?.map((sub, idx) => (
-            <Link key={idx} to={sub.href!} className="block px-4 py-2 hover:bg-gray-100">
+            <Link
+              key={idx}
+              to={sub.href!}
+              className="block px-4 py-2 hover:bg-gray-100"
+            >
               {sub.name}
             </Link>
           ))}
@@ -208,4 +228,3 @@ const MobileSubMenu: React.FC<{ item: NavItem }> = ({ item }) => {
     </div>
   );
 };
-
