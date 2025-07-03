@@ -90,7 +90,7 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice, isArchived = false }) =
           <div className="flex flex-col gap-3 flex-shrink-0">
             <button
               onClick={handleDownloadPDF}
-              className="flex items-center gap-2 px-4 py-2 bg-secondary hover:bg-secondary/90 text-white rounded-lg text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-y hover:bg-primary-y/90 text-primary rounded-lg text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md"
               title="Download PDF"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

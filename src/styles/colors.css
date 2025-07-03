@@ -3,6 +3,8 @@
   --primary2: #002147;
   --secondary: #ffb606;
   --t-yellow: #E6A400;
+  --gray-dark: #565252;
+  --primary-y: #F4D20E;
 }
 
 /* CSS classes for the colors */
@@ -10,15 +12,23 @@
 .bg-primary2 { background-color: var(--primary2); }
 .bg-secondary { background-color: var(--secondary); }
 .bg-t-yellow { background-color: var(--t-yellow); }
+.bg-gray-dark { background-color: var(--gray-dark); }
+.bg-primary-y { background-color: var(--primary-y); }
 
 .text-primary { color: var(--primary); }
 .text-primary2 { color: var(--primary2); }
 .text-secondary { color: var(--secondary); }
 .text-t-yellow { color: var(--t-yellow); }
+.text-gray-dark { color: var(--gray-dark); }
+.text-primary-y { color: var(--primary-y); }
 
 .hover\:bg-primary:hover { background-color: var(--primary); }
 .hover\:bg-primary2:hover { background-color: var(--primary2); }
 .hover\:bg-secondary\/90:hover { background-color: color-mix(in srgb, var(--secondary) 90%, transparent); }
 .hover\:bg-primary\/90:hover { background-color: color-mix(in srgb, var(--primary) 90%, transparent); }
+.hover\:bg-gray-dark:hover { background-color: var(--gray-dark); }
+.hover\:bg-primary-y:hover { background-color: var(--primary-y); }
 
 .group-hover\:text-primary:hover { color: var(--primary); }
+.group-hover\:text-gray-dark:hover { color: var(--gray-dark); }
+.group-hover\:text-primary-y:hover { color: var(--primary-y); }

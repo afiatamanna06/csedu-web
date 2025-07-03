@@ -134,7 +134,7 @@ const Notice: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 py-16 pt-40"> {/* Changed from py-16 to py-16 pt-24 */}
+    <div className="bg-gray-50 py-16 pt-40 overflow-visible">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Notice Board title */}
         <div className="mb-12">
@@ -155,7 +155,7 @@ const Notice: React.FC = () => {
                 </h2>
               ) : (
                 <h2 className="text-3xl font-bold text-primary">
-                  Notice and Announcements
+                  Notice & Announcements
                 </h2>
               )}
             </div>
@@ -165,10 +165,10 @@ const Notice: React.FC = () => {
               {!showArchived && (
                 <button
                   onClick={toggleArchived}
-                  className="flex items-center gap-2 px-4 py-2 text-primary hover:bg-blue-50 hover:text-primary border border-gray-300 rounded-xl transition-all duration-200 font-medium"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-primary-y text-primary hover:bg-primary-y/90 hover:text-primary rounded transition-all duration-200 font-medium text-sm"
                 >
                   <svg 
-                    className="w-5 h-5" 
+                    className="w-4 h-4" 
                     fill="currentColor" 
                     viewBox="0 0 20 20"
                   >
@@ -181,7 +181,7 @@ const Notice: React.FC = () => {
               {showArchived && (
                 <button
                   onClick={toggleArchived}
-                  className="flex items-center gap-2 px-3 py-2 text-primary hover:bg-blue-50 hover:text-primary border border-gray-300 rounded-xl transition-all duration-200 font-medium"
+                  className="flex items-center gap-2 px-3 py-1.5 text-primary hover:bg-blue-50 hover:text-primary rounded transition-all duration-200 font-medium text-sm"
                 >
                   <svg 
                     className="w-4 h-4" 
@@ -196,7 +196,7 @@ const Notice: React.FC = () => {
               )}
             </div>
           </div>
-          <div className="w-80 h-1 bg-secondary mb-8"></div>
+          <div className="w-80 h-1 bg-primary-y mb-8"></div>
         </div>
 
         {/* Archive Notice */}
@@ -225,7 +225,17 @@ const Notice: React.FC = () => {
             <select
               value={selectedCategory}
               onChange={(e) => handleFilterChange('category', e.target.value)}
-              className="border border-gray-300 text-gray-800 px-4 py-2 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white"
+              className="border border-gray-300 text-gray-dark px-3 py-1.5 rounded font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white text-sm"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                backgroundPosition: 'right 0.5rem center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '1.5em 1.5em',
+                paddingRight: '2.5rem',
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none'
+              }}
             >
               {noticeCategories.map((category) => (
                 <option key={category.id} value={category.id}>
@@ -238,7 +248,17 @@ const Notice: React.FC = () => {
             <select
               value={selectedYear}
               onChange={(e) => handleFilterChange('year', e.target.value)}
-              className="border border-gray-300 text-gray-800 px-4 py-2 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white"
+              className="border border-gray-300 text-gray-dark px-3 py-1.5 rounded font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white text-sm"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                backgroundPosition: 'right 0.5rem center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '1.5em 1.5em',
+                paddingRight: '2.5rem',
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none'
+              }}
             >
               <option value="">All Years</option>
               {years.map((year) => (
@@ -252,7 +272,17 @@ const Notice: React.FC = () => {
             <select
               value={selectedMonth}
               onChange={(e) => handleFilterChange('month', e.target.value)}
-              className="border border-gray-300 text-gray-800 px-4 py-2 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white"
+              className="border border-gray-300 text-gray-dark px-3 py-1.5 rounded font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white text-sm"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                backgroundPosition: 'right 0.5rem center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '1.5em 1.5em',
+                paddingRight: '2.5rem',
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none'
+              }}
             >
               <option value="">All Months</option>
               {months.map((month) => (
@@ -266,7 +296,17 @@ const Notice: React.FC = () => {
             <select
               value={sortOrder}
               onChange={(e) => handleFilterChange('sort', e.target.value)}
-              className="border border-gray-300 text-gray-800 px-4 py-2 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white"
+              className="border border-gray-300 text-gray-dark px-3 py-1.5 rounded font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white text-sm"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                backgroundPosition: 'right 0.5rem center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '1.5em 1.5em',
+                paddingRight: '2.5rem',
+                appearance: 'none',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none'
+              }}
             >
               <option value="oldest">Oldest First</option>
               <option value="newest">Newest First</option>
@@ -276,7 +316,7 @@ const Notice: React.FC = () => {
             {(selectedYear || selectedMonth) && (
               <button
                 onClick={clearYearMonthFilters}
-                className="px-3 py-2 text-sm text-red-600 hover:text-red-800 border border-red-300 hover:border-red-400 rounded-xl transition-colors"
+                className="px-3 py-1.5 text-sm text-red-600 hover:text-red-800 border border-red-300 hover:border-red-400 rounded transition-colors"
               >
                 Clear Filters
               </button>
@@ -295,7 +335,7 @@ const Notice: React.FC = () => {
                 value={searchQuery}
                 onChange={handleSearch}
                 placeholder="Search for notices..."
-                className="border border-gray-300 text-gray-800 px-4 py-2 rounded-full text-sm w-70 focus:outline-none focus:ring-1 focus:ring-gray-300 pr-10" 
+                className="border border-gray-300 text-gray-800 px-3 py-1.5 rounded text-sm w-70 focus:outline-none focus:ring-1 focus:ring-gray-300 pr-10" 
               />
               <button
                 className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 pr-3"
