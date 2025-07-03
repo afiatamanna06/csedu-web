@@ -5,6 +5,11 @@
   --t-yellow: #E6A400;
   --gray-dark: #565252;
   --primary-y: #F4D20E;
+  --light-purple: #F3E8FF;
+  --purple: #9333EA;
+  --archive-text: #7C3939;
+  --archive-border: #FDE68A;
+  --archive-bg: #FFFBEB;
 }
 
 /* CSS classes for the colors */
@@ -14,6 +19,11 @@
 .bg-t-yellow { background-color: var(--t-yellow); }
 .bg-gray-dark { background-color: var(--gray-dark); }
 .bg-primary-y { background-color: var(--primary-y); }
+.bg-light-purple { background-color: var(--light-purple); }
+.bg-purple { background-color: var(--purple); }
+.bg-archive-text { background-color: var(--archive-text); }
+.bg-archive-border { background-color: var(--archive-border); }
+.bg-archive-bg { background-color: var(--archive-bg); }
 
 .text-primary { color: var(--primary); }
 .text-primary2 { color: var(--primary2); }
@@ -21,6 +31,13 @@
 .text-t-yellow { color: var(--t-yellow); }
 .text-gray-dark { color: var(--gray-dark); }
 .text-primary-y { color: var(--primary-y); }
+.text-light-purple { color: var(--light-purple); }
+.text-purple { color: var(--purple); }
+.text-archive-text { color: var(--archive-text); }
+.text-archive-border { color: var(--archive-border); }
+.text-archive-bg { color: var(--archive-bg); }
+
+.border-archive-border { border-color: var(--archive-border); }
 
 .hover\:bg-primary:hover { background-color: var(--primary); }
 .hover\:bg-primary2:hover { background-color: var(--primary2); }
@@ -28,7 +45,11 @@
 .hover\:bg-primary\/90:hover { background-color: color-mix(in srgb, var(--primary) 90%, transparent); }
 .hover\:bg-gray-dark:hover { background-color: var(--gray-dark); }
 .hover\:bg-primary-y:hover { background-color: var(--primary-y); }
+.hover\:bg-light-purple:hover { background-color: var(--light-purple); }
+.hover\:bg-purple:hover { background-color: var(--purple); }
 
 .group-hover\:text-primary:hover { color: var(--primary); }
 .group-hover\:text-gray-dark:hover { color: var(--gray-dark); }
 .group-hover\:text-primary-y:hover { color: var(--primary-y); }
+.group-hover\:text-light-purple:hover { color: var(--light-purple); }
+.group-hover\:text-purple:hover { color: var(--purple); }

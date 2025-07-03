@@ -41,9 +41,6 @@ const Notice: React.FC = () => {
     { value: '12', name: 'December' }
   ];
 
-  // Get archived notices count
-  const archivedNoticesCount = getArchivedNotices(sampleNotices).length;
-
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
@@ -165,23 +162,24 @@ const Notice: React.FC = () => {
               {!showArchived && (
                 <button
                   onClick={toggleArchived}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-primary-y text-primary hover:bg-primary-y/90 hover:text-primary rounded transition-all duration-200 font-medium text-sm"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-primary-y text-primary hover:bg-primary-y/90 hover:text-primary rounded-md transition-all duration-200 font-medium text-sm cursor-pointer hover:shadow-md"
                 >
                   <svg 
                     className="w-4 h-4" 
-                    fill="currentColor" 
-                    viewBox="0 0 20 20"
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
                   >
-                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                   </svg>
-                  View Archived ({archivedNoticesCount})
+                  View Archived
                 </button>
               )}
               
               {showArchived && (
                 <button
                   onClick={toggleArchived}
-                  className="flex items-center gap-2 px-3 py-1.5 text-primary hover:bg-blue-50 hover:text-primary rounded transition-all duration-200 font-medium text-sm"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-primary-y text-primary hover:bg-primary-y/90 hover:text-primary rounded-md transition-all duration-200 font-medium text-sm cursor-pointer hover:shadow-md"
                 >
                   <svg 
                     className="w-4 h-4" 
@@ -225,7 +223,7 @@ const Notice: React.FC = () => {
             <select
               value={selectedCategory}
               onChange={(e) => handleFilterChange('category', e.target.value)}
-              className="border border-gray-300 text-gray-dark px-3 py-1.5 rounded font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white text-sm"
+              className="border border-gray-300 text-gray-dark px-3 py-1.5 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white text-sm cursor-pointer hover:border-gray-400 hover:shadow-sm"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: 'right 0.5rem center',
@@ -248,7 +246,7 @@ const Notice: React.FC = () => {
             <select
               value={selectedYear}
               onChange={(e) => handleFilterChange('year', e.target.value)}
-              className="border border-gray-300 text-gray-dark px-3 py-1.5 rounded font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white text-sm"
+              className="cursor-pointer border border-gray-300 text-gray-dark px-3 py-1.5 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white text-sm hover:border-gray-400 hover:shadow-sm"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: 'right 0.5rem center',
@@ -272,7 +270,7 @@ const Notice: React.FC = () => {
             <select
               value={selectedMonth}
               onChange={(e) => handleFilterChange('month', e.target.value)}
-              className="border border-gray-300 text-gray-dark px-3 py-1.5 rounded font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white text-sm"
+              className="cursor-pointer border border-gray-300 text-gray-dark px-3 py-1.5 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white text-sm hover:border-gray-400 hover:shadow-sm"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: 'right 0.5rem center',
@@ -296,7 +294,7 @@ const Notice: React.FC = () => {
             <select
               value={sortOrder}
               onChange={(e) => handleFilterChange('sort', e.target.value)}
-              className="border border-gray-300 text-gray-dark px-3 py-1.5 rounded font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white text-sm"
+              className="cursor-pointer border border-gray-300 text-gray-dark px-3 py-1.5 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white text-sm hover:border-gray-400 hover:shadow-sm"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
                 backgroundPosition: 'right 0.5rem center',
@@ -316,7 +314,7 @@ const Notice: React.FC = () => {
             {(selectedYear || selectedMonth) && (
               <button
                 onClick={clearYearMonthFilters}
-                className="px-3 py-1.5 text-sm text-red-600 hover:text-red-800 border border-red-300 hover:border-red-400 rounded transition-colors"
+                className="cursor-pointer px-3 py-1.5 text-sm text-red-600 hover:text-red-800 border border-red-300 hover:border-red-400 rounded transition-colors hover:shadow-sm"
               >
                 Clear Filters
               </button>
@@ -335,7 +333,7 @@ const Notice: React.FC = () => {
                 value={searchQuery}
                 onChange={handleSearch}
                 placeholder="Search for notices..."
-                className="border border-gray-300 text-gray-800 px-3 py-1.5 rounded text-sm w-70 focus:outline-none focus:ring-1 focus:ring-gray-300 pr-10" 
+                className="border border-gray-300 text-gray-800 px-3 py-1.5 rounded-md text-sm w-70 focus:outline-none focus:ring-1 focus:ring-gray-300 pr-10" 
               />
               <button
                 className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 pr-3"
