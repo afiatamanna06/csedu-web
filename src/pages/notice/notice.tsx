@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NoticeCard from '@/components/notice/noticecard';
 import { sampleNotices, noticeCategories} from '@/assets/assets';
-import { getActiveNotices, getArchivedNotices } from '@/utils/noticeUtils';
+import { getActiveNotices, getArchivedNotices } from '@/utils/noticeutils';
 
 const Notice: React.FC = () => {
   
@@ -134,7 +134,7 @@ const Notice: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 py-16">
+    <div className="bg-gray-50 py-16 pt-40"> {/* Changed from py-16 to py-16 pt-24 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Notice Board title */}
         <div className="mb-12">
