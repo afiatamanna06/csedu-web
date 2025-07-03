@@ -1,14 +1,6 @@
 import React from 'react';
 import { useNavigate } from '@tanstack/react-router';
-
-interface Notice {
-  id: string;
-  title: string;
-  date: string;
-  description?: string;
-  category?: string;
-  pdfUrl?: string;
-}
+import type { Notice } from '@/assets/assets';
 
 interface NoticeCardProps {
   notice: Notice;

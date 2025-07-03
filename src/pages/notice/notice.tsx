@@ -1,33 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from '@tanstack/react-router';
-import NoticeCard from '@/components/notice/NoticeCard';
-import { sampleNotices, noticeCategories, assets } from '@/assets/assets';
-
-// Add TypeScript types for function parameters
-export const isExpired = (expiryDate: string): boolean => {
-  if (!expiryDate) return false;
-  const today = new Date();
-  const expiry = new Date(expiryDate);
-  return today > expiry;
-};
-
-export const autoArchiveNotices = (noticesArray: any[]) => {
-  return noticesArray.map(notice => ({
-    ...notice,
-    isArchived: isExpired(notice.expiryDate)
-  }));
-};
-
-export const getActiveNotices = (noticesArray: any[]) => {
-  return autoArchiveNotices(noticesArray).filter(notice => !notice.isArchived);
-};
-
-export const getArchivedNotices = (noticesArray: any[]) => {
-  return autoArchiveNotices(noticesArray).filter(notice => notice.isArchived);
-};
+import NoticeCard from '@/components/notice/noticecard';
+import { sampleNotices, noticeCategories} from '@/assets/assets';
+import { getActiveNotices, getArchivedNotices } from '@/utils/noticeUtils';
 
 const Notice: React.FC = () => {
-  const navigate = useNavigate();
   
   // Remove location and showArchived since we're not using routes for archived
   const [showArchived, setShowArchived] = useState(false);
