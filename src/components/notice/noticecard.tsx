@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import type { Notice } from '@/assets/assets';
+import '../../styles/colors.css'; 
 
 interface NoticeCardProps {
   notice: Notice;
