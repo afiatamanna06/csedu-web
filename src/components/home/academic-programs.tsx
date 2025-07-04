@@ -84,7 +84,7 @@ export default function AcademicPrograms() {
   };
 
   return (
-    <section className="px-6 md:px-16 py-12 bg-white">
+    <section className="px-4 py-8 bg-white mx-auto container">
       <h2 className="text-3xl font-bold text-center text-[#3D007B] mb-8">
         Academic Programs
       </h2>
