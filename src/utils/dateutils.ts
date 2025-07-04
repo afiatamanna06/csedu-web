@@ -5,7 +5,7 @@ export function isExpired(dateString?: string): boolean {
     const now = new Date()
     const expiry = new Date(dateString)
     return expiry < now
-  } catch (error) {
+  } catch {
     console.error("Invalid date format:", dateString)
     return false
   }
@@ -19,7 +19,7 @@ export function formatDate(dateString: string): string {
       month: "long",
       day: "numeric",
     })
-  } catch (error) {
+  } catch {
     console.error("Invalid date format:", dateString)
     return dateString
   }
