@@ -372,11 +372,11 @@ const Events = () => {
                 </span>
               )}
               {sortBy !== "date" && (
-                <span className="flex items-center gap-1 px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">
+                <span className="flex items-center gap-1 px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">
                   Sort: {sortBy}
                   <button
                     onClick={() => setSortBy("date")}
-                    className="ml-1 hover:bg-purple-200 rounded-full p-0.5 transition-colors"
+                    className="ml-1 hover:bg-orange-200 rounded-full p-0.5 transition-colors"
                     title="Reset sort to date"
                   >
                     <X className="w-3 h-3" />

@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { useParams } from "@tanstack/react-router"
-import { Calendar, MapPin, Clock, Tag, User, ChevronLeft, Share2, Printer, Users, CheckCircle } from "lucide-react"
+import { Calendar, MapPin, Clock, Tag, User, ChevronLeft, Share2, Printer, CheckCircle } from "lucide-react"
 import { sampleEvents} from "../../assets/assets"
 import RegistrationForm from "../../components/events/registerform"
 import RegistrationSuccessModal from "../../components/events/registrationsuccessmodal"
@@ -205,7 +205,9 @@ const EventDetails = () => {
                 <p className="text-xs leading-[18px] text-[#6B7280]">Time</p>
               </div>
             </div>
+          </div>
 
+          <div className="space-y-4">
             <div className="flex items-center gap-4">
               <div className="w-[43.8px] h-[38px] bg-[#FAF5FF] rounded flex items-center justify-center">
                 <MapPin className="w-[19.8px] h-[22px] text-[#9333EA]" />
@@ -213,30 +215,6 @@ const EventDetails = () => {
               <div>
                 <p className="font-semibold text-sm leading-[21px] text-[#374151]">{event.location}</p>
                 <p className="text-xs leading-[18px] text-[#6B7280]">Location</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="w-[44px] h-[40px] bg-[#FFF7ED] rounded flex items-center justify-center">
-                <User className="w-6 h-6 text-[#EA580C]" />
-              </div>
-              <div>
-                <p className="font-semibold text-sm leading-[21px] text-[#374151]">{event.organizer}</p>
-                <p className="text-xs leading-[18px] text-[#6B7280]">Organizer</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="w-[43px] h-[40px] bg-[#FEF3C7] rounded flex items-center justify-center">
-                <Users className="w-5 h-5 text-[#D97706]" />
-              </div>
-              <div>
-                <p className="font-semibold text-sm leading-[21px] text-[#374151]">
-                  {event.currentAttendees} / {event.maxAttendees}
-                </p>
-                <p className="text-xs leading-[18px] text-[#6B7280]">Attendees</p>
               </div>
             </div>
 
@@ -308,9 +286,25 @@ const EventDetails = () => {
             </div>
           </div>
         )}
-
         {/* Divider Line */}
         <div className="w-full h-px bg-[#E5E7EB] mb-[30px]"></div>
+
+        {/* Organizer Section */}
+        <div className="mb-[30px]">
+          <div className="text-left">
+            <h3 className="font-semibold text-[18px] leading-[27px] text-[#374151] mb-2">Event Organiser</h3>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-blue-50 rounded-md flex items-center justify-center">
+                <User className="w-5 h-5 text-[#3B82F6]" />
+              </div>
+              <p className="font-medium text-[14px] leading-[24px] text-[#374151]">{event.organizer}</p>
+            </div>
+          </div>
+        </div>
+
+  
+        {/* Divider Line */}
+        {/* <div className="w-full h-px bg-[#E5E7EB] mb-[30px]"></div> */}
 
         {/* Registration Status Messages */}
         {isRegistrationOpen && !isEventFull && (
@@ -347,8 +341,8 @@ const EventDetails = () => {
 
         {!isRegistrationOpen && (
           <div className="mb-[25px] flex justify-center">
-            <div className="px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg">
-              <p className="text-gray-700 font-medium text-center">
+            <div className="px-4 py-3 bg-orange-50 border border-orange-300 rounded-lg">
+              <p className="text-orange-700 font-medium text-center">
                 {now > eventDate 
                   ? "This event has ended" 
                   : now > registrationDeadline 
