@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from '@tanstack/react-router';
 import NoticeCard from '@/components/notice/noticecard';
+import Pagination from '@/components/pagination/pagination';
 import { sampleNotices, noticeCategories} from '@/assets/assets';
 import { getActiveNotices, getArchivedNotices } from '@/utils/noticeutils';
 
@@ -381,50 +382,11 @@ const toggleArchived = () => {
         </div>
 
         {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex justify-center items-center mt-12 mb-16 gap-2">
-            {/* Previous Button */}
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className={`px-3 py-2 rounded-xl border transition-all duration-200 ${
-                currentPage === 1
-                  ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-primary hover:border-1 hover:scale-80'
-              }`}
-            >
-              &lt;
-            </button>
-
-            {/* Page Numbers */}
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-              <button
-                key={pageNumber}
-                onClick={() => handlePageChange(pageNumber)}
-                className={`px-3 py-2 rounded-xl border transition-all duration-200 ${
-                  currentPage === pageNumber
-                    ? 'bg-primary text-white border-primary'
-                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400 hover:border-2 hover:scale-110'
-                }`}
-              >
-                {pageNumber}
-              </button>
-            ))}
-
-            {/* Next Button */}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className={`px-3 py-2 rounded-xl border transition-all duration-200 ${
-                currentPage === totalPages
-                  ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400 hover:border-2 hover:scale-110'
-              }`}
-            >
-              &gt;
-            </button>
-          </div>
-        )}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

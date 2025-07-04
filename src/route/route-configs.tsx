@@ -5,6 +5,7 @@ import Notice from "@/pages/notice/notice";
 import NoticeDetails from "@/pages/notice/noticedetails";
 import Events from "@/pages/events/events";
 import EventDetails from "@/pages/events/eventdetails";
+import StudentActivity from "@/pages/studentactivity/studentactivity";
 import type { RouteComponent } from "@tanstack/react-router";
 
 export const routeConfigs = [
@@ -16,6 +17,7 @@ export const routeConfigs = [
   { path: "/notice/$noticeId", component: NoticeDetails },
   { path: "/events", component: Events },
   { path: "/events/$eventId", component: EventDetails },
+  { path: "/student-activity", component: StudentActivity },
 ] as const satisfies ReadonlyArray<{
   path: string;
   component: RouteComponent;
