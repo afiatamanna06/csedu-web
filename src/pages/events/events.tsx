@@ -234,7 +234,7 @@ const Events = () => {
   }
 
   return (
-    <div className="relative w-full max-w-[1440px] mx-auto bg-white mt-28">
+    <div className="relative w-full max-w-[1440px] mx-auto bg-white mt-32">
       {/* Hero Header */}
       <div className="bg-white">
         <div className="px-14 py-6">
@@ -340,7 +340,7 @@ const Events = () => {
         </div>
 
         {/* Horizontal line separator */}
-        <div className="border-t border-gray-200 mb-3"></div>
+        {/* <div className="border-t border-gray-200 mb-3"></div> */}
 
         {/* Active Filters */}
         {(searchTerm || selectedCategory !== "all" || sortBy !== "date") && (
@@ -384,7 +384,7 @@ const Events = () => {
                 </span>
               )}
             </div>
-            <button onClick={clearFilters} className="text-sm text-primary hover:text-primary/80 font-medium">
+            <button onClick={clearFilters} className="cursor-pointer text-sm text-primary hover:text-primary/80 font-medium">
               Clear all
             </button>
           </div>
