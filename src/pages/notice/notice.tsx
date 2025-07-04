@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from '@tanstack/react-router';
 import NoticeCard from '@/components/notice/noticecard';
 import { sampleNotices, noticeCategories} from '@/assets/assets';
 import { getActiveNotices, getArchivedNotices } from '@/utils/noticeutils';
 
 const Notice: React.FC = () => {
+  const location = useLocation();
   
-  // Remove location and showArchived since we're not using routes for archived
-  const [showArchived, setShowArchived] = useState(false);
+  // Check if current path is archived
+  const isArchivedPage = location.pathname === '/notice/archived';
+  const [showArchived, setShowArchived] = useState(isArchivedPage);
   
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -15,6 +18,11 @@ const Notice: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+
+  // Update showArchived when route changes
+  useEffect(() => {
+    setShowArchived(isArchivedPage);
+  }, [isArchivedPage]);
 
   // Reset page when switching between active and archived
   useEffect(() => {
@@ -122,13 +130,19 @@ const Notice: React.FC = () => {
     window.scrollTo(0, 0);
   };
 
-  const toggleArchived = () => {
-    setSelectedCategory('all');
-    setSelectedYear('');
-    setSelectedMonth('');
-    setSearchQuery('');
-    setShowArchived(!showArchived);
-  };
+const toggleArchived = () => {
+  setSelectedCategory('all');
+  setSelectedYear('');
+  setSelectedMonth('');
+  setSearchQuery('');
+
+  if (showArchived) {
+    window.location.href = '/notice';
+  } else {
+    window.location.href = '/notice/archived';
+  }
+};
+
 
   return (
     <div className="bg-gray-50 py-16 pt-40 overflow-visible">
