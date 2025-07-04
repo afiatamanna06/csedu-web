@@ -1,8 +1,9 @@
+import GoogleMap from "@/components/home/map";
+
 export default function Home() {
   return (
-    <div className="p-4 w-full mt-[4rem] lg:mt-[8rem]">
-      <h1>Welcome Home!</h1>
-      <p>This is the Home page.</p>
+    <div className="w-full mt-[4rem] lg:mt-[8rem]">
+      <GoogleMap />
     </div>
   )
 }

@@ -8,12 +8,14 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { routeConfigs } from "./route-configs";
+import Footer from "@/components/footer/footer";
 const rootRoute = createRootRoute({
   component: () => (
-    <div className="flex flex-col min-h-[120vh]">
+    <div className="flex flex-col min-h-[100vh]">
       <Navbar />
       <Outlet />
       <TanStackRouterDevtools />
+      <Footer />
     </div>
   ),
 });
