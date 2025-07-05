@@ -44,7 +44,7 @@ const News = () => {
           {newsCards.map((item, i) => (
             <div
               key={i}
-              className={`relative rounded-md overflow-hidden col-span-${i === 0 ? "2" : "1"}`}
+              className={`relative rounded-md overflow-hidden ${i === 0 ? "col-span-2" : "col-span-1"}`}
             >
               <img
                 src={item.image}
