@@ -1,4 +1,5 @@
 import AcademicPrograms from "@/components/home/academic-programs";
+import ChairmanMessage from "@/components/home/chairman-message";
 import { ExcellenceInEducation } from "@/components/home/excellence";
 import { DepartmentOverview } from "@/components/home/landing";
 import GoogleMap from "@/components/home/map";
@@ -11,6 +12,7 @@ export default function Home() {
     <div className="w-full relative mt-[4rem] lg:mt-[8rem]">
       <DepartmentOverview />
       <ExcellenceInEducation />
+      <ChairmanMessage />
       <AcademicPrograms />
       <ResearchOpportunities />
       <News />
