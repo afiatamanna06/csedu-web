@@ -1,9 +1,9 @@
 export const ExcellenceInEducation = () => {
   return (
-    <div className="max-w-7xl mx-auto mt-[10rem] md:mt-[7rem] lg:mt-[6rem] px-4 sm:px-6 lg:px-8 py-12">
-      <div className="flex flex-col lg:flex-row gap-8">
+    <div className="container mx-auto mt-[10rem] md:mt-[7rem] lg:mt-[6rem] px-4 sm:px-6 lg:px-8 py-12">
+      <div className="flex flex-col lg:flex-row gap-8 w-[100%] justify-between">
         {/* Left Column - Text Content */}
-        <div className="lg:w-1/2">
+        <div className="lg:w-1/2 xl:w-[45rem]">
           <h1 className="text-3xl font-bold text-gray-900 mb-6">
             Excellence in Education
           </h1>
@@ -36,11 +36,16 @@ export const ExcellenceInEducation = () => {
         </div>
 
         {/* Right Column - Image */}
-        <div className="lg:w-1/2 hidden lg:block">
+        <div className="hidden lg:flex lg:gap-6 xl:gap-10">
           <img
             src="/exellence1.png" // Replace with your actual image path
             alt="CSEDU Department"
-            className="w-[15rem] h-[25rem] mt-20 object-cover rounded-lg"
+            className="w-[15rem] xl:w-[17rem] h-[25rem] mt-20 object-cover rounded-lg"
+          />
+          <img
+            src="/cultural.jpg" // Replace with your actual image path
+            alt="CSEDU Department"
+            className="w-[15rem] xl:w-[17rem] h-[25rem] mt-1 object-cover rounded-lg"
           />
         </div>
       </div>

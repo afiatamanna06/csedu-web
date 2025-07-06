@@ -139,15 +139,6 @@ export default function AcademicPrograms() {
                   )}
                 </div>
               </div>
-
-              {/* Optional image */}
-              {isActive && program.image && (
-                <img
-                  src={program.image}
-                  alt="Program"
-                  className="w-full max-w-[20rem] h-[10rem] object-cover rounded-md hidden lg:block"
-                />
-              )}
             </div>
           );
         })}

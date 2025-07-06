@@ -1,7 +1,13 @@
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Menu, X, Search } from "lucide-react";
 import Banner from "../banner/banner";
 
@@ -13,7 +19,6 @@ type NavItem = {
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  const [searchOpen, setSearchOpen] = React.useState(false);
 
   const navItems: NavItem[] = [
     { name: "Home", href: "/" },
@@ -56,17 +61,25 @@ export const Navbar: React.FC = () => {
       {/* Top Navbar */}
       <nav className="w-full bg-white shadow-sm fixed top-0 z-50">
         <div className="flex items-center justify-between px-4 py-3 shadow-md lg:px-0 lg:py-0">
-        <Banner />
-        {/* Mobile Menu Button */}
+          <Banner />
+          {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center">
             {/* Mobile Search */}
-            <Button
-              variant="ghost"
-              className="flex justify-start p-4"
-              onClick={() => setSearchOpen(true)}
-            >
-              <Search className="mr-2" />
-            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Search className="mr-2" />
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Search here</SheetTitle>
+                </SheetHeader>
+                <div className="grid flex-1 auto-rows-min gap-6 px-4">
+                  <div className="grid gap-3">
+                    <Input id="sheet-demo-username" defaultValue="@peduarte" />
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
             <button
               className=""
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -74,7 +87,7 @@ export const Navbar: React.FC = () => {
               {mobileMenuOpen ? <X /> : <Menu />}
             </button>
           </div>
-          </div>
+        </div>
         <div className="hidden lg:flex bg-[#EFEFFF] px-4 py-3 justify-between items-center">
           {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-6 items-center">
@@ -84,25 +97,22 @@ export const Navbar: React.FC = () => {
           </div>
           {/* Search Button */}
           <div className="hidden lg:flex">
-            <Drawer open={searchOpen} onOpenChange={setSearchOpen}>
-              <DrawerTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Search className="h-5 w-5" />
-                </Button>
-              </DrawerTrigger>
-              <DrawerContent>
-                <div className="p-4">
-                  <input
-                    type="text"
-                    placeholder="Search here..."
-                    className="w-full border rounded p-2"
-                  />
+            <Sheet>
+              <SheetTrigger asChild>
+                <Search className="mr-2" />
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>Search here</SheetTitle>
+                </SheetHeader>
+                <div className="grid flex-1 auto-rows-min gap-6 px-4">
+                  <div className="grid gap-3">
+                    <Input id="sheet-demo-username" defaultValue="@peduarte" />
+                  </div>
                 </div>
-              </DrawerContent>
-            </Drawer>
+              </SheetContent>
+            </Sheet>
           </div>
-
-          
         </div>
 
         {/* Mobile Menu */}
