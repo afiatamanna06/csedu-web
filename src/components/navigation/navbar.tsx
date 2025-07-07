@@ -22,8 +22,29 @@ export const Navbar: React.FC = () => {
 
   const navItems: NavItem[] = [
     { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Academic", href: "/academic" },
+    {
+      name: "About",
+      submenu: [
+        { name: "History", href: "/about/history" },
+        { name: "Mission and Vision", href: "/about/mission-vision" },
+      ],
+    },
+    {
+      name: "Academic",
+      submenu: [
+        { name: "Programs", href: "/academic/programs" },
+        { name: "Courses", href: "/academic/courses" },  
+        { name: "Academic Calendar", href: "/academic/calendar" },
+        { name: "Exam Schedule", href: "/academic/exam-schedule" },
+      ],
+    },
+    {
+      name: "Admission",
+      submenu: [
+        { name: "Undergraduate", href: "/admission/undergraduate" },
+        { name: "Graduate", href: "/admission/graduate" },
+      ],
+    },
     {
       name: "People",
       submenu: [
