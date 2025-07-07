@@ -33,7 +33,7 @@ export const Navbar: React.FC = () => {
       name: "Academic",
       submenu: [
         { name: "Programs", href: "/academic/programs" },
-        { name: "Courses", href: "/academic/courses" },  
+        { name: "Courses", href: "/academic/courses" },
         { name: "Academic Calendar", href: "/academic/calendar" },
         { name: "Exam Schedule", href: "/academic/exam-schedule" },
       ],
@@ -62,18 +62,49 @@ export const Navbar: React.FC = () => {
     {
       name: "Research",
       submenu: [
-        {
-          name: "ML and AI",
-          submenu: [
-            { name: "All", href: "/research/mlai/all" },
-            { name: "ML", href: "/research/mlai/ml" },
-          ],
-        },
-        { name: "Security", href: "/research/security" },
+        { name: "Research Areas", href: "/research/areas" },
+        { name: "Publications", href: "/research/publications" },
+        { name: "Funded Projects", href: "/research/projects" },
+        { name: "Research Facilities", href: "/research/facilities" },
       ],
     },
-    { name: "Student", href: "/student" },
-    { name: "Alumni", href: "/alumni" },
+    {
+      name: "Student",
+      submenu: [
+        { name: "Student Activities", href: "/student/activities" },
+        { name: "Student Acheivements", href: "/student/acheivements" },
+        {
+          name: "Scholarship and Financial Aids",
+          href: "/student/scholarships",
+        },
+        { name: "Foreign Student Admission Fees", href: "/student/foreign" },
+      ],
+    },
+    {
+      name: "Alumni",
+      submenu: [
+        { name: "Alumni Network", href: "/alumni/network" },
+        { name: "Alumni Achievements", href: "/alumni/achievements" },
+        { name: "Alumni Events", href: "/alumni/events" },
+      ],
+    },
+    {
+      name: "News",
+      submenu: [
+        { name: "Latest News", href: "/news/latest" },
+        { name: "Events", href: "/news/events" },
+        { name: "Announcements", href: "/news/announcements" },
+      ],
+    },
+    {
+      name: "Login",
+      submenu: [
+        { name: "Faculty Login", href: "/login/faculty" },
+        { name: "Student Login", href: "/login/student" },
+        { name: "Admin Login", href: "/login/admin" },
+        { name: "Alumni Login", href: "/login/alumni" },
+      ],
+    },
     { name: "Contact", href: "/contact" },
   ];
 
