@@ -73,29 +73,29 @@ export const routeConfigs = [
   // Student Dashboard with layout and child routes
   {
     path: "/dashboard/student",
-    component: StudentLayout, // layout with sidebar
+    component: StudentLayout,
     children: [
-      {
-        path: "/dashboard/student",
-        component: StudentOverview, // default when visiting /dashboard/student
-      },
-      {
-        path: "/dashboard/student/overview",
-        component: StudentOverview,
-      },
-      {
-        path: "/dashboard/student/courses",
-        component: Placeholder,
-      },
-      {
-        path: "/dashboard/student/results",
-        component: Placeholder,
-      },
-      {
-        path: "/dashboard/student/settings",
-        component: Placeholder,
-      },
-    ],
+    {
+      path: "/",
+      component: StudentOverview,
+    },
+    {
+      path: "overview",
+      component: StudentOverview,
+    },
+    {
+      path: "courses",
+      component: Placeholder,
+    },
+    {
+      path: "results",
+      component: Placeholder,
+    },
+    {
+      path: "settings",
+      component: Placeholder,
+    },
+  ],
   },
 
   // Other Dashboards

@@ -11,7 +11,7 @@ export default function StudentSidebar() {
   const { location } = useRouterState();
 
   return (
-    <aside className="w-64 bg-white shadow-lg border-r">
+    <aside className="bg-white h-full shadow-lg border-r">
       <div className="p-4 font-bold text-lg">Student Dashboard</div>
       <nav className="flex flex-col gap-1 p-4">
         {links.map((link) => (
