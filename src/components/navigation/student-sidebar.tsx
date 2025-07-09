@@ -7,17 +7,22 @@ const links = [
   { label: "Settings", path: "/dashboard/student/settings" },
 ];
 
-export default function StudentSidebar() {
+interface StudentSidebarProps {
+  onLinkClick?: () => void;
+}
+
+export default function StudentSidebar({ onLinkClick }: StudentSidebarProps) {
   const { location } = useRouterState();
 
   return (
-    <aside className="bg-white h-full shadow-lg border-r">
-      <div className="p-4 font-bold text-lg">Student Dashboard</div>
-      <nav className="flex flex-col gap-1 p-4">
+    <div className="h-full flex flex-col">
+      <div className="p-4 font-bold text-lg border-b">Student Dashboard</div>
+      <nav className="flex flex-col gap-1 p-4 flex-1 overflow-y-auto">
         {links.map((link) => (
           <Link
             key={link.path}
             to={link.path}
+            onClick={onLinkClick}
             className={`p-2 rounded hover:bg-blue-100 ${
               location.pathname === link.path ? "bg-blue-200" : ""
             }`}
@@ -26,6 +31,6 @@ export default function StudentSidebar() {
           </Link>
         ))}
       </nav>
-    </aside>
+    </div>
   );
 }
