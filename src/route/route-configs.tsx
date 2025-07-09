@@ -12,6 +12,8 @@ import {
 
 import StudentLayout from "@/layouts/student-layout";
 import StudentOverview from "@/pages/dashboard/student/overview";
+import FacultyMembers from "@/pages/people/faculty/all";
+import OfficersAndStaff from "@/pages/people/staffs/staffs";
 
 const FacultyDashboard = Placeholder;
 const AdminDashboard = Placeholder;
@@ -37,10 +39,10 @@ export const routeConfigs = [
   { path: "/admission/graduate", component: Placeholder },
 
   // People
-  { path: "/people/faculty/all", component: Placeholder },
-  { path: "/people/faculty/position", component: Placeholder },
-  { path: "/people/faculty/research", component: Placeholder },
-  { path: "/people/staffs", component: Placeholder },
+  { path: "/people/faculty/all", component: FacultyMembers },
+  { path: "/people/faculty/position", component: FacultyMembers },
+  { path: "/people/faculty/research", component: FacultyMembers },
+  { path: "/people/staffs", component: OfficersAndStaff },
 
   // Research
   { path: "/research/areas", component: Placeholder },
