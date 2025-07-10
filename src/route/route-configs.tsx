@@ -102,6 +102,10 @@ export const routeConfigs = [
     component: DashboardLayout,
     children: [
       {
+        path: "/",
+        component: FacultyOverview,
+      },
+      {
         path: "overview",
         component: FacultyOverview,
       },
@@ -125,6 +129,10 @@ export const routeConfigs = [
     component: DashboardLayout,
     children: [
       {
+        path: "/",
+        component: Placeholder,
+      },
+      {
         path: "overview",
         component: Placeholder,
       },
@@ -147,6 +155,10 @@ export const routeConfigs = [
     path: "/dashboard/alumni",
     component: DashboardLayout,
     children: [
+      {
+        path: "/",
+        component: Placeholder,
+      },
       {
         path: "overview",
         component: Placeholder,
