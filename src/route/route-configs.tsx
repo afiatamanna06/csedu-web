@@ -10,14 +10,11 @@ import {
   StudentLogin,
 } from "@/pages/auth/login/login";
 
-import StudentLayout from "@/layouts/student-layout";
 import StudentOverview from "@/pages/dashboard/student/overview";
 import FacultyMembers from "@/pages/people/faculty/all";
 import OfficersAndStaff from "@/pages/people/staffs/staffs";
-
-const FacultyDashboard = Placeholder;
-const AdminDashboard = Placeholder;
-const AlumniDashboard = Placeholder;
+import DashboardLayout from "@/layouts/dashboard-layout";
+import FacultyDashboard from "@/pages/dashboard/faculty/overview";
 
 export const routeConfigs = [
   // Base
@@ -75,35 +72,99 @@ export const routeConfigs = [
   // Student Dashboard with layout and child routes
   {
     path: "/dashboard/student",
-    component: StudentLayout,
+    component: DashboardLayout,
     children: [
-    {
-      path: "/",
-      component: StudentOverview,
-    },
-    {
-      path: "overview",
-      component: StudentOverview,
-    },
-    {
-      path: "courses",
-      component: Placeholder,
-    },
-    {
-      path: "results",
-      component: Placeholder,
-    },
-    {
-      path: "settings",
-      component: Placeholder,
-    },
-  ],
+      {
+        path: "/",
+        component: StudentOverview,
+      },
+      {
+        path: "overview",
+        component: StudentOverview,
+      },
+      {
+        path: "courses",
+        component: Placeholder,
+      },
+      {
+        path: "results",
+        component: Placeholder,
+      },
+      {
+        path: "settings",
+        component: Placeholder,
+      },
+    ],
   },
 
-  // Other Dashboards
-  { path: "/dashboard/faculty", component: FacultyDashboard },
-  { path: "/dashboard/admin", component: AdminDashboard },
-  { path: "/dashboard/alumni", component: AlumniDashboard },
+  {
+    path: "/dashboard/faculty",
+    component: DashboardLayout,
+    children: [
+      {
+        path: "overview",
+        component: FacultyDashboard, // Replace with FacultyOverview when available
+      },
+      {
+        path: "classes", // more appropriate than "courses"
+        component: Placeholder,
+      },
+      {
+        path: "research",
+        component: Placeholder,
+      },
+      {
+        path: "settings",
+        component: Placeholder,
+      },
+    ],
+  },
+
+  {
+    path: "/dashboard/admin",
+    component: DashboardLayout,
+    children: [
+      {
+        path: "overview",
+        component: StudentOverview,
+      },
+      {
+        path: "users",
+        component: Placeholder,
+      },
+      {
+        path: "reports",
+        component: Placeholder,
+      },
+      {
+        path: "settings",
+        component: Placeholder,
+      },
+    ],
+  },
+
+  {
+    path: "/dashboard/alumni",
+    component: DashboardLayout,
+    children: [
+      {
+        path: "overview",
+        component: StudentOverview,
+      },
+      {
+        path: "events",
+        component: Placeholder,
+      },
+      {
+        path: "networking",
+        component: Placeholder,
+      },
+      {
+        path: "settings",
+        component: Placeholder,
+      },
+    ],
+  },
 ] as const satisfies ReadonlyArray<{
   path: string;
   component: RouteComponent;
