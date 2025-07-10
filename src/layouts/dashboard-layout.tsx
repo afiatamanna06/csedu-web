@@ -1,9 +1,9 @@
 import { useState } from "react";
-import StudentSidebar from "@/components/navigation/student-sidebar";
 import { Outlet } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react"; // icons for hamburger and close
+import RoleBasedSidebar from "@/components/navigation/role-based-sidebar";
 
-export default function StudentLayout() {
+export default function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Toggle sidebar open/close
@@ -27,7 +27,7 @@ export default function StudentLayout() {
         {/* Desktop sidebar */}
         <aside className="hidden lg:block w-64 bg-white border-r shadow-md">
           <div className="sticky top-[8rem] h-[calc(100vh-8rem)] overflow-y-auto">
-            <StudentSidebar onLinkClick={() => {}} />
+            <RoleBasedSidebar onLinkClick={() => {}} />
           </div>
         </aside>
 
@@ -43,7 +43,7 @@ export default function StudentLayout() {
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <StudentSidebar onLinkClick={() => setSidebarOpen(false)} />
+          <RoleBasedSidebar onLinkClick={() => setSidebarOpen(false)} />
         </aside>
 
         {/* Main content */}
