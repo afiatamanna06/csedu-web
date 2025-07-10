@@ -14,7 +14,7 @@ import StudentOverview from "@/pages/dashboard/student/overview";
 import FacultyMembers from "@/pages/people/faculty/all";
 import OfficersAndStaff from "@/pages/people/staffs/staffs";
 import DashboardLayout from "@/layouts/dashboard-layout";
-import FacultyDashboard from "@/pages/dashboard/faculty/overview";
+import FacultyOverview from "@/pages/dashboard/faculty/overview";
 
 export const routeConfigs = [
   // Base
@@ -103,10 +103,10 @@ export const routeConfigs = [
     children: [
       {
         path: "overview",
-        component: FacultyDashboard, // Replace with FacultyOverview when available
+        component: FacultyOverview,
       },
       {
-        path: "classes", // more appropriate than "courses"
+        path: "classes",
         component: Placeholder,
       },
       {
@@ -126,7 +126,7 @@ export const routeConfigs = [
     children: [
       {
         path: "overview",
-        component: StudentOverview,
+        component: Placeholder,
       },
       {
         path: "users",
@@ -149,7 +149,7 @@ export const routeConfigs = [
     children: [
       {
         path: "overview",
-        component: StudentOverview,
+        component: Placeholder,
       },
       {
         path: "events",
