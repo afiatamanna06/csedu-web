@@ -83,11 +83,27 @@ export const routeConfigs = [
         component: StudentOverview,
       },
       {
+        path: "grades",
+        component: Placeholder,
+      },
+      {
+        path: "payments",
+        component: Placeholder,
+      },
+      {
+        path: "equipment-fees",
+        component: Placeholder,
+      },
+      {
+        path: "exam-routine",
+        component: Placeholder,
+      },
+      {
         path: "courses",
         component: Placeholder,
       },
       {
-        path: "results",
+        path: "semester-routine",
         component: Placeholder,
       },
       {
@@ -110,11 +126,19 @@ export const routeConfigs = [
         component: FacultyOverview,
       },
       {
-        path: "classes",
+        path: "schedule-exams",
         component: Placeholder,
       },
       {
-        path: "research",
+        path: "grade-submission",
+        component: Placeholder,
+      },
+      {
+        path: "room-booking",
+        component: Placeholder,
+      },
+      {
+        path: "meetings",
         component: Placeholder,
       },
       {
@@ -141,7 +165,15 @@ export const routeConfigs = [
         component: Placeholder,
       },
       {
-        path: "reports",
+        path: "courses",
+        component: Placeholder,
+      },
+      {
+        path: "exams",
+        component: Placeholder,
+      },
+      {
+        path: "payments",
         component: Placeholder,
       },
       {
@@ -165,10 +197,6 @@ export const routeConfigs = [
       },
       {
         path: "events",
-        component: Placeholder,
-      },
-      {
-        path: "networking",
         component: Placeholder,
       },
       {
