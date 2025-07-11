@@ -1,6 +1,7 @@
 import Contact from "@/pages/contact/contact";
 import Home from "@/pages/home/home";
 import { type RouteComponent } from "@tanstack/react-router";
+import About from "@/pages/about/about";
 
 import { Placeholder } from "@/components/placeholder";
 import {
@@ -22,7 +23,7 @@ export const routeConfigs = [
   { path: "/contact", component: Contact },
 
   // About
-  { path: "/about/history", component: Placeholder },
+  { path: "/about/history", component: About },
   { path: "/about/mission-vision", component: Placeholder },
 
   // Academic
