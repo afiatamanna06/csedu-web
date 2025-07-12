@@ -9,7 +9,7 @@ import { isExpired } from "../../utils/dateutils"
 import LatestNotice from "../../components/notice/latestnotice"
 
 const NoticeDetails = () => {
-  const { noticeId } = useParams({ from: "/notice/$noticeId" })
+  const { noticeId } = useParams({ from: "__root__" })
 
   // Find the notice item by ID - using sampleNotices
   const notice = sampleNotices.find((item) => item.id === Number.parseInt(noticeId))
@@ -25,7 +25,7 @@ const NoticeDetails = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Notice Not Found</h2>
           <p className="text-gray-600 mb-6">The requested notice could not be found.</p>
           <button
-            onClick={() => (window.location.href = "/notice")}
+            onClick={() => (window.location.href = "/news/notice")}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Back to Notices
@@ -88,7 +88,7 @@ const NoticeDetails = () => {
 
   const handleViewDetails = (item: Notice, e: React.MouseEvent) => {
     e.stopPropagation()
-    window.location.href = `/notice/${item.id}`
+    window.location.href = `/news/notice/${item.id}`
     window.scrollTo(0, 0)
   }
 
@@ -111,7 +111,7 @@ return (
       {/* Back Button - reduce top padding since we added py-16 */}
       <div className="pt-[90px] pb-[22px]">
         <button
-          onClick={() => (window.location.href = noticeIsArchived ? "/notice/archived" : "/notice")}
+          onClick={() => (window.location.href = noticeIsArchived ? "/news/notice/archived" : "/news/notice")}
           className="flex items-center gap-3 text-[#13274C] hover:text-[#13274C]/80 transition-colors cursor-pointer"
         >
           <ChevronLeft className="w-5 h-5" />
@@ -243,7 +243,7 @@ return (
 
                     <button
                       onClick={(e) => handleDownloadAttachment(attachment, e)}
-                      className="w-[128px] h-[28px] bg-[#F4D20E] border-[3px] border-[#F4D20E] rounded flex items-center justify-center gap-2 mx-auto hover:bg-[#F4D20E]/90 transition-colors cursor-pointer"
+                      className="w-[128px] h-[28px] bg-yellow-400 border-[3px] border-yellow-400 rounded flex items-center justify-center gap-2 mx-auto hover:bg-yellow-500 hover:border-yellow-500 transition-colors cursor-pointer"
                     >
                       <Download className="w-3 h-3 text-black" />
                       <span className="text-[10px] leading-[15px] font-semibold text-[#13274C]">Download PDF</span>
@@ -275,8 +275,8 @@ return (
 
           <div className="text-center">
             <button
-              onClick={() => (window.location.href = noticeIsArchived ? "/notice/archived" : "/notice")}
-              className="w-[150px] h-[40px] bg-white border-[3px] border-[#13274C] rounded-xl flex items-center justify-center hover:bg-gray-50 transition-colors cursor-pointer mx-auto"
+              onClick={() => (window.location.href = noticeIsArchived ? "/news/notice/archived" : "/news/notice")}
+              className="w-[150px] h-[40px] bg-yellow-400 border-[3px] border-yellow-400 rounded-md flex items-center justify-center hover:bg-yellow-500 hover:border-yellow-500 transition-colors cursor-pointer mx-auto"
             >
               <span className="font-semibold text-sm leading-5 text-[#13274C]">View More News</span>
             </button>

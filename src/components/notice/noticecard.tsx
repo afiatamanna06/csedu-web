@@ -42,12 +42,12 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice, isArchived = false }) =
 
   const handleViewDetails = (e: React.MouseEvent) => {
     e.stopPropagation()
-    navigate({ to: `/notice/${notice.id}` })
+    navigate({ to: `/news/notice/${notice.id}` })
     window.scrollTo(0, 0)
   }
 
   return (
-    <div className="group bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer relative">
+    <div className="group bg-white rounded-lg border border-gray-200 hover:bg-[#f4f0ff] hover:shadow-lg transition-all duration-300 cursor-pointer relative">
       <div className="p-6">
         <div className="flex items-start justify-between">
           <div className="flex-1 mr-4">
@@ -81,7 +81,7 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice, isArchived = false }) =
               )}
               <button
                 onClick={handleDownloadPDF}
-                className="flex items-center gap-2 px-1 py-1.5 bg-primary-y hover:bg-primary-y/90 text-primary rounded-md text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer w-32"
+                className="flex items-center gap-2 px-1 py-1.5 bg-yellow-400 hover:bg-yellow-500 text-primary rounded-md text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer w-32"
                 title="Download PDF"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

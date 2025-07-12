@@ -337,7 +337,7 @@ const EventDetails = () => {
           <div className="mb-[25px] flex justify-center">
             <button
               onClick={handleRegister}
-              className="flex flex-row justify-center items-center px-4 py-2 gap-2 w-[160px] h-[36px] bg-[#F4D20E] rounded-lg font-semibold text-sm text-black cursor-pointer hover:bg-[#E6BE0A] transition-colors"
+              className="flex flex-row justify-center items-center px-4 py-2 gap-2 w-[160px] h-[36px] bg-yellow-400 rounded-lg font-semibold text-sm text-black cursor-pointer hover:bg-yellow-500 transition-colors"
             >
               Register Now
             </button>

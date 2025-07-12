@@ -93,7 +93,7 @@ export const Navbar: React.FC = () => {
       submenu: [
         // { name: "Latest News", href: "/news/latest" },
         { name: "Events", href: "/news/events" },
-        { name: "Announcements", href: "/news/announcements" },
+        { name: "Announcements", href: "/news/notice" },
       ],
     },
     {

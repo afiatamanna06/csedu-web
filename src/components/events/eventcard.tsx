@@ -55,7 +55,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, onRegister, onViewDetails 
   const status = getRegistrationStatus();
 
   return (
-    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group">
+    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl hover:bg-[#f4f0ff] transition-all duration-300 overflow-hidden border border-gray-100 group">
       {/* Event Image */}
       {event.image && (
         <div className="h-48 overflow-hidden relative">

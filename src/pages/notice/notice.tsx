@@ -9,7 +9,7 @@ const Notice: React.FC = () => {
   const location = useLocation();
   
   // Check if current path is archived
-  const isArchivedPage = location.pathname === '/notice/archived';
+  const isArchivedPage = location.pathname === '/news/notice/archived';
   const [showArchived, setShowArchived] = useState(isArchivedPage);
   
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -138,9 +138,9 @@ const toggleArchived = () => {
   setSearchQuery('');
 
   if (showArchived) {
-    window.location.href = '/notice';
+    window.location.href = '/news/notice';
   } else {
-    window.location.href = '/notice/archived';
+    window.location.href = '/news/notice/archived';
   }
 };
 
@@ -177,7 +177,7 @@ const toggleArchived = () => {
               {!showArchived && (
                 <button
                   onClick={toggleArchived}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-primary-y text-primary hover:bg-primary-y/90 hover:text-primary rounded-md transition-all duration-200 font-medium text-sm cursor-pointer hover:shadow-md"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-yellow-400 text-primary hover:bg-yellow-500 hover:text-primary rounded-md transition-all duration-200 font-medium text-sm cursor-pointer hover:shadow-md"
                 >
                   <svg 
                     className="w-4 h-4" 
@@ -194,7 +194,7 @@ const toggleArchived = () => {
               {showArchived && (
                 <button
                   onClick={toggleArchived}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-primary-y text-primary hover:bg-primary-y/90 hover:text-primary rounded-md transition-all duration-200 font-medium text-sm cursor-pointer hover:shadow-md"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-yellow-400 text-primary hover:bg-yellow-500 hover:text-primary rounded-md transition-all duration-200 font-medium text-sm cursor-pointer hover:shadow-md"
                 >
                   <svg 
                     className="w-4 h-4" 

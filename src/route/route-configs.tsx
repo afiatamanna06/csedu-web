@@ -73,12 +73,12 @@ export const routeConfigs = [
   { path: "/news/events", component: Events },
   { path: "/news/events/$eventId", component: EventDetails },
 
-    // Notice
-  { path: "/notice", component: Notice },
-  { path: "/notice/archived", component: Notice },
-  { path: "/notice/$noticeId", component: NoticeDetails },
+  // Notice
+  { path: "news/notice", component: Notice },
+  { path: "news/notice/archived", component: Notice },
+  { path: "news/notice/$noticeId", component: NoticeDetails },
 
-  { path: "/news/announcements", component: Placeholder },
+  // { path: "/news/announcements", component: Placeholder },
 
   // Login
   { path: "/login/faculty", component: FacultyLogin },
