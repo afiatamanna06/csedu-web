@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { X, Calendar, Clock, MapPin, Users, User } from "lucide-react"
-import type { Event } from "../../../../../../csedu-web/src/assets/assets"
+import type { Event } from "@/assets/assets"
 import { toast } from "react-toastify"
 import { type RegistrationDetails } from "./registrationdetails"
 

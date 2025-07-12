@@ -241,10 +241,10 @@ const Events = () => {
           <div className="text-center">
             <h1 className="text-4xl font-bold text-primary mb-4">Upcoming Events</h1>
             <div className="w-80 h-1 bg-primary-y mb-4 mx-auto"></div>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-4">
+            {/* <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-4">
               Discover and join exciting events in our computer science community. From workshops to hackathons, find
               opportunities to learn and grow.
-            </p>
+            </p> */}
             {/* Event Stats Badges */}
             <div className="flex items-center justify-center gap-6 mt-4">
               <Badge variant="secondary" className="text-base font-semibold px-4 py-2">

@@ -2,7 +2,7 @@
 
 import type React from "react"
 import type { Notice } from "@/assets/assets"
-import { isExpired } from "../../../../../../csedu-web/src/utils/dateutils"
+import { isExpired } from "@/utils/dateutils"
 import "../../styles/colors.css"
 
 interface LatestNoticeCardProps {

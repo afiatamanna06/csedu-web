@@ -29,7 +29,8 @@ const sidebarLinks: Record<string, SidebarLink[]> = {
     { label: "Courses", path: "/dashboard/admin/courses" },
     { label: "Exams", path: "/dashboard/admin/exams" },
     { label: "Payments", path: "/dashboard/admin/payments" },
-    { label: "Settings", path: "/dashboard/admin/settings" },
+    { label: "Notices", path: "/dashboard/admin/notices" },
+    { label: "Events", path: "/dashboard/admin/events" },
   ],
 
   alumni: [

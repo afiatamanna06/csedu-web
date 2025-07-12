@@ -1,6 +1,6 @@
 import React from 'react';
 import { CheckCircle, Mail, Hash, Calendar, MapPin, Clock, X, Download, Share2 } from 'lucide-react';
-import { type Event } from '../../../../../../csedu-web/src/assets/assets';
+import type { Event } from "@/assets/assets"
 import { type RegistrationDetails } from './registrationdetails';
 
 interface RegistrationSuccessModalProps {
