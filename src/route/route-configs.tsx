@@ -20,6 +20,8 @@ import FacultyMembers from "@/pages/people/faculty/all";
 import OfficersAndStaff from "@/pages/people/staffs/staffs";
 import DashboardLayout from "@/layouts/dashboard-layout";
 import FacultyOverview from "@/pages/dashboard/faculty/overview";
+import AdminNotice from "@/pages/admin/notice/adminnotice";
+import AddNotice from "@/pages/admin/notice/addnotice";
 
 export const routeConfigs = [
   // Base
@@ -28,7 +30,6 @@ export const routeConfigs = [
 
 
   // Student Activity
-  { path: "/student-activity", component: StudentActivity },
 
   // About
   { path: "/about/history", component: Placeholder },
@@ -57,7 +58,7 @@ export const routeConfigs = [
   { path: "/research/facilities", component: Placeholder },
 
   // Student
-  { path: "/student/activities", component: Placeholder },
+  { path: "/student/activities", component: StudentActivity },
   { path: "/student/acheivements", component: Placeholder },
   { path: "/student/scholarships", component: Placeholder },
   { path: "/student/foreign", component: Placeholder },
@@ -67,18 +68,14 @@ export const routeConfigs = [
   { path: "/alumni/achievements", component: Placeholder },
   { path: "/alumni/events", component: Placeholder },
 
-  // News
-  // { path: "/news/latest", component: Placeholder },
-  // { path: "/news/events", component: Placeholder },
-  { path: "/news/events", component: Events },
-  { path: "/news/events/$eventId", component: EventDetails },
 
-  // Notice
+  // News
   { path: "news/notice", component: Notice },
   { path: "news/notice/archived", component: Notice },
   { path: "news/notice/$noticeId", component: NoticeDetails },
+  { path: "/news/events", component: Events },
+  { path: "/news/events/$eventId", component: EventDetails },
 
-  // { path: "/news/announcements", component: Placeholder },
 
   // Login
   { path: "/login/faculty", component: FacultyLogin },
@@ -191,6 +188,18 @@ export const routeConfigs = [
       },
       {
         path: "payments",
+        component: Placeholder,
+      },
+      {
+        path: "notices",
+        component: AdminNotice,
+      },
+      {
+        path: "notices/addnotice",
+        component: AddNotice,
+      },
+      {
+        path: "events",
         component: Placeholder,
       },
       {

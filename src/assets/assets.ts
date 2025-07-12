@@ -64,13 +64,11 @@ export interface Notice {
   author: string;
   location: string;
   time: string;
-  priority: 'high' | 'medium' | 'low';
   attachments?: Array<{
     name: string;
     url: string;
     size: string;
   }>;
-  tags: string[];
   isArchived: boolean;
 }
 
@@ -302,12 +300,10 @@ export const sampleNotices: Notice[] = [
     author: 'Dr. Mohammad Rahman, Controller of Examinations',
     location: 'Multiple Examination Halls - Check Portal',
     time: 'July 15-30, 2025',
-    priority: 'high',
     attachments: [
       { name: 'Final_Exam_Schedule_Spring_2025.pdf', url: pdf1, size: '2.3 MB' },
       { name: 'Examination_Guidelines.pdf', url: pdf2, size: '1.8 MB' }
     ],
-    tags: ['examination', 'spring2025', 'important', 'schedule'],
     isArchived: false
   },
   {
@@ -323,13 +319,11 @@ export const sampleNotices: Notice[] = [
     author: 'Prof. Dr. Ayesha Khan, Conference Chair',
     location: 'CSEDU Main Campus & Virtual Hybrid',
     time: 'September 15-17, 2025',
-    priority: 'medium',
     attachments: [
       { name: 'Conference_Call_for_Papers.pdf', url: pdf1, size: '3.2 MB' },
       { name: 'Registration_Information.pdf', url: pdf2, size: '1.5 MB' },
       { name: 'Conference_Program_Draft.pdf', url: pdf1, size: '2.8 MB' }
     ],
-    tags: ['research', 'conference', 'AI', 'ML', 'international'],
     isArchived: false
   },
   {
@@ -345,14 +339,12 @@ export const sampleNotices: Notice[] = [
     author: 'Ms. Fatima Hassan, Career Services Director',
     location: 'Various Companies - Remote/On-site',
     time: 'Applications Due: July 1, 2025',
-    priority: 'high',
     attachments: [
       { name: 'Internship_Program_Brochure.pdf', url: pdf1, size: '4.1 MB' },
       { name: 'Application_Guidelines.pdf', url: pdf2, size: '2.2 MB' },
       { name: 'Company_Profiles.pdf', url: pdf1, size: '5.8 MB' },
       { name: 'Technical_Requirements.pdf', url: pdf2, size: '1.9 MB' }
     ],
-    tags: ['internship', 'career', 'summer2025', 'tech-companies'],
     isArchived: false
   },
   {
@@ -368,14 +360,12 @@ export const sampleNotices: Notice[] = [
     author: 'Mr. Abdul Karim, Chief Security Officer',
     location: 'Campus-wide Implementation',
     time: 'Phased Implementation: June-August 2025',
-    priority: 'high',
     attachments: [
       { name: 'Security_Enhancement_Overview.pdf', url: pdf1, size: '3.5 MB' },
       { name: 'ID_Card_Activation_Guide.pdf', url: pdf2, size: '1.2 MB' },
       { name: 'Emergency_Procedures.pdf', url: pdf1, size: '2.7 MB' },
       { name: 'Training_Schedule.pdf', url: pdf2, size: '0.8 MB' }
     ],
-    tags: ['security', 'safety', 'campus', 'important', 'compliance'],
     isArchived: false
   },
   {
@@ -391,7 +381,6 @@ export const sampleNotices: Notice[] = [
     author: 'Ms. Rafia Ahmed, Cultural Committee Chair',
     location: 'CSEDU Main Campus - Multiple Venues',
     time: 'April 10-12, 2025 (9:00 AM - 10:00 PM)',
-    priority: 'medium',
     attachments: [
       { name: 'Cultural_Festival_Brochure.pdf', url: pdf1, size: '6.2 MB' },
       { name: 'Registration_Form.pdf', url: pdf2, size: '1.1 MB' },
@@ -399,7 +388,6 @@ export const sampleNotices: Notice[] = [
       { name: 'Venue_Map.pdf', url: pdf2, size: '3.4 MB' },
       { name: 'Competition_Rules.pdf', url: pdf1, size: '2.1 MB' }
     ],
-    tags: ['cultural', 'festival', 'competition', 'celebration', 'digital-heritage'],
     isArchived: false
   },
   {
@@ -415,7 +403,6 @@ export const sampleNotices: Notice[] = [
     author: 'Prof. Dr. Mahmud Hassan, Academic Affairs Dean',
     location: 'All Academic Departments',
     time: 'Effective Fall 2025 Semester',
-    priority: 'high',
     attachments: [
       { name: 'New_Curriculum_Overview.pdf', url: pdf1, size: '8.7 MB' },
       { name: 'Course_Descriptions.pdf', url: pdf2, size: '12.3 MB' },
@@ -423,7 +410,6 @@ export const sampleNotices: Notice[] = [
       { name: 'Assessment_Methods.pdf', url: pdf2, size: '3.1 MB' },
       { name: 'Industry_Partnership_Details.pdf', url: pdf1, size: '5.4 MB' }
     ],
-    tags: ['curriculum', 'academic', 'industry-aligned', 'important', 'fall2025'],
     isArchived: false
   },
   {
@@ -439,14 +425,12 @@ export const sampleNotices: Notice[] = [
     author: 'Dr. Sarah Ahmed, Student Wellness Director',
     location: 'Student Wellness Center & Campus-wide',
     time: '24/7 Support Available',
-    priority: 'high',
     attachments: [
       { name: 'Mental_Health_Program_Guide.pdf', url: pdf1, size: '4.8 MB' },
       { name: 'Crisis_Support_Resources.pdf', url: pdf2, size: '2.3 MB' },
       { name: 'Wellness_Activities_Schedule.pdf', url: pdf1, size: '3.7 MB' },
       { name: 'Faculty_Training_Manual.pdf', url: pdf2, size: '5.2 MB' }
     ],
-    tags: ['mental-health', 'wellness', 'student-support', 'counseling', 'important'],
     isArchived: false
   },
   {
@@ -462,14 +446,12 @@ export const sampleNotices: Notice[] = [
     author: 'Prof. Dr. Nusrat Jahan, Environmental Committee Chair',
     location: 'Campus-wide Implementation',
     time: 'Multi-year Initiative (2025-2030)',
-    priority: 'medium',
     attachments: [
       { name: 'Sustainability_Master_Plan.pdf', url: pdf1, size: '7.9 MB' },
       { name: 'Green_Technology_Guide.pdf', url: pdf2, size: '4.1 MB' },
       { name: 'Student_Engagement_Opportunities.pdf', url: pdf1, size: '2.8 MB' },
       { name: 'Environmental_Impact_Assessment.pdf', url: pdf2, size: '6.3 MB' }
     ],
-    tags: ['sustainability', 'environment', 'green-campus', 'renewable-energy', 'long-term'],
     isArchived: false
   },
   {
@@ -485,7 +467,6 @@ export const sampleNotices: Notice[] = [
     author: 'Dr. Rashida Khatun, Chief Librarian',
     location: 'Central Library & Digital Platforms',
     time: 'Implementation: July-October 2025',
-    priority: 'medium',
     attachments: [
       { name: 'Digital_Library_Overview.pdf', url: pdf1, size: '5.6 MB' },
       { name: 'Database_Access_Guide.pdf', url: pdf2, size: '3.9 MB' },
@@ -493,7 +474,6 @@ export const sampleNotices: Notice[] = [
       { name: 'Training_Schedule.pdf', url: pdf2, size: '2.1 MB' },
       { name: 'Research_Tools_Manual.pdf', url: pdf1, size: '8.3 MB' }
     ],
-    tags: ['library', 'digital-resources', 'research', 'VR', 'academic-support'],
     isArchived: false
   },
   {
@@ -509,7 +489,6 @@ export const sampleNotices: Notice[] = [
     author: 'Mr. Rafiq Ahmed, Alumni Relations Director',
     location: 'Global Network - Virtual & In-Person',
     time: 'Year-round Program',
-    priority: 'medium',
     attachments: [
       { name: 'Alumni_Network_Directory.pdf', url: pdf1, size: '9.8 MB' },
       { name: 'Mentorship_Program_Guide.pdf', url: pdf2, size: '4.5 MB' },
@@ -517,7 +496,6 @@ export const sampleNotices: Notice[] = [
       { name: 'Application_Instructions.pdf', url: pdf2, size: '2.3 MB' },
       { name: 'Networking_Event_Calendar.pdf', url: pdf1, size: '3.1 MB' }
     ],
-    tags: ['alumni', 'mentorship', 'networking', 'career-development', 'professional-growth'],
     isArchived: false
   }
 ];
