@@ -1,7 +1,7 @@
 .programs-page {
   display: flex;
   min-height: 100vh;
-  background: #f7f8fa;
+  background: linear-gradient(120deg, #f5f5f5 0%, #f5f5f5 40%, #0c2850 40%, #11315e 70%, #f5f5f5 70%, #f5f5f5 100%);
 }
 .programs-sidebar {
   width: 240px;
@@ -112,7 +112,7 @@
   border-radius: 20px;
   box-shadow: 0 8px 32px rgba(10,35,71,0.13);
   padding: 36px 28px;
-  margin-top: 18px;
+  margin: 18px;
 }
 .programs-courses-header {
   display: flex;
@@ -291,7 +291,7 @@
   font-weight: 600;
   font-size: 1.1rem;
   padding: 0.85em 2.2em;
-  border-bottom: 4px solid #f2a922;
+  border: 2.5px solid #f2a922;
   border-radius: 0.7em;
   box-shadow: 0 4px 18px 0 rgba(10,35,71,0.10);
   transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
