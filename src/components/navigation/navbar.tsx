@@ -9,6 +9,9 @@ export default function Navbar() {
       <Link to="/about" className="[&.active]:font-bold">
         About
       </Link>
+      <Link to="/programs" className="[&.active]:font-bold">
+        Programs
+      </Link>
       <Link to="/contact" className="[&.active]:font-bold">
         Contact
       </Link>
