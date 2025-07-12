@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams } from "@tanstack/react-router"
 import { Calendar, MapPin, Clock, Tag, User, ChevronLeft, Share2, Printer, CheckCircle } from "lucide-react"
 import { sampleEvents} from "../../assets/assets"
@@ -10,10 +9,16 @@ import RegistrationSuccessModal from "../../components/events/registrationsucces
 import { type RegistrationDetails } from "../../components/events/registrationdetails"
 
 const EventDetails = () => {
-  const { eventId } = useParams({ from: "/events/$eventId" })
+  // const { eventId } = useParams({ from: "/news/events/$eventId" })
+    const { eventId } = useParams({ strict: false })
   const [isRegistrationFormOpen, setIsRegistrationFormOpen] = useState(false)
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [registrationDetails, setRegistrationDetails] = useState<RegistrationDetails | null>(null)
+
+    // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }, [])
 
   // Find the event item by ID
   const event = sampleEvents.find((item) => item.id === Number.parseInt(eventId))

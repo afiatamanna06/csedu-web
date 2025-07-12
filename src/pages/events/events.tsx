@@ -193,7 +193,7 @@ const Events = () => {
   }
 
   const handleViewDetails = (event: Event) => {
-    navigate({ to: `/events/${event.id}` })
+    navigate({ to: `/news/events/${event.id}` })
   }
 
   const handlePageChange = (page: number) => {

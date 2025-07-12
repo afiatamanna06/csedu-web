@@ -26,14 +26,6 @@ export const routeConfigs = [
   { path: "/", component: Home },
   { path: "/contact", component: Contact },
 
-  // Notice
-  { path: "/notice", component: Notice },
-  { path: "/notice/archived", component: Notice },
-  { path: "/notice/$noticeId", component: NoticeDetails },
-
-  // Events
-  { path: "/events", component: Events },
-  { path: "/events/$eventId", component: EventDetails },
 
   // Student Activity
   { path: "/student-activity", component: StudentActivity },
@@ -76,8 +68,16 @@ export const routeConfigs = [
   { path: "/alumni/events", component: Placeholder },
 
   // News
-  { path: "/news/latest", component: Placeholder },
-  { path: "/news/events", component: Placeholder },
+  // { path: "/news/latest", component: Placeholder },
+  // { path: "/news/events", component: Placeholder },
+  { path: "/news/events", component: Events },
+  { path: "/news/events/$eventId", component: EventDetails },
+
+    // Notice
+  { path: "/notice", component: Notice },
+  { path: "/notice/archived", component: Notice },
+  { path: "/notice/$noticeId", component: NoticeDetails },
+
   { path: "/news/announcements", component: Placeholder },
 
   // Login
