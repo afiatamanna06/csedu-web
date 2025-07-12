@@ -1,5 +1,10 @@
 import Contact from "@/pages/contact/contact";
 import Home from "@/pages/home/home";
+import Notice from "@/pages/notice/notice";
+import NoticeDetails from "@/pages/notice/noticedetails";
+import Events from "@/pages/events/events";
+import EventDetails from "@/pages/events/eventdetails";
+import StudentActivity from "@/pages/studentactivity/studentactivity";
 import { type RouteComponent } from "@tanstack/react-router";
 
 import { Placeholder } from "@/components/placeholder";
@@ -20,6 +25,18 @@ export const routeConfigs = [
   // Base
   { path: "/", component: Home },
   { path: "/contact", component: Contact },
+
+  // Notice
+  { path: "/notice", component: Notice },
+  { path: "/notice/archived", component: Notice },
+  { path: "/notice/$noticeId", component: NoticeDetails },
+
+  // Events
+  { path: "/events", component: Events },
+  { path: "/events/$eventId", component: EventDetails },
+
+  // Student Activity
+  { path: "/student-activity", component: StudentActivity },
 
   // About
   { path: "/about/history", component: Placeholder },
