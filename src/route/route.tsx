@@ -10,6 +10,8 @@ import { Navbar } from "@/components/navigation/navbar";
 import Footer from "@/components/footer/footer";
 import { routeConfigs } from "./route-configs";
 
+console.log("Route configuration loading...");
+
 // 1. Define root route with layout
 const rootRoute = createRootRoute({
   component: () => (

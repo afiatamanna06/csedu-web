@@ -16,6 +16,7 @@ import FacultyMembers from "@/pages/people/faculty/all";
 import OfficersAndStaff from "@/pages/people/staffs/staffs";
 import DashboardLayout from "@/layouts/dashboard-layout";
 import FacultyOverview from "@/pages/dashboard/faculty/overview";
+import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
 
 export const routeConfigs = [
   // Base
@@ -105,8 +106,9 @@ export const routeConfigs = [
       },
       {
         path: "semester-routine",
-        component: Placeholder,
+        component: SemesterRoutine,
       },
+    
       {
         path: "settings",
         component: Placeholder,
