@@ -102,7 +102,7 @@ const EditNoticeModal: React.FC<EditNoticeModalProps> = ({ isOpen, onClose, noti
           <h2 className="text-2xl font-bold text-gray-900">Edit Notice</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
           >
             <X className="w-6 h-6 text-gray-500" />
           </button>
@@ -320,7 +320,7 @@ const EditNoticeModal: React.FC<EditNoticeModalProps> = ({ isOpen, onClose, noti
                 <button
                   type="button"
                   onClick={handleAddAttachment}
-                  className="inline-flex items-center justify-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="inline-flex items-center justify-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
@@ -339,7 +339,7 @@ const EditNoticeModal: React.FC<EditNoticeModalProps> = ({ isOpen, onClose, noti
                     <button
                       type="button"
                       onClick={() => handleRemoveAttachment(index)}
-                      className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors"
+                      className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -368,13 +368,13 @@ const EditNoticeModal: React.FC<EditNoticeModalProps> = ({ isOpen, onClose, noti
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
             >
               Update Notice
             </button>
