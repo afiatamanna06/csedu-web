@@ -21,7 +21,7 @@ import OfficersAndStaff from "@/pages/people/staffs/staffs";
 import DashboardLayout from "@/layouts/dashboard-layout";
 import FacultyOverview from "@/pages/dashboard/faculty/overview";
 import AdminNotice from "@/pages/admin/notice/adminnotice";
-import AddNotice from "@/pages/admin/notice/addnotice";
+// import AddNotice from "@/pages/admin/notice/addnotice";
 
 export const routeConfigs = [
   // Base
@@ -194,10 +194,10 @@ export const routeConfigs = [
         path: "notices",
         component: AdminNotice,
       },
-      {
-        path: "notices/addnotice",
-        component: AddNotice,
-      },
+      // {
+      //   path: "notices/addnotice",
+      //   component: AddNotice,
+      // },
       {
         path: "events",
         component: Placeholder,
