@@ -11,7 +11,7 @@ interface EditEventsSearch {
 
 const EditEvents: React.FC = () => {
   const navigate = useNavigate();
-  const search = useSearch({ from: '/dashboard/admin/events/editevents' }) as EditEventsSearch;
+  const search = useSearch({ from: '__root__' }) as EditEventsSearch;
   const eventId = Number(search.id);
 
   // Find the event to edit
@@ -24,7 +24,7 @@ const EditEvents: React.FC = () => {
         <div className="bg-white p-8 rounded shadow text-center">
           <h2 className="text-xl font-bold mb-4 text-red-600">Event not found</h2>
           <button
-            onClick={() => navigate({ to: '/dashboard/admin/events' })}
+            onClick={() => navigate({ to: '/' })}
             className="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded text-primary font-semibold"
           >
             Back to Events
@@ -74,7 +74,7 @@ const EditEvents: React.FC = () => {
     );
     // Normally, you'd update the global state or send to backend here
     console.log('Updated events:', updatedEvents);
-    navigate({ to: '/dashboard/admin/events' });
+    navigate({ to: '/' });
   };
 
   return (
@@ -149,14 +149,19 @@ const EditEvents: React.FC = () => {
                 accept="image/*"
                 onChange={(e) => {
                   if (e.target.files && e.target.files.length > 0) {
-                    setForm({ ...form, image: e.target.files[0] });
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setForm({ ...form, image: reader.result as string });
+                    };
+                    reader.readAsDataURL(file);
                   }
                 }}
                 className="block w-full text-sm text-gray-800 cursor-pointer file:mr-4 file:py-1.5 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-[#3D007B] hover:file:bg-yellow-100"
               />
               {form.image && typeof form.image !== "string" && (
                 <span className="text-xs text-gray-600 mt-1 block">
-                  Selected: {form.image.name}
+                  Selected: {form.image.name ?? ""}
                 </span>
               )}
               {form.image && typeof form.image === "string" && (
@@ -338,7 +343,7 @@ const EditEvents: React.FC = () => {
         <div className="flex items-center justify-end space-x-2 pt-4 border-t border-gray-200">
           <button
             type="button"
-            onClick={() => navigate({ to: '/dashboard/admin/events' })}
+            onClick={() => navigate({ to: '/' })}
             className="px-4 py-1.5 border border-gray-300 text-[#3D007B] rounded-md hover:bg-[#f4f0ff] transition-colors cursor-pointer text-sm"
           >
             Cancel

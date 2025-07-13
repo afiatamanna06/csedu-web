@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Calendar, User, MapPin, Clock, FileText } from "lucide-react";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 
 const AddNotice: React.FC = () => {
-  const search = useSearch({ from: "/dashboard/admin/notices/addnotice" });
+  
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -48,21 +48,21 @@ const AddNotice: React.FC = () => {
     toast.success("Notice added successfully!");
   };
 
-  const handleReset = () => {
-    setFormData({
-      title: "",
-      description: "",
-      detailedDescription: "",
-      pdfFile: null,
-      category: "general",
-      date: new Date().toISOString().split("T")[0],
-      expiryDate: "",
-      author: "",
-      location: "",
-      time: "",
-      isArchived: false,
-    });
-  };
+  // const handleReset = () => {
+  //   setFormData({
+  //     title: "",
+  //     description: "",
+  //     detailedDescription: "",
+  //     pdfFile: null,
+  //     category: "general",
+  //     date: new Date().toISOString().split("T")[0],
+  //     expiryDate: "",
+  //     author: "",
+  //     location: "",
+  //     time: "",
+  //     isArchived: false,
+  //   });
+  // };
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">
@@ -116,7 +116,7 @@ const AddNotice: React.FC = () => {
               <select
                 required
                 value={formData.category}
-                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value as "general" | "academic" | "administrative" })}
                 className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-yellow-400 focus:border-transparent hover:border-[#7C3AED] transition-colors text-sm text-gray-800"
               >
                 <option value="general">General</option>
@@ -225,7 +225,7 @@ const AddNotice: React.FC = () => {
         <div className="flex items-center justify-end space-x-2 pt-4 border-t border-gray-200">
           <button
             type="button"
-            onClick={() => navigate({ to: "/dashboard/admin/notices/addnotice" })}
+            onClick={() => navigate({ to: "/" })}
             className="px-4 py-1.5 border border-gray-300 text-[#3D007B] rounded-md hover:bg-[#f4f0ff] transition-colors cursor-pointer text-sm"
           >
             Reset

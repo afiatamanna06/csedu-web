@@ -63,7 +63,7 @@ const AdminNotice: React.FC = () => {
             <div className="w-64 h-1 bg-yellow-400 mt-2"></div>
           </div>
           <button
-            onClick={() => navigate({ to: "/dashboard/admin/notices/addnotice" })}
+            onClick={() => navigate({ to: "/" })}
             className="bg-yellow-400 hover:bg-yellow-500 text-primary font-semibold px-6 py-2 rounded-md text-sm transition cursor-pointer flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
@@ -73,7 +73,7 @@ const AdminNotice: React.FC = () => {
         
         {notices.length > 0 ? (
           <div className="my-10">
-            {notices.map((notice, index) => (
+            {notices.map((notice) => (
               <div
                 key={notice.id}
                 className="border-b hover:bg-[#f4f0ff] group transition"
@@ -135,7 +135,7 @@ const AdminNotice: React.FC = () => {
               Get started by adding your first notice.
             </p>
             <button
-              onClick={() => navigate({ to: "/dashboard/admin/notices/addnotice" })}
+              onClick={() => navigate({ to: "/" })}
               className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2 rounded-md text-sm transition cursor-pointer"
             >
               <Plus className="w-4 h-4 mr-2 inline" />
