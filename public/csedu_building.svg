@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <!-- Building main structure -->
+  <rect x="100" y="50" width="600" height="300" fill="#f5f5f5" stroke="#333" stroke-width="2"/>
+  
+  <!-- Windows -->
+  <g fill="#a5d8ff" stroke="#333" stroke-width="1">
+    <!-- First row -->
+    <rect x="150" y="80" width="60" height="40"/>
+    <rect x="250" y="80" width="60" height="40"/>
+    <rect x="350" y="80" width="60" height="40"/>
+    <rect x="450" y="80" width="60" height="40"/>
+    <rect x="550" y="80" width="60" height="40"/>
+    
+    <!-- Second row -->
+    <rect x="150" y="140" width="60" height="40"/>
+    <rect x="250" y="140" width="60" height="40"/>
+    <rect x="350" y="140" width="60" height="40"/>
+    <rect x="450" y="140" width="60" height="40"/>
+    <rect x="550" y="140" width="60" height="40"/>
+    
+    <!-- Third row -->
+    <rect x="150" y="200" width="60" height="40"/>
+    <rect x="250" y="200" width="60" height="40"/>
+    <rect x="350" y="200" width="60" height="40"/>
+    <rect x="450" y="200" width="60" height="40"/>
+    <rect x="550" y="200" width="60" height="40"/>
+    
+    <!-- Fourth row -->
+    <rect x="150" y="260" width="60" height="40"/>
+    <rect x="250" y="260" width="60" height="40"/>
+    <rect x="350" y="260" width="60" height="40"/>
+    <rect x="450" y="260" width="60" height="40"/>
+    <rect x="550" y="260" width="60" height="40"/>
+  </g>
+  
+  <!-- Entrance -->
+  <rect x="300" y="300" width="200" height="50" fill="#fff" stroke="#333" stroke-width="2"/>
+  <rect x="350" y="300" width="100" height="50" fill="#13274C" stroke="#333" stroke-width="1"/>
+  
+  <!-- Pillars -->
+  <rect x="300" y="300" width="20" height="50" fill="#ddd" stroke="#333" stroke-width="1"/>
+  <rect x="480" y="300" width="20" height="50" fill="#ddd" stroke="#333" stroke-width="1"/>
+  
+  <!-- Roof -->
+  <polygon points="50,50 750,50 700,20 100,20" fill="#ddd" stroke="#333" stroke-width="2"/>
+  
+  <!-- Trees -->
+  <circle cx="200" cy="350" r="30" fill="#4CAF50"/>
+  <circle cx="600" cy="350" r="30" fill="#4CAF50"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="350" width="800" height="50" fill="#8d6e63"/>
+  
+  <!-- Department Name -->
+  <text x="400" y="380" font-family="Arial" font-size="16" text-anchor="middle" fill="#fff">Department of Computer Science and Engineering</text>
+</svg>
