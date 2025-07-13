@@ -48,27 +48,91 @@ const profileData: ProfileData = {
   photo: "https://randomuser.me/api/portraits/women/44.jpg",
   bio: "Wenxin Du is a Professor of Finance and the Sylvan C. Coleman Professor of Financial Management at the Harvard Business School. She studies global currency and fixed income markets, central banking, financial regulations, and emerging market finance. She was the recipient of 2022 Award for Economics in Central Banking, and was named the Alfred P. Sloan Foundation Research Fellow 2021-2023.",
   education: [
-    { degree: "Ph.D.", major: "Computer Graphics", institute: "Toyohashi University of Technology", year: "2001" },
-    { degree: "Masters", major: "Computer Graphics", institute: "Toyohashi University of Technology", year: "1990" },
-    { degree: "Bachelor", major: "Computer Graphics", institute: "Toyohashi University of Technology", year: "1987" }
+    {
+      degree: "Ph.D.",
+      major: "Computer Graphics",
+      institute: "Toyohashi University of Technology",
+      year: "2001",
+    },
+    {
+      degree: "Masters",
+      major: "Computer Graphics",
+      institute: "Toyohashi University of Technology",
+      year: "1990",
+    },
+    {
+      degree: "Bachelor",
+      major: "Computer Graphics",
+      institute: "Toyohashi University of Technology",
+      year: "1987",
+    },
   ],
   experience: [
-    { title: "Professor", organization: "Dept of Computer Science & Engineering, University of Dhaka", duration: "18 Years", year: "2007-PRESENT" },
-    { title: "Associate Professor", organization: "Dept of Computer Science & Engineering, University of Dhaka", duration: "4 Years", year: "2003-2007" },
-    { title: "Associate Professor", organization: "Dept of CSE, Shah Jalal University of Science and Technology", duration: "7 Years", year: "1995-2003" },
-    { title: "Scientific Officer", organization: "Bangladesh Atomic Energy Commission", duration: "5 Years", year: "1990-1995" }
+    {
+      title: "Professor",
+      organization:
+        "Dept of Computer Science & Engineering, University of Dhaka",
+      duration: "18 Years",
+      year: "2007-PRESENT",
+    },
+    {
+      title: "Associate Professor",
+      organization:
+        "Dept of Computer Science & Engineering, University of Dhaka",
+      duration: "4 Years",
+      year: "2003-2007",
+    },
+    {
+      title: "Associate Professor",
+      organization:
+        "Dept of CSE, Shah Jalal University of Science and Technology",
+      duration: "7 Years",
+      year: "1995-2003",
+    },
+    {
+      title: "Scientific Officer",
+      organization: "Bangladesh Atomic Energy Commission",
+      duration: "5 Years",
+      year: "1990-1995",
+    },
   ],
   awards: [
-    { title: "Best Researcher Award", type: "Academic Excellence", description: "Outstanding contributions to research", year: "2001" },
-    { title: "Young Faculty Award", type: "Early Career", description: "Promising early-career faculty demonstrating high potential", year: "1990" },
-    { title: "Best Paper Award", type: "Research Publication", description: "Best paper in a peer-reviewed international journal", year: "1987" }
+    {
+      title: "Best Researcher Award",
+      type: "Academic Excellence",
+      description: "Outstanding contributions to research",
+      year: "2001",
+    },
+    {
+      title: "Young Faculty Award",
+      type: "Early Career",
+      description:
+        "Promising early-career faculty demonstrating high potential",
+      year: "1990",
+    },
+    {
+      title: "Best Paper Award",
+      type: "Research Publication",
+      description: "Best paper in a peer-reviewed international journal",
+      year: "1987",
+    },
   ],
   researchProfiles: [
-    { label: "GOOGLE SCHOLARS", icon: "🎓", url: "#", btnLabel: "VIEW PROFILE" },
+    {
+      label: "GOOGLE SCHOLARS",
+      icon: "🎓",
+      url: "#",
+      btnLabel: "VIEW PROFILE",
+    },
     { label: "RESEARCH GATE", icon: "🎓", url: "#", btnLabel: "VIEW PROFILE" },
     { label: "CURRICULUM VITAE", icon: "📄", url: "#", btnLabel: "VIEW" },
-    { label: "PERSONAL WEBSITE", icon: "🌐", url: "#", btnLabel: "VIEW PROFILE" }
-  ]
+    {
+      label: "PERSONAL WEBSITE",
+      icon: "🌐",
+      url: "#",
+      btnLabel: "VIEW PROFILE",
+    },
+  ],
 };
 
 const courses = [
@@ -76,38 +140,38 @@ const courses = [
     number: "01",
     title: "Computer Networking",
     description: "15 weeks per semester 1 mid-term + 1 final exam / semister",
-    detailsUrl: "#"
+    detailsUrl: "#",
   },
   {
     number: "02",
     title: "Data and Telecommunication",
     description: "15 weeks per semester1 mid-term + 1 final exam / semister",
-    detailsUrl: "#"
+    detailsUrl: "#",
   },
   {
     number: "03",
     title: "Digital Logic Design",
     description: "15 weeks per semester1 mid-term + 1 final exam / semister",
-    detailsUrl: "#"
+    detailsUrl: "#",
   },
   {
     number: "04",
     title: "Human Robot Interaction",
     description: "15 weeks per semester1 mid-term + 1 final exam / semister",
-    detailsUrl: "#"
+    detailsUrl: "#",
   },
   {
     number: "05",
     title: "Machine Learning",
     description: "15 weeks per semester1 mid-term + 1 final exam / semister",
-    detailsUrl: "#"
-  }
+    detailsUrl: "#",
+  },
 ];
 
 function CoursesTab() {
   return (
     <div className="courses-tab">
-      {courses.map((course, idx) => (
+      {courses.map((course) => (
         <div className="course-item" key={course.number}>
           <div className="course-number">{course.number}</div>
           <div className="course-content">
@@ -126,46 +190,52 @@ function CoursesTab() {
 const publications = [
   {
     type: "BOOKS",
-    title: "Du, Wenxin, and Jesse Schreger. 'CIP Deviations, the Dollar, and Frictions in International Capital Markets.' Chap. 4 in Handbook of International Economics, Volume 6, edited by Gita Gopinath, Elhanan Helpman, and Kenneth Rogoff, 147–197. Handbooks in Economics. Elsevier BV, 2022.",
-    url: "#"
+    title:
+      "Du, Wenxin, and Jesse Schreger. 'CIP Deviations, the Dollar, and Frictions in International Capital Markets.' Chap. 4 in Handbook of International Economics, Volume 6, edited by Gita Gopinath, Elhanan Helpman, and Kenneth Rogoff, 147–197. Handbooks in Economics. Elsevier BV, 2022.",
+    url: "#",
   },
   {
     type: "JOURNAL",
-    title: "Du, Wenxin, and Jesse Schreger. 'CIP Deviations, the Dollar, and Frictions in International Capital Markets.' Chap. 4 in Handbook of International Economics, Volume 6, edited by Gita Gopinath, Elhanan Helpman, and Kenneth Rogoff, 147–197. Handbooks in Economics. Elsevier BV, 2022.",
-    url: "#"
+    title:
+      "Du, Wenxin, and Jesse Schreger. 'CIP Deviations, the Dollar, and Frictions in International Capital Markets.' Chap. 4 in Handbook of International Economics, Volume 6, edited by Gita Gopinath, Elhanan Helpman, and Kenneth Rogoff, 147–197. Handbooks in Economics. Elsevier BV, 2022.",
+    url: "#",
   },
   {
     type: "CONFERENCE",
-    title: "Du, Wenxin, and Jesse Schreger. 'CIP Deviations, the Dollar, and Frictions in International Capital Markets.' Chap. 4 in Handbook of International Economics, Volume 6, edited by Gita Gopinath, Elhanan Helpman, and Kenneth Rogoff, 147–197. Handbooks in Economics. Elsevier BV, 2022.",
-    url: "#"
+    title:
+      "Du, Wenxin, and Jesse Schreger. 'CIP Deviations, the Dollar, and Frictions in International Capital Markets.' Chap. 4 in Handbook of International Economics, Volume 6, edited by Gita Gopinath, Elhanan Helpman, and Kenneth Rogoff, 147–197. Handbooks in Economics. Elsevier BV, 2022.",
+    url: "#",
   },
   // ...repeat as needed for demo
   {
     type: "BOOKS",
-    title: "Du, Wenxin, and Jesse Schreger. 'CIP Deviations, the Dollar, and Frictions in International Capital Markets.' Chap. 4 in Handbook of International Economics, Volume 6, edited by Gita Gopinath, Elhanan Helpman, and Kenneth Rogoff, 147–197. Handbooks in Economics. Elsevier BV, 2022.",
-    url: "#"
+    title:
+      "Du, Wenxin, and Jesse Schreger. 'CIP Deviations, the Dollar, and Frictions in International Capital Markets.' Chap. 4 in Handbook of International Economics, Volume 6, edited by Gita Gopinath, Elhanan Helpman, and Kenneth Rogoff, 147–197. Handbooks in Economics. Elsevier BV, 2022.",
+    url: "#",
   },
   {
     type: "BOOKS",
-    title: "Du, Wenxin, and Jesse Schreger. 'CIP Deviations, the Dollar, and Frictions in International Capital Markets.' Chap. 4 in Handbook of International Economics, Volume 6, edited by Gita Gopinath, Elhanan Helpman, and Kenneth Rogoff, 147–197. Handbooks in Economics. Elsevier BV, 2022.",
-    url: "#"
+    title:
+      "Du, Wenxin, and Jesse Schreger. 'CIP Deviations, the Dollar, and Frictions in International Capital Markets.' Chap. 4 in Handbook of International Economics, Volume 6, edited by Gita Gopinath, Elhanan Helpman, and Kenneth Rogoff, 147–197. Handbooks in Economics. Elsevier BV, 2022.",
+    url: "#",
   },
   {
     type: "CONFERENCE",
-    title: "Du, Wenxin, and Jesse Schreger. 'CIP Deviations, the Dollar, and Frictions in International Capital Markets.' Chap. 4 in Handbook of International Economics, Volume 6, edited by Gita Gopinath, Elhanan Helpman, and Kenneth Rogoff, 147–197. Handbooks in Economics. Elsevier BV, 2022.",
-    url: "#"
+    title:
+      "Du, Wenxin, and Jesse Schreger. 'CIP Deviations, the Dollar, and Frictions in International Capital Markets.' Chap. 4 in Handbook of International Economics, Volume 6, edited by Gita Gopinath, Elhanan Helpman, and Kenneth Rogoff, 147–197. Handbooks in Economics. Elsevier BV, 2022.",
+    url: "#",
   },
 ];
 
 function PublicationsTab() {
   const [pubType, setPubType] = useState("BOOKS");
   const pubTypes = ["BOOKS", "JOURNAL", "CONFERENCE"];
-  const filtered = publications.filter(pub => pub.type === pubType);
+  const filtered = publications.filter((pub) => pub.type === pubType);
 
   return (
     <div className="publications-tab">
       <div className="pub-type-tabs">
-        {pubTypes.map(type => (
+        {pubTypes.map((type) => (
           <button
             key={type}
             className={`pub-type-tab${pubType === type ? " active" : ""}`}
@@ -179,7 +249,9 @@ function PublicationsTab() {
         {filtered.map((pub, idx) => (
           <div className="pub-item" key={idx}>
             <div className="pub-title">
-              <a href={pub.url} target="_blank" rel="noopener noreferrer">{pub.title}</a>
+              <a href={pub.url} target="_blank" rel="noopener noreferrer">
+                {pub.title}
+              </a>
             </div>
             <a className="pub-link" href={pub.url}>
               View Details <span className="arrow">→</span>
@@ -194,15 +266,16 @@ function PublicationsTab() {
 const contactInfo = {
   name: "Wenxin Du",
   title: "Professor",
-  department: "Department of Computer Science and Engineering\nFaculty of Engineering and Technology",
+  department:
+    "Department of Computer Science and Engineering\nFaculty of Engineering and Technology",
   phone: "+1012 3456 789",
   email: "demo@gmail.com",
   address: "132 Dartmouth Street Boston,\nMassachusetts 02156 United States",
   socials: [
     { icon: "🌐", url: "#" },
     { icon: "🐦", url: "#" },
-    { icon: "📸", url: "#" }
-  ]
+    { icon: "📸", url: "#" },
+  ],
 };
 
 function ContactInfoTab() {
@@ -216,18 +289,26 @@ function ContactInfoTab() {
           <div className="contact-dept">{contactInfo.department}</div>
         </div>
         <div className="contact-details">
-          <div><span className="contact-icon">📞</span> {contactInfo.phone}</div>
-          <div><span className="contact-icon">✉️</span> {contactInfo.email}</div>
-          <div><span className="contact-icon">📍</span> {contactInfo.address}</div>
+          <div>
+            <span className="contact-icon">📞</span> {contactInfo.phone}
+          </div>
+          <div>
+            <span className="contact-icon">✉️</span> {contactInfo.email}
+          </div>
+          <div>
+            <span className="contact-icon">📍</span> {contactInfo.address}
+          </div>
         </div>
         <div className="contact-socials">
           {contactInfo.socials.map((s, i) => (
-            <a key={i} href={s.url} className="contact-social">{s.icon}</a>
+            <a key={i} href={s.url} className="contact-social">
+              {s.icon}
+            </a>
           ))}
         </div>
         <div className="contact-bg-circles"></div>
       </div>
-      <form className="contact-form" onSubmit={e => e.preventDefault()}>
+      <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
         <div className="contact-form-row">
           <div>
             <label>First Name</label>
@@ -252,10 +333,19 @@ function ContactInfoTab() {
           <div>
             <label>Select Subject?</label>
             <div className="contact-radio-group">
-              <label><input type="radio" name="subject" defaultChecked /> General Inquiry</label>
-              <label><input type="radio" name="subject" /> Collaboration Request</label>
-              <label><input type="radio" name="subject" /> Research Inquiry</label>
-              <label><input type="radio" name="subject" /> Invitation</label>
+              <label>
+                <input type="radio" name="subject" defaultChecked /> General
+                Inquiry
+              </label>
+              <label>
+                <input type="radio" name="subject" /> Collaboration Request
+              </label>
+              <label>
+                <input type="radio" name="subject" /> Research Inquiry
+              </label>
+              <label>
+                <input type="radio" name="subject" /> Invitation
+              </label>
             </div>
           </div>
         </div>
@@ -263,7 +353,9 @@ function ContactInfoTab() {
           <textarea placeholder=" " rows={3}></textarea>
           <label>Message</label>
         </div>
-        <button className="contact-submit" type="submit">Send Message</button>
+        <button className="contact-submit" type="submit">
+          Send Message
+        </button>
       </form>
     </div>
   );
@@ -293,7 +385,7 @@ export default function Profile() {
       {/* Tabs and Tab Content inside a card */}
       <div className="tab-card">
         <div className="profile-tabs">
-          {['PROFILE', 'COURSES', 'PUBLICATIONS', 'CONTACT INFO'].map(tab => (
+          {["PROFILE", "COURSES", "PUBLICATIONS", "CONTACT INFO"].map((tab) => (
             <button
               key={tab}
               className={`tab${activeTab === tab ? " active" : ""}`}
@@ -389,10 +481,18 @@ export default function Profile() {
                 <div className="research-card">
                   <div className="research-links">
                     {data.researchProfiles.map((profile, i) => (
-                      <a href={profile.url} className="research-link" key={i} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={profile.url}
+                        className="research-link"
+                        key={i}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <div className="research-link-icon">{profile.icon}</div>
                         {profile.label}
-                        <div className="research-link-btn">{profile.btnLabel}</div>
+                        <div className="research-link-btn">
+                          {profile.btnLabel}
+                        </div>
                       </a>
                     ))}
                   </div>
@@ -407,4 +507,4 @@ export default function Profile() {
       </div>
     </div>
   );
-} 
+}
