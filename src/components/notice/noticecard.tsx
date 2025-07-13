@@ -25,16 +25,16 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice, isArchived = false }) =
   const handleDownloadPDF = (e: React.MouseEvent) => {
     e.stopPropagation()
 
-    if (notice.pdfUrl) {
+    if (notice.pdfFile) {
+      const url = URL.createObjectURL(notice.pdfFile)
       const link = document.createElement("a")
-      link.href = notice.pdfUrl
+      link.href = url
       link.download = `${notice.title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.pdf`
       link.target = "_blank"
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
-    } else if (notice.id) {
-      window.open(`/api/notices/${notice.id}/download-pdf`, "_blank")
+      URL.revokeObjectURL(url)
     } else {
       alert("PDF not available for this notice")
     }

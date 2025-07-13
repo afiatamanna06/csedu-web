@@ -1,26 +1,28 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Paperclip } from 'lucide-react';
+import { Plus, Edit, Trash2} from 'lucide-react';
 import { sampleNotices } from '../../../assets/assets';
 import type { Notice } from '../../../assets/assets';
-import AddNoticeModal from '../../../components/admin/notice/addnoticemodal';
+// Removed: import AddNoticeModal from '../../../components/admin/notice/addnoticemodal';
 import EditNoticeModal from '../../../components/admin/notice/editnoticemodal';
 import DeleteConfirmModal from '../../../components/admin/notice/deleteconfirmmodal';
+import { useNavigate } from '@tanstack/react-router';
 
 const AdminNotice: React.FC = () => {
   const [notices, setNotices] = useState<Notice[]>(sampleNotices);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  // Removed: const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedNotice, setSelectedNotice] = useState<Notice | null>(null);
+  const navigate = useNavigate();
 
-  const handleAddNotice = (newNotice: Omit<Notice, 'id'>) => {
-    const notice: Notice = {
-      ...newNotice,
-      id: Math.max(...notices.map(n => n.id)) + 1
-    };
-    setNotices([notice, ...notices]);
-    setIsAddModalOpen(false);
-  };
+  // const handleAddNotice = (newNotice: Omit<Notice, 'id'>) => {
+  //   const notice: Notice = {
+  //     ...newNotice,
+  //     id: Math.max(...notices.map(n => n.id)) + 1
+  //   };
+  //   setNotices([notice, ...notices]);
+  //   // Removed: setIsAddModalOpen(false);
+  // };
 
   const handleEditNotice = (updatedNotice: Notice) => {
     setNotices(notices.map(notice => 
@@ -61,7 +63,7 @@ const AdminNotice: React.FC = () => {
             <div className="w-64 h-1 bg-yellow-400 mt-2"></div>
           </div>
           <button
-            onClick={() => setIsAddModalOpen(true)}
+            onClick={() => navigate({ to: "/dashboard/admin/notices/addnotice" })}
             className="bg-yellow-400 hover:bg-yellow-500 text-primary font-semibold px-6 py-2 rounded-md text-sm transition cursor-pointer flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
@@ -90,19 +92,18 @@ const AdminNotice: React.FC = () => {
                           Expired
                         </span>
                       )}
-                      {notice.attachments && notice.attachments.length > 0 && (
+                      {/* {notice.attachments && notice.attachments.length > 0 && (
                         <span className="flex items-center gap-1 text-xs text-gray-500">
                           <Paperclip className="w-3 h-3" />
                           {notice.attachments.length} attachment(s)
                         </span>
-                      )}
+                      )} */}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => {
-                        setSelectedNotice(notice);
-                        setIsEditModalOpen(true);
+                        navigate({ to: `/dashboard/admin/notices/editnotice?id=${notice.id}` });
                       }}
                       className="p-2 text-green-500 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors cursor-pointer"
                       title="Edit Notice"
@@ -134,7 +135,7 @@ const AdminNotice: React.FC = () => {
               Get started by adding your first notice.
             </p>
             <button
-              onClick={() => setIsAddModalOpen(true)}
+              onClick={() => navigate({ to: "/dashboard/admin/notices/addnotice" })}
               className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2 rounded-md text-sm transition cursor-pointer"
             >
               <Plus className="w-4 h-4 mr-2 inline" />
@@ -145,12 +146,7 @@ const AdminNotice: React.FC = () => {
       </div>
 
       {/* Modals */}
-      <AddNoticeModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        onAdd={handleAddNotice}
-      />
-
+      {/* Removed: AddNoticeModal */}
       {selectedNotice && (
         <>
           <EditNoticeModal

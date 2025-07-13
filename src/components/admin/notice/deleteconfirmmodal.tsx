@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, Trash2, AlertTriangle } from 'lucide-react';
+import { toast } from 'react-toastify';
 import type { Notice } from '../../../assets/assets';
 
 interface DeleteConfirmModalProps {
@@ -9,8 +10,13 @@ interface DeleteConfirmModalProps {
   onDelete: () => void;
 }
 
-const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ isOpen, onClose, notice, onDelete }) => {
+const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ isOpen, onClose, onDelete }) => {
   if (!isOpen) return null;
+
+  const handleDelete = () => {
+    onDelete();
+    toast.success("Notice deleted successfully!");
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
@@ -44,7 +50,7 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ isOpen, onClose
             Cancel
           </button>
           <button
-            onClick={onDelete}
+            onClick={handleDelete}
             className="inline-flex items-center px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-xs font-medium shadow-sm"
           >
             <Trash2 className="w-3 h-3 mr-1" />
