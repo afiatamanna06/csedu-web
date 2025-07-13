@@ -1,6 +1,11 @@
 import Contact from "@/pages/contact/contact";
 import Home from "@/pages/home/home";
-import { type RouteComponent } from "@tanstack/react-router";
+
+import Profile from "@/pages/profile/profile";
+import Programs from "@/pages/programs/programs";
+import Degree from "@/pages/programs/degree";
+import type { RouteComponent } from "@tanstack/react-router";
+
 import About from "@/pages/about/about";
 
 import { Placeholder } from "@/components/placeholder";
@@ -22,6 +27,10 @@ export const routeConfigs = [
   // Base
   { path: "/", component: Home },
   { path: "/contact", component: Contact },
+
+  { path: "/profile", component: Profile },
+  { path: "/programs", component: Programs },
+  { path: "/degree", component: Degree },
 
   // About
   { path: "/about/history", component: About },
@@ -208,6 +217,7 @@ export const routeConfigs = [
       },
     ],
   },
+
 ] as const satisfies ReadonlyArray<{
   path: string;
   component: RouteComponent;
