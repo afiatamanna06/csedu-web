@@ -1,6 +1,14 @@
 import Contact from "@/pages/contact/contact";
 import Home from "@/pages/home/home";
 
+import Notice from "@/pages/notice/notice";
+import NoticeDetails from "@/pages/notice/noticedetails";
+import Events from "@/pages/events/events";
+import EventDetails from "@/pages/events/eventdetails";
+import StudentActivity from "@/pages/studentactivity/studentactivity";
+import { type RouteComponent } from "@tanstack/react-router";
+
+
 import Profile from "@/pages/profile/profile";
 import Programs from "@/pages/programs/programs";
 import Degree from "@/pages/programs/degree";
@@ -22,7 +30,15 @@ import OfficersAndStaff from "@/pages/people/staffs/staffs";
 import DashboardLayout from "@/layouts/dashboard-layout";
 import FacultyOverview from "@/pages/dashboard/faculty/overview";
 
+import AdminNotice from "@/pages/admin/notice/adminnotice";
+import AddNotice from "@/pages/admin/notice/addnotice";
+import EditNotice from "@/pages/admin/notice/editnotice";
+import AdminEvents from "@/pages/admin/events/adminevents";
+import AddEvents from "@/pages/admin/events/addevents";
+import EditEvents from "@/pages/admin/events/editevents";
+
 import FeeStructure from "@/pages/dashboard/fee-structure";
+
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
 
 
@@ -31,9 +47,11 @@ export const routeConfigs = [
   { path: "/", component: Home },
   { path: "/contact", component: Contact },
 
+
   { path: "/profile", component: Profile },
   { path: "/programs", component: Programs },
   { path: "/degree", component: Degree },
+
 
   // About
   { path: "/about/history", component: About },
@@ -62,7 +80,7 @@ export const routeConfigs = [
   { path: "/research/facilities", component: Placeholder },
 
   // Student
-  { path: "/student/activities", component: Placeholder },
+  { path: "/student/activities", component: StudentActivity },
   { path: "/student/acheivements", component: Placeholder },
   { path: "/student/scholarships", component: Placeholder },
   { path: "/student/foreign", component: Placeholder },
@@ -72,10 +90,14 @@ export const routeConfigs = [
   { path: "/alumni/achievements", component: Placeholder },
   { path: "/alumni/events", component: Placeholder },
 
+
   // News
-  { path: "/news/latest", component: Placeholder },
-  { path: "/news/events", component: Placeholder },
-  { path: "/news/announcements", component: Placeholder },
+  { path: "news/notice", component: Notice },
+  { path: "news/notice/archived", component: Notice },
+  { path: "news/notice/$noticeId", component: NoticeDetails },
+  { path: "/news/events", component: Events },
+  { path: "/news/events/$eventId", component: EventDetails },
+
 
   // Login
   { path: "/login/faculty", component: FacultyLogin },
@@ -194,6 +216,31 @@ export const routeConfigs = [
       {
         path: "payments",
         component: Placeholder,
+      },
+      {
+        path: "notices",
+        component: AdminNotice,
+      },
+      {
+        path: "notices/addnotice",
+        component: AddNotice,
+      },
+      {
+        path: "notices/editnotice",
+        component: EditNotice,
+      },
+
+      {
+        path: "events",
+        component: AdminEvents,
+      },
+      {
+        path: "events/addevents",
+        component: AddEvents,
+      },
+      {
+        path: "events/editevents",
+        component: EditEvents,
       },
       {
         path: "settings",
