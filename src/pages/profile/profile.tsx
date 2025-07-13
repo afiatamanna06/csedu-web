@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./profile.css";
 
 // TypeScript interfaces for the data structure
