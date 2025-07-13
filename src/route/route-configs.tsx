@@ -6,6 +6,7 @@ import Events from "@/pages/events/events";
 import EventDetails from "@/pages/events/eventdetails";
 import StudentActivity from "@/pages/studentactivity/studentactivity";
 import { type RouteComponent } from "@tanstack/react-router";
+import About from "@/pages/about/about";
 
 import { Placeholder } from "@/components/placeholder";
 import {
@@ -20,12 +21,15 @@ import FacultyMembers from "@/pages/people/faculty/all";
 import OfficersAndStaff from "@/pages/people/staffs/staffs";
 import DashboardLayout from "@/layouts/dashboard-layout";
 import FacultyOverview from "@/pages/dashboard/faculty/overview";
+
 import AdminNotice from "@/pages/admin/notice/adminnotice";
 import AddNotice from "@/pages/admin/notice/addnotice";
 import EditNotice from "@/pages/admin/notice/editnotice";
 import AdminEvents from "@/pages/admin/events/adminevents";
 import AddEvents from "@/pages/admin/events/addevents";
 import EditEvents from "@/pages/admin/events/editevents";
+import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
+
 
 export const routeConfigs = [
   // Base
@@ -36,7 +40,7 @@ export const routeConfigs = [
   // Student Activity
 
   // About
-  { path: "/about/history", component: Placeholder },
+  { path: "/about/history", component: About },
   { path: "/about/mission-vision", component: Placeholder },
 
   // Academic
@@ -122,8 +126,9 @@ export const routeConfigs = [
       },
       {
         path: "semester-routine",
-        component: Placeholder,
+        component: SemesterRoutine,
       },
+    
       {
         path: "settings",
         component: Placeholder,
