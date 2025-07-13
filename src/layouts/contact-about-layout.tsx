@@ -1,5 +1,4 @@
 import { Link, Outlet } from "@tanstack/react-router";
-import React from "react";
 
 interface LayoutProps {
   currentPage: 'home' | 'about' | 'programs' | 'faculty' | 'research' | 'contact';
@@ -19,11 +18,11 @@ export default function Layout({ currentPage }: LayoutProps) {
           </div>
           <nav className="hidden md:flex space-x-8">
             <Link to="/" className={`${currentPage === 'home' ? 'bg-[#FFB606] text-white px-2 py-1 rounded' : 'text-[#13274C] hover:text-[#FFB606]'}`}>Home</Link>
-            <Link to="/about" className={`${currentPage === 'about' ? 'bg-[#FFB606] text-white px-2 py-1 rounded' : 'text-[#13274C] hover:text-[#FFB606]'}`}>About</Link>
-            <Link to="/programs" className={`${currentPage === 'programs' ? 'bg-[#FFB606] text-white px-2 py-1 rounded' : 'text-[#13274C] hover:text-[#FFB606]'}`}>Programs</Link>
-            <Link to="/faculty" className={`${currentPage === 'faculty' ? 'bg-[#FFB606] text-white px-2 py-1 rounded' : 'text-[#13274C] hover:text-[#FFB606]'}`}>Faculty</Link>
-            <Link to="/research" className={`${currentPage === 'research' ? 'bg-[#FFB606] text-white px-2 py-1 rounded' : 'text-[#13274C] hover:text-[#FFB606]'}`}>Research</Link>
-            <Link to="/contact" className={`${currentPage === 'contact' ? 'bg-[#FFB606] text-white px-2 py-1 rounded' : 'text-[#13274C] hover:text-[#FFB606]'}`}>Contact</Link>
+            <Link to="/" className={`${currentPage === 'about' ? 'bg-[#FFB606] text-white px-2 py-1 rounded' : 'text-[#13274C] hover:text-[#FFB606]'}`}>About</Link>
+            <Link to="/" className={`${currentPage === 'programs' ? 'bg-[#FFB606] text-white px-2 py-1 rounded' : 'text-[#13274C] hover:text-[#FFB606]'}`}>Programs</Link>
+            <Link to="/" className={`${currentPage === 'faculty' ? 'bg-[#FFB606] text-white px-2 py-1 rounded' : 'text-[#13274C] hover:text-[#FFB606]'}`}>Faculty</Link>
+            <Link to="/" className={`${currentPage === 'research' ? 'bg-[#FFB606] text-white px-2 py-1 rounded' : 'text-[#13274C] hover:text-[#FFB606]'}`}>Research</Link>
+            <Link to="/" className={`${currentPage === 'contact' ? 'bg-[#FFB606] text-white px-2 py-1 rounded' : 'text-[#13274C] hover:text-[#FFB606]'}`}>Contact</Link>
           </nav>
         </div>
       </header>
