@@ -21,7 +21,10 @@ import FacultyMembers from "@/pages/people/faculty/all";
 import OfficersAndStaff from "@/pages/people/staffs/staffs";
 import DashboardLayout from "@/layouts/dashboard-layout";
 import FacultyOverview from "@/pages/dashboard/faculty/overview";
+
+import FeeStructure from "@/pages/dashboard/fee-structure";
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
+
 
 export const routeConfigs = [
   // Base
@@ -100,6 +103,10 @@ export const routeConfigs = [
       {
         path: "payments",
         component: Placeholder,
+      },
+      {
+        path: "fee-structure",
+        component: FeeStructure,
       },
       {
         path: "equipment-fees",

@@ -7,6 +7,7 @@ const sidebarLinks: Record<string, SidebarLink[]> = {
     { label: "Overview", path: "/dashboard/student/overview" },
     { label: "Courses", path: "/dashboard/student/courses" },
     { label: "Grades", path: "/dashboard/student/grades" },
+    { label: "Fee Structure", path: "/dashboard/student/fee-structure" },
     { label: "Exam Payments", path: "/dashboard/student/payments" },
     { label: "Equipment Fees", path: "/dashboard/student/equipment-fees" },
     { label: "Exam Routine", path: "/dashboard/student/exam-routine" },
