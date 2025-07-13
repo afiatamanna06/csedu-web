@@ -6,7 +6,6 @@ import NoticeDetails from "@/pages/notice/noticedetails";
 import Events from "@/pages/events/events";
 import EventDetails from "@/pages/events/eventdetails";
 import StudentActivity from "@/pages/studentactivity/studentactivity";
-import { type RouteComponent } from "@tanstack/react-router";
 
 
 import Profile from "@/pages/profile/profile";

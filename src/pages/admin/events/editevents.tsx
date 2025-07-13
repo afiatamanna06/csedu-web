@@ -14,11 +14,33 @@ const EditEvents: React.FC = () => {
   const search = useSearch({ from: '__root__' }) as EditEventsSearch;
   const eventId = Number(search.id);
 
-  // Find the event to edit
   const eventToEdit = sampleEvents.find(e => e.id === eventId);
 
-  // If not found, show error
-  if (!eventToEdit) {
+  // Always call useState at the top
+  const [form, setForm] = useState<Omit<Event, 'id'> | null>(() => {
+    if (!eventToEdit) return null;
+    return {
+      title: eventToEdit.title,
+      date: eventToEdit.date,
+      location: eventToEdit.location,
+      organizer: eventToEdit.organizer,
+      category: eventToEdit.category,
+      startTime: eventToEdit.startTime,
+      endTime: eventToEdit.endTime,
+      description: eventToEdit.description,
+      detailedDescription: eventToEdit.detailedDescription,
+      image: eventToEdit.image,
+      tags: eventToEdit.tags,
+      registrationOpen: eventToEdit.registrationOpen,
+      registrationClosed: eventToEdit.registrationClosed,
+      maxAttendees: eventToEdit.maxAttendees,
+      currentAttendees: eventToEdit.currentAttendees,
+      registrationDeadline: eventToEdit.registrationDeadline,
+      contactEmail: eventToEdit.contactEmail,
+    };
+  });
+
+  if (!form) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="bg-white p-8 rounded shadow text-center">
@@ -34,45 +56,26 @@ const EditEvents: React.FC = () => {
     );
   }
 
-  // Initialize form with all required Event fields
-  const [form, setForm] = useState<Omit<Event, 'id'>>({
-    title: eventToEdit.title,
-    date: eventToEdit.date,
-    location: eventToEdit.location,
-    organizer: eventToEdit.organizer,
-    category: eventToEdit.category,
-    startTime: eventToEdit.startTime,
-    endTime: eventToEdit.endTime,
-    description: eventToEdit.description,
-    detailedDescription: eventToEdit.detailedDescription,
-    image: eventToEdit.image,
-    tags: eventToEdit.tags,
-    registrationOpen: eventToEdit.registrationOpen,
-    registrationClosed: eventToEdit.registrationClosed,
-    maxAttendees: eventToEdit.maxAttendees,
-    currentAttendees: eventToEdit.currentAttendees,
-    registrationDeadline: eventToEdit.registrationDeadline,
-    contactEmail: eventToEdit.contactEmail,
-  });
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value, type } = e.target;
     setForm(prev => ({
-      ...prev,
-      [name]: type === 'number' ? Number(value) : value,
+      ...prev!,
+      [name]:
+        name === 'tags'
+          ? value.split(',').map(tag => tag.trim())
+          : type === 'number'
+          ? Number(value)
+          : value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Update the event in your backend or global state
-    // For demo, update sampleEvents (in a real app, use a proper state management or API call)
     const updatedEvents = sampleEvents.map(event =>
       event.id === eventId ? { id: eventId, ...form } : event
     );
-    // Normally, you'd update the global state or send to backend here
     console.log('Updated events:', updatedEvents);
     navigate({ to: '/' });
   };
@@ -93,7 +96,7 @@ const EditEvents: React.FC = () => {
                 required
                 value={form.title}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md transition-all duration-200 focus:w-[102%] hover:border-[#7C3AED] text-sm text-gray-800 placeholder:text-gray-400"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md transition-all duration-200 text-sm text-gray-800"
                 placeholder="Enter event title"
               />
             </div>
@@ -107,7 +110,7 @@ const EditEvents: React.FC = () => {
                 rows={2}
                 value={form.description}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md transition-all duration-200 focus:w-[102%] hover:border-[#7C3AED] text-sm text-gray-800 placeholder:text-gray-400"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
                 placeholder="Brief description for preview"
               />
             </div>
@@ -121,7 +124,7 @@ const EditEvents: React.FC = () => {
                 rows={4}
                 value={form.detailedDescription}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md transition-all duration-200 focus:w-[102%] hover:border-[#7C3AED] text-sm text-gray-800 placeholder:text-gray-400"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
                 placeholder="Full detailed description"
               />
             </div>
@@ -133,9 +136,9 @@ const EditEvents: React.FC = () => {
               <input
                 type="text"
                 name="tags"
-                value={form.tags}
+                value={form.tags.join(', ')}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-yellow-400 focus:border-transparent hover:border-[#7C3AED] transition-colors text-sm text-gray-800"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
                 placeholder="e.g. Workshop, AI, Beginner"
               />
             </div>
@@ -152,22 +155,19 @@ const EditEvents: React.FC = () => {
                     const file = e.target.files[0];
                     const reader = new FileReader();
                     reader.onloadend = () => {
-                      setForm({ ...form, image: reader.result as string });
+                      setForm(prev => ({ ...prev!, image: reader.result as string }));
                     };
                     reader.readAsDataURL(file);
                   }
                 }}
                 className="block w-full text-sm text-gray-800 cursor-pointer file:mr-4 file:py-1.5 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-[#3D007B] hover:file:bg-yellow-100"
               />
-              {form.image && typeof form.image !== "string" && (
-                <span className="text-xs text-gray-600 mt-1 block">
-                  Selected: {form.image.name ?? ""}
-                </span>
-              )}
               {form.image && typeof form.image === "string" && (
-                <span className="text-xs text-gray-600 mt-1 block">
-                  Current: {form.image}
-                </span>
+                <img
+                  src={form.image}
+                  alt="Event"
+                  className="w-32 h-20 object-cover mt-2 rounded"
+                />
               )}
             </div>
             <div>
@@ -179,7 +179,7 @@ const EditEvents: React.FC = () => {
                 required
                 value={form.category}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-yellow-400 focus:border-transparent hover:border-[#7C3AED] transition-colors text-sm text-gray-800"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
               >
                 {eventCategories
                   .filter((cat) => cat.id !== "all")
@@ -201,7 +201,7 @@ const EditEvents: React.FC = () => {
                 required
                 value={form.date}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-yellow-400 focus:border-transparent hover:border-[#7C3AED] transition-colors text-sm text-gray-800"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
               />
             </div>
             <div>
@@ -215,7 +215,7 @@ const EditEvents: React.FC = () => {
                 required
                 value={form.startTime}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-yellow-400 focus:border-transparent hover:border-[#7C3AED] transition-colors text-sm text-gray-800"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
               />
             </div>
             <div>
@@ -229,7 +229,7 @@ const EditEvents: React.FC = () => {
                 required
                 value={form.endTime}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-yellow-400 focus:border-transparent hover:border-[#7C3AED] transition-colors text-sm text-gray-800"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
               />
             </div>
             <div>
@@ -243,7 +243,7 @@ const EditEvents: React.FC = () => {
                 required
                 value={form.location}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-yellow-400 focus:border-transparent hover:border-[#7C3AED] transition-colors text-sm text-gray-800 placeholder:text-gray-400"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
                 placeholder="Event location"
               />
             </div>
@@ -257,7 +257,7 @@ const EditEvents: React.FC = () => {
                 required
                 value={form.organizer}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-yellow-400 focus:border-transparent hover:border-[#7C3AED] transition-colors text-sm text-gray-800 placeholder:text-gray-400"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
                 placeholder="Organizer name"
               />
             </div>
@@ -272,7 +272,7 @@ const EditEvents: React.FC = () => {
                 required
                 value={form.contactEmail}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-yellow-400 focus:border-transparent hover:border-[#7C3AED] transition-colors text-sm text-gray-800 placeholder:text-gray-400"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
                 placeholder="Contact email"
               />
             </div>
@@ -286,7 +286,7 @@ const EditEvents: React.FC = () => {
                 required
                 value={form.registrationDeadline}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-yellow-400 focus:border-transparent hover:border-[#7C3AED] transition-colors text-sm text-gray-800"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
               />
             </div>
             <div>
@@ -300,8 +300,7 @@ const EditEvents: React.FC = () => {
                 required
                 value={form.maxAttendees}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-yellow-400 focus:border-transparent hover:border-[#7C3AED] transition-colors text-sm text-gray-800"
-                placeholder="Maximum number of attendees"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
               />
             </div>
             <div>
@@ -314,8 +313,7 @@ const EditEvents: React.FC = () => {
                 min={0}
                 value={form.currentAttendees}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-1 focus:ring-yellow-400 focus:border-transparent hover:border-[#7C3AED] transition-colors text-sm text-gray-800"
-                placeholder="Current number of attendees"
+                className="w-full px-3 py-1.5 border border-gray-300 rounded-md text-sm text-gray-800"
               />
             </div>
             <div className="flex items-center gap-4 md:col-span-2">
@@ -323,8 +321,8 @@ const EditEvents: React.FC = () => {
                 <input
                   type="checkbox"
                   checked={form.registrationOpen}
-                  onChange={(e) => setForm({ ...form, registrationOpen: e.target.checked })}
-                  className="w-3 h-3 text-yellow-400 border-gray-300 rounded focus:ring-yellow-400 mr-2"
+                  onChange={(e) => setForm(prev => ({ ...prev!, registrationOpen: e.target.checked }))}
+                  className="w-3 h-3 text-yellow-400 border-gray-300 rounded mr-2"
                 />
                 Registration Open
               </label>
@@ -332,8 +330,8 @@ const EditEvents: React.FC = () => {
                 <input
                   type="checkbox"
                   checked={form.registrationClosed}
-                  onChange={(e) => setForm({ ...form, registrationClosed: e.target.checked })}
-                  className="w-3 h-3 text-yellow-400 border-gray-300 rounded focus:ring-yellow-400 mr-2"
+                  onChange={(e) => setForm(prev => ({ ...prev!, registrationClosed: e.target.checked }))}
+                  className="w-3 h-3 text-yellow-400 border-gray-300 rounded mr-2"
                 />
                 Registration Closed
               </label>
@@ -344,13 +342,13 @@ const EditEvents: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate({ to: '/' })}
-            className="px-4 py-1.5 border border-gray-300 text-[#3D007B] rounded-md hover:bg-[#f4f0ff] transition-colors cursor-pointer text-sm"
+            className="px-4 py-1.5 border border-gray-300 text-[#3D007B] rounded-md hover:bg-[#f4f0ff] transition-colors text-sm"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-1.5 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition-colors cursor-pointer text-sm"
+            className="px-4 py-1.5 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 transition-colors text-sm"
           >
             Save Changes
           </button>
