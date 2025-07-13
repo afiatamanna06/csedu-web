@@ -1,13 +1,3 @@
-import Layout from "../../layouts/contact-about-layout";
-
-
-export function meta() {
-  return [
-    { title: "Contact CSEDU - Department of Computer Science and Engineering, University of Dhaka" },
-    { name: "description", content: "Contact the Department of Computer Science and Engineering at the University of Dhaka (CSEDU). Find our location, phone numbers, email addresses, and send us a message." },
-  ];
-}
-
 export default function Contact() {
   return (
     <div className="py-12">
