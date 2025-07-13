@@ -1,11 +1,19 @@
 import Contact from "@/pages/contact/contact";
 import Home from "@/pages/home/home";
+
 import Notice from "@/pages/notice/notice";
 import NoticeDetails from "@/pages/notice/noticedetails";
 import Events from "@/pages/events/events";
 import EventDetails from "@/pages/events/eventdetails";
 import StudentActivity from "@/pages/studentactivity/studentactivity";
 import { type RouteComponent } from "@tanstack/react-router";
+
+
+import Profile from "@/pages/profile/profile";
+import Programs from "@/pages/programs/programs";
+import Degree from "@/pages/programs/degree";
+import type { RouteComponent } from "@tanstack/react-router";
+
 import About from "@/pages/about/about";
 
 import { Placeholder } from "@/components/placeholder";
@@ -28,6 +36,9 @@ import EditNotice from "@/pages/admin/notice/editnotice";
 import AdminEvents from "@/pages/admin/events/adminevents";
 import AddEvents from "@/pages/admin/events/addevents";
 import EditEvents from "@/pages/admin/events/editevents";
+
+import FeeStructure from "@/pages/dashboard/fee-structure";
+
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
 
 
@@ -37,7 +48,10 @@ export const routeConfigs = [
   { path: "/contact", component: Contact },
 
 
-  // Student Activity
+  { path: "/profile", component: Profile },
+  { path: "/programs", component: Programs },
+  { path: "/degree", component: Degree },
+
 
   // About
   { path: "/about/history", component: About },
@@ -111,6 +125,10 @@ export const routeConfigs = [
       {
         path: "payments",
         component: Placeholder,
+      },
+      {
+        path: "fee-structure",
+        component: FeeStructure,
       },
       {
         path: "equipment-fees",
@@ -253,6 +271,7 @@ export const routeConfigs = [
       },
     ],
   },
+
 ] as const satisfies ReadonlyArray<{
   path: string;
   component: RouteComponent;
