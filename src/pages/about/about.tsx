@@ -1,12 +1,4 @@
-import Layout from "../../layouts/contact-about-layout";
 import { useState, useEffect } from "react";
-
-export function meta() {
-  return [
-    { title: "About - CSEDU - Department of Computer Science and Engineering, University of Dhaka" },
-    { name: "description", content: "Learn about the Department of Computer Science and Engineering at the University of Dhaka, its history, mission, and achievements." },
-  ];
-};
 
 export default function About() {
   const [activeSection, setActiveSection] = useState("about");
@@ -197,7 +189,7 @@ export default function About() {
               <table className="min-w-full bg-white border border-gray-300">
                 <thead>
                   <tr>
-                    <th className="border border-gray-300 px-4 py-2" colSpan="4">Dept. of Computer Science</th>
+                    <th className="border border-gray-300 px-4 py-2" colSpan={4}>Dept. of Computer Science</th>
                   </tr>
                   <tr>
                     <th className="border border-gray-300 px-4 py-2"></th>
@@ -245,7 +237,7 @@ export default function About() {
               <table className="min-w-full bg-white border border-gray-300">
                 <thead>
                   <tr>
-                    <th className="border border-gray-300 px-4 py-2" colSpan="4">Dept. of Computer Science and Engineering</th>
+                    <th className="border border-gray-300 px-4 py-2" colSpan={4}>Dept. of Computer Science and Engineering</th>
                   </tr>
                   <tr>
                     <th className="border border-gray-300 px-4 py-2"></th>
