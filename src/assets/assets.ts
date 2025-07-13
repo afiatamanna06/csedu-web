@@ -46,9 +46,6 @@ export interface Event {
   organizer: string;
   registrationDeadline: string;
   contactEmail: string;
-  requiresTshirt?: boolean;
-  requiresEmergencyContact?: boolean;
-  includesMeals?: boolean;
 }
 
 export interface Notice {
@@ -91,9 +88,6 @@ export const sampleEvents: Event[] = [
     organizer: "CSEDU Programming Club",
     registrationDeadline: "2025-06-10",
     contactEmail: "programming@csedu.edu.bd",
-    requiresTshirt: true,
-    requiresEmergencyContact: false,
-    includesMeals: true
   },
   {
     id: 2,
@@ -114,9 +108,6 @@ export const sampleEvents: Event[] = [
     organizer: "AI Research Lab",
     registrationDeadline: "2025-06-18",
     contactEmail: "ailab@csedu.edu.bd",
-    requiresTshirt: true,
-    requiresEmergencyContact: true,
-    includesMeals: true
   },
   {
     id: 3,
@@ -207,7 +198,7 @@ export const sampleEvents: Event[] = [
     location: "Data Science Lab",
     description: "Comprehensive workshop covering data analysis, visualization, and machine learning with Python and R.",
     detailedDescription: "Enhance your data science skills through this comprehensive workshop series covering the complete data science pipeline from data collection to model deployment. The program is designed for students and professionals seeking practical data science experience.\n\nTopics include data cleaning and preprocessing, exploratory data analysis, statistical modeling, machine learning algorithms, data visualization, and result interpretation. Hands-on sessions with Python, R, Pandas, NumPy, Scikit-learn, and Tableau provide practical experience with industry-standard tools.\n\nParticipants work on real-world datasets and complete projects that can be added to their professional portfolios. The series concludes with project presentations and peer review sessions.",
-    image: research,
+    image: career,
     tags: ["Workshop", "Data Science", "Python"],
     registrationOpen: true,
     registrationClosed: false,
@@ -218,26 +209,6 @@ export const sampleEvents: Event[] = [
     registrationDeadline: "2025-08-10",
     contactEmail: "datascience@csedu.edu.bd"
   },
-  {
-    id: 8,
-    title: "International Programming Contest",
-    date: "2025-09-10",
-    startTime: "09:00",
-    endTime: "14:00",
-    location: "Programming Contest Hall",
-    description: "Competitive programming contest with international participants testing algorithmic skills.",
-    detailedDescription: "Participate in the prestigious International Programming Contest featuring competitive programmers from universities worldwide. This challenging competition tests algorithmic thinking, problem-solving skills, and programming efficiency.\n\nThe contest includes multiple rounds with problems ranging from basic algorithms to advanced data structures and mathematical concepts. Teams of three members compete to solve complex programming challenges within strict time limits.\n\nPrizes include scholarships, internship opportunities, and recognition in the international competitive programming community. Training sessions and practice contests are available for preparation.",
-    image: award,
-    tags: ["Contest", "Programming", "International"],
-    registrationOpen: true,
-    registrationClosed: false,
-    maxAttendees: 150,
-    currentAttendees: 98,
-    category: "competition",
-    organizer: "ACM Student Chapter",
-    registrationDeadline: "2025-09-05",
-    contactEmail: "acm@csedu.edu.bd"
-  }
 ];
 
 export const sampleNotices: Notice[] = [

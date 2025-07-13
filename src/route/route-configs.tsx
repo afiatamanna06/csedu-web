@@ -23,6 +23,9 @@ import FacultyOverview from "@/pages/dashboard/faculty/overview";
 import AdminNotice from "@/pages/admin/notice/adminnotice";
 import AddNotice from "@/pages/admin/notice/addnotice";
 import EditNotice from "@/pages/admin/notice/editnotice";
+import AdminEvents from "@/pages/admin/events/adminevents";
+import AddEvents from "@/pages/admin/events/addevents";
+import EditEvents from "@/pages/admin/events/editevents";
 
 export const routeConfigs = [
   // Base
@@ -206,7 +209,15 @@ export const routeConfigs = [
 
       {
         path: "events",
-        component: Placeholder,
+        component: AdminEvents,
+      },
+      {
+        path: "events/addevents",
+        component: AddEvents,
+      },
+      {
+        path: "events/editevents",
+        component: EditEvents,
       },
       {
         path: "settings",
