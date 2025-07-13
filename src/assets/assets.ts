@@ -46,6 +46,11 @@ export interface Event {
   organizer: string;
   registrationDeadline: string;
   contactEmail: string;
+
+  // ✅ Add these optional fields if used in some events only
+  requiresTshirt?: boolean;
+  requiresEmergencyContact?: boolean;
+  includesMeals?: boolean;
 }
 
 export interface Notice {
