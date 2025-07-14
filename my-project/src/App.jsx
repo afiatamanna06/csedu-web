@@ -12,7 +12,6 @@ import AdminDashboard from "./Pages/AdminDashboard";
 import Achievements from "./Pages/Achievements";
 import AuthProvider from "./contexts/AuthContext";
 import SidebarLayout from "./components/SidebarLayout";
-import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
 import GradeManagement from "./Pages/GradeManagement";
 
@@ -40,11 +39,9 @@ function App() {
           <Route
             path="/admin/bookings"
             element={
-              <ProtectedRoute requireAdmin={true}>
-                <SidebarLayout>
-                  <BookingRequests />
-                </SidebarLayout>
-              </ProtectedRoute>
+              <SidebarLayout>
+                <BookingRequests />
+              </SidebarLayout>
             }
           />
           <Route
@@ -58,11 +55,9 @@ function App() {
           <Route
             path="/admin/dashboard"
             element={
-              <ProtectedRoute requireAdmin={true}>
-                <SidebarLayout>
-                  <AdminDashboard />
-                </SidebarLayout>
-              </ProtectedRoute>
+              <SidebarLayout>
+                <AdminDashboard />
+              </SidebarLayout>
             }
           />
           <Route

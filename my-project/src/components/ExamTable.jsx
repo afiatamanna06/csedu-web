@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 const EllipsisIcon = () => (
   <svg
     width="16"
@@ -22,15 +24,28 @@ const EllipsisIcon = () => (
   </svg>
 );
 
-const ExamTable = ({ data }) => {
+const ExamTable = ({ data, onUpdate, onDelete }) => {
+  const [activeMenu, setActiveMenu] = useState(null);
+
+  const handleMenuClick = (index, e) => {
+    e.stopPropagation(); // Prevent event bubbling
+    setActiveMenu(activeMenu === index ? null : index);
+  };
+
+  // Close menu when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = () => setActiveMenu(null);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
         {/* Table Header */}
         <thead className="bg-[#FFC300]">
           <tr>
-            <th scope="col" className="w-4"></th>
-            {["Date", "Time", "Course Code", "Course Name", "Room No", "Invigilator"].map((header) => (
+            {["Date", "Time", "Course Code", "Course Name", "Room No", "Invigilator", "Actions"].map((header) => (
               <th
                 key={header}
                 scope="col"
@@ -39,7 +54,6 @@ const ExamTable = ({ data }) => {
                 {header}
               </th>
             ))}
-            <th scope="col" className="w-4"></th>
           </tr>
         </thead>
 
@@ -50,7 +64,6 @@ const ExamTable = ({ data }) => {
               key={index}
               className={index % 2 === 1 ? "bg-gray-50" : undefined}
             >
-              <td className="w-4"></td>
               <td className="px-4 py-3 text-left text-sm text-gray-900">
                 {row.date}
               </td>
@@ -71,10 +84,38 @@ const ExamTable = ({ data }) => {
               <td className="px-4 py-3 text-left text-sm text-gray-900">
                 {row.invigilator}
               </td>
-              <td className="w-4">
-                <button className="text-gray-400 hover:text-gray-500">
+              <td className="px-4 py-3 text-left text-sm text-gray-900 relative">
+                <button 
+                  className="text-gray-400 hover:text-gray-500 p-1"
+                  onClick={(e) => handleMenuClick(index, e)}
+                >
                   <EllipsisIcon />
                 </button>
+                {activeMenu === index && (
+                  <div 
+                    className="absolute right-8 top-2 bg-white rounded-md shadow-lg border border-gray-200 z-50 min-w-[100px]"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <button
+                      onClick={() => {
+                        onUpdate(row);
+                        setActiveMenu(null);
+                      }}
+                      className="w-full px-4 py-2 text-gray-700 hover:bg-gray-100 text-left"
+                    >
+                      Update
+                    </button>
+                    <button
+                      onClick={() => {
+                        onDelete(row);
+                        setActiveMenu(null);
+                      }}
+                      className="w-full px-4 py-2 text-red-600 hover:bg-gray-100 text-left border-t border-gray-200"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
               </td>
             </tr>
           ))}

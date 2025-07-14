@@ -16,20 +16,8 @@ const Login = () => {
     try {
       setError("");
       setLoading(true);
-      const result = await login(email, password);
-      
-      // Check if trying to access admin route and user is not admin
-      if (window.location.pathname.startsWith('/admin') && !result.user.email.endsWith('@admin.csedu.edu')) {
-        setError("You don't have admin privileges to access this page");
-        return;
-      }
-      
-      // Navigate based on user role
-      if (result.user.email.endsWith('@admin.csedu.edu')) {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/");
-      }
+      await login(email, password);
+      navigate("/admin/dashboard");
     } catch (error) {
       console.error("Login error:", error);
       let errorMessage = "Failed to log in: ";
@@ -61,20 +49,8 @@ const Login = () => {
     try {
       setError("");
       setLoading(true);
-      const result = await signInWithGoogle();
-      
-      // Check if trying to access admin route and user is not admin
-      if (window.location.pathname.startsWith('/admin') && !result.user.email.endsWith('@admin.csedu.edu')) {
-        setError("You don't have admin privileges to access this page");
-        return;
-      }
-      
-      // Navigate based on user role
-      if (result.user.email.endsWith('@admin.csedu.edu')) {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/");
-      }
+      await signInWithGoogle();
+      navigate("/admin/dashboard");
     } catch (error) {
       console.error("Google sign in error:", error);
       setError("Failed to sign in with Google: " + (error.message || "Unknown error"));

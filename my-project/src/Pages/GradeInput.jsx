@@ -7,7 +7,7 @@ const GradeInput = () => {
     "4th year - 1st Semester",
   );
   const [selectedCourse, setSelectedCourse] = useState(
-    "Data Structures and Algorithms 2012",
+    "CSE-401: Data Structures and Algorithms",
   );
   const [selectedRoom, setSelectedRoom] = useState("3rd floor : 412");
 
@@ -24,14 +24,14 @@ const GradeInput = () => {
       "1st year - 2nd Semester",
     ],
     course: [
-      "Data Structures and Algorithms 2012",
-      "Artificial Intelligence",
-      "Machine Learning",
-      "Operating Systems",
-      "Linear Algebra",
-      "Database Systems",
-      "Computer Networks",
-      "Software Engineering",
+      "CSE-401: Data Structures and Algorithms",
+      "CSE-402: Artificial Intelligence",
+      "CSE-403: Machine Learning",
+      "CSE-404: Operating Systems",
+      "CSE-405: Linear Algebra",
+      "CSE-406: Database Systems",
+      "CSE-407: Computer Networks",
+      "CSE-408: Software Engineering",
     ],
     room: [
       "3rd floor : 412",
@@ -52,7 +52,8 @@ const GradeInput = () => {
       name: "Arif Rahman",
       grade: "A+",
       semester: "4th year - 1st Semester",
-      course: "Data Structures and Algorithms 2012",
+      course: "CSE-401: Data Structures and Algorithms",
+      courseCode: "CSE-401",
       room: "3rd floor : 412",
     },
     {
@@ -60,7 +61,8 @@ const GradeInput = () => {
       name: "Fatima Khan",
       grade: "A",
       semester: "4th year - 1st Semester",
-      course: "Data Structures and Algorithms 2012",
+      course: "CSE-401: Data Structures and Algorithms",
+      courseCode: "CSE-401",
       room: "3rd floor : 412",
     },
     {
@@ -68,7 +70,8 @@ const GradeInput = () => {
       name: "Imran Ali",
       grade: "B+",
       semester: "4th year - 1st Semester",
-      course: "Data Structures and Algorithms 2012",
+      course: "CSE-401: Data Structures and Algorithms",
+      courseCode: "CSE-401",
       room: "3rd floor : 412",
     },
     {
@@ -76,7 +79,8 @@ const GradeInput = () => {
       name: "Nadia Islam",
       grade: "B",
       semester: "4th year - 1st Semester",
-      course: "Data Structures and Algorithms 2012",
+      course: "CSE-401: Data Structures and Algorithms",
+      courseCode: "CSE-401",
       room: "3rd floor : 412",
     },
     {
@@ -84,7 +88,8 @@ const GradeInput = () => {
       name: "Rohan Sharma",
       grade: "C+",
       semester: "4th year - 1st Semester",
-      course: "Data Structures and Algorithms 2012",
+      course: "CSE-401: Data Structures and Algorithms",
+      courseCode: "CSE-401",
       room: "3rd floor : 412",
     },
     {
@@ -92,7 +97,8 @@ const GradeInput = () => {
       name: "Priya Verma",
       grade: "C",
       semester: "4th year - 1st Semester",
-      course: "Data Structures and Algorithms 2012",
+      course: "CSE-401: Data Structures and Algorithms",
+      courseCode: "CSE-401",
       room: "3rd floor : 412",
     },
     {
@@ -100,7 +106,8 @@ const GradeInput = () => {
       name: "Vikram Singh",
       grade: "D+",
       semester: "4th year - 1st Semester",
-      course: "Data Structures and Algorithms 2012",
+      course: "CSE-401: Data Structures and Algorithms",
+      courseCode: "CSE-401",
       room: "3rd floor : 412",
     },
     {
@@ -108,7 +115,8 @@ const GradeInput = () => {
       name: "Anjali Kapoor",
       grade: "D",
       semester: "4th year - 1st Semester",
-      course: "Data Structures and Algorithms 2012",
+      course: "CSE-401: Data Structures and Algorithms",
+      courseCode: "CSE-401",
       room: "3rd floor : 412",
     },
     {
@@ -116,7 +124,8 @@ const GradeInput = () => {
       name: "Rahul Gupta",
       grade: "F",
       semester: "4th year - 1st Semester",
-      course: "Data Structures and Algorithms 2012",
+      course: "CSE-401: Data Structures and Algorithms",
+      courseCode: "CSE-401",
       room: "3rd floor : 412",
     },
     {
@@ -124,7 +133,8 @@ const GradeInput = () => {
       name: "Sneha Reddy",
       grade: "A+",
       semester: "4th year - 1st Semester",
-      course: "Data Structures and Algorithms 2012",
+      course: "CSE-401: Data Structures and Algorithms",
+      courseCode: "CSE-401",
       room: "3rd floor : 412",
     },
   ]);

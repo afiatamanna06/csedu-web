@@ -7,6 +7,17 @@ const ExamSchedule = () => {
   const [selectedCourse, setSelectedCourse] = useState("Artificial Intelligence");
   const [selectedRoom, setSelectedRoom] = useState("3rd floor : 412");
   const [selectedInvigilator, setSelectedInvigilator] = useState("All");
+  const [showForm, setShowForm] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    date: '',
+    time: '',
+    courseCode: '',
+    courseName: '',
+    roomNo: '',
+    invigilator: '',
+    semester: ''
+  });
 
   // Dropdown options moved to a separate object for better organization
   const dropdownOptions = {
@@ -49,7 +60,7 @@ const ExamSchedule = () => {
   };
 
   // Sample exam data
-  const examData = [
+  const [examData, setExamData] = useState([
     {
       date: "2025-06-10",
       time: "10:00 AM",
@@ -86,7 +97,7 @@ const ExamSchedule = () => {
       invigilator: "Dr. Emily Chen",
       semester: "2nd year - 2nd Semester"
     },
-  ];
+  ]);
 
   // Filter the exam data based on selected options
   const filteredExamData = useMemo(() => {
@@ -98,23 +109,84 @@ const ExamSchedule = () => {
       
       return matchesSemester && matchesCourse && matchesRoom && matchesInvigilator;
     });
-  }, [selectedSemester, selectedCourse, selectedRoom, selectedInvigilator]);
+  }, [selectedSemester, selectedCourse, selectedRoom, selectedInvigilator, examData]);
 
   // Add "All" option to dropdowns
   const getOptionsWithAll = (options) => ["All", ...options];
+
+  const handleUpdate = (exam) => {
+    setFormData(exam);
+    setIsEditing(true);
+    setShowForm(true);
+  };
+
+  const handleDelete = (exam) => {
+    setExamData(examData.filter(e => 
+      e.courseCode !== exam.courseCode || 
+      e.date !== exam.date || 
+      e.time !== exam.time
+    ));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (isEditing) {
+      setExamData(examData.map(exam => 
+        (exam.courseCode === formData.courseCode && 
+         exam.date === formData.date && 
+         exam.time === formData.time) ? formData : exam
+      ));
+    } else {
+      setExamData([...examData, formData]);
+    }
+    setShowForm(false);
+    setIsEditing(false);
+    setFormData({
+      date: '',
+      time: '',
+      courseCode: '',
+      courseName: '',
+      roomNo: '',
+      invigilator: '',
+      semester: ''
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main Container with max width and center alignment */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header Section */}
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-medium text-gray-900 font-poppins">
-            Exam Schedule
-          </h1>
-          <p className="mt-2 text-sm text-gray-600 font-inter">
-            Welcome to our exam scheduling system
-          </p>
+        {/* Header Section with Add Button */}
+        <header className="flex justify-between items-center mb-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-medium text-gray-900 font-poppins">
+              Exam Schedule
+            </h1>
+            <p className="mt-2 text-sm text-gray-600 font-inter">
+              Welcome to our exam scheduling system
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              setIsEditing(false);
+              setFormData({
+                date: '',
+                time: '',
+                courseCode: '',
+                courseName: '',
+                roomNo: '',
+                invigilator: '',
+                semester: ''
+              });
+              setShowForm(true);
+            }}
+            className="px-4 py-2 bg-[#13274C] text-white rounded-lg hover:bg-[#1e3a5f] transition-colors duration-200 flex items-center space-x-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            <span>Add Exam</span>
+          </button>
         </header>
 
         {/* Filters Section */}
@@ -157,13 +229,143 @@ const ExamSchedule = () => {
         {/* Table Section */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           {filteredExamData.length > 0 ? (
-            <ExamTable data={filteredExamData} />
+            <ExamTable 
+              data={filteredExamData} 
+              onUpdate={handleUpdate}
+              onDelete={handleDelete}
+            />
           ) : (
             <div className="text-center py-8 text-gray-500">
               No exams found matching the selected filters
             </div>
           )}
         </div>
+
+        {/* Add/Edit Form Modal */}
+        {showForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-[#13274C]">
+                  {isEditing ? 'Update Exam' : 'Add New Exam'}
+                </h2>
+                <button
+                  onClick={() => setShowForm(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                    <input
+                      type="date"
+                      value={formData.date}
+                      onChange={(e) => setFormData({...formData, date: e.target.value})}
+                      className="w-full p-2 border rounded-lg"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                    <input
+                      type="time"
+                      value={formData.time}
+                      onChange={(e) => setFormData({...formData, time: e.target.value})}
+                      className="w-full p-2 border rounded-lg"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Course Code</label>
+                    <input
+                      type="text"
+                      value={formData.courseCode}
+                      onChange={(e) => setFormData({...formData, courseCode: e.target.value})}
+                      className="w-full p-2 border rounded-lg"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Course Name</label>
+                    <select
+                      value={formData.courseName}
+                      onChange={(e) => setFormData({...formData, courseName: e.target.value})}
+                      className="w-full p-2 border rounded-lg"
+                      required
+                    >
+                      <option value="">Select Course</option>
+                      {dropdownOptions.course.map(course => (
+                        <option key={course} value={course}>{course}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Room No</label>
+                    <select
+                      value={formData.roomNo}
+                      onChange={(e) => setFormData({...formData, roomNo: e.target.value.split(" : ")[1]})}
+                      className="w-full p-2 border rounded-lg"
+                      required
+                    >
+                      <option value="">Select Room</option>
+                      {dropdownOptions.room.map(room => (
+                        <option key={room} value={room}>{room}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Invigilator</label>
+                    <select
+                      value={formData.invigilator}
+                      onChange={(e) => setFormData({...formData, invigilator: e.target.value})}
+                      className="w-full p-2 border rounded-lg"
+                      required
+                    >
+                      <option value="">Select Invigilator</option>
+                      {dropdownOptions.invigilator.map(invigilator => (
+                        <option key={invigilator} value={invigilator}>{invigilator}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Semester</label>
+                    <select
+                      value={formData.semester}
+                      onChange={(e) => setFormData({...formData, semester: e.target.value})}
+                      className="w-full p-2 border rounded-lg"
+                      required
+                    >
+                      <option value="">Select Semester</option>
+                      {dropdownOptions.semester.map(semester => (
+                        <option key={semester} value={semester}>{semester}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="flex justify-end space-x-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowForm(false)}
+                    className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-[#13274C] text-white rounded-lg hover:bg-[#1e3a5f]"
+                  >
+                    {isEditing ? 'Update Exam' : 'Add Exam'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

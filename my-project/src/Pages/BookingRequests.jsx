@@ -13,6 +13,7 @@ const BookingRequests = () => {
       time: "10:00 AM - 12:00 PM",
       requester: "Alice Johnson",
       purpose: "Project Meeting",
+      courseCode: "CSE-101",
       status: "m"
     },
     {
@@ -23,6 +24,7 @@ const BookingRequests = () => {
       time: "02:00 PM - 04:00 PM",
       requester: "Bob Williams",
       purpose: "Presentation Practice",
+      courseCode: "CSE-201",
       status: "accepted"
     },
     {
@@ -33,6 +35,7 @@ const BookingRequests = () => {
       time: "11:00 AM - 01:00 PM",
       requester: "Charlie Brown",
       purpose: "Group Study",
+      courseCode: "CSE-301",
       status: "rejected"
     },
     {
@@ -43,6 +46,7 @@ const BookingRequests = () => {
       time: "09:00 AM - 11:00 AM",
       requester: "Diana Green",
       purpose: "Seminar",
+      courseCode: "CSE-401",
       status: "m"
     },
     {
@@ -53,6 +57,7 @@ const BookingRequests = () => {
       time: "03:00 PM - 05:00 PM",
       requester: "Ethan White",
       purpose: "Workshop",
+      courseCode: "CSE-402",
       status: "accepted"
     }
   ]);
@@ -143,6 +148,7 @@ const BookingRequests = () => {
             <thead>
               <tr className="bg-[#FFC300]">
                 <th className="text-left py-3 px-6 text-sm font-semibold">Room</th>
+                <th className="text-left py-3 px-6 text-sm font-semibold">Course Code</th>
                 <th className="text-left py-3 px-6 text-sm font-semibold">Date</th>
                 <th className="text-left py-3 px-6 text-sm font-semibold">Time</th>
                 <th className="text-left py-3 px-6 text-sm font-semibold">Requester</th>
@@ -155,6 +161,7 @@ const BookingRequests = () => {
               {bookings.map((booking, index) => (
                 <tr key={index} className="border-b border-gray-100">
                   <td className="py-3 px-6 text-sm text-gray-600">{booking.room}</td>
+                  <td className="py-3 px-6 text-sm text-gray-600">{booking.courseCode}</td>
                   <td className="py-3 px-6 text-sm text-gray-600">{booking.date}</td>
                   <td className="py-3 px-6 text-sm text-gray-600">{booking.time}</td>
                   <td className="py-3 px-6 text-sm text-gray-600">{booking.requester}</td>

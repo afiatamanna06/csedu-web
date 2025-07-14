@@ -95,17 +95,19 @@ const GradeTable = ({ data, onGradeUpdate }) => {
     <table className="w-full">
       <thead>
         <tr className="bg-[#FFC300]">
-          <th className="text-left py-3 px-6 text-sm font-semibold" style={{ width: '25%' }}>Student ID</th>
-          <th className="text-left py-3 px-6 text-sm font-semibold" style={{ width: '35%' }}>Student Name</th>
+          <th className="text-left py-3 px-6 text-sm font-semibold" style={{ width: '15%' }}>Student ID</th>
+          <th className="text-left py-3 px-6 text-sm font-semibold" style={{ width: '25%' }}>Student Name</th>
+          <th className="text-left py-3 px-6 text-sm font-semibold" style={{ width: '20%' }}>Course Code</th>
           <th className="text-left py-3 px-6 text-sm font-semibold" style={{ width: '25%' }}>Grade</th>
           <th className="text-left py-3 px-6 text-sm font-semibold" style={{ width: '15%' }}>Edit</th>
         </tr>
       </thead>
       <tbody>
         {data.map((student) => (
-          <tr key={student.id} className="border-b border-gray-100">
+          <tr key={student.id} className="border-b border-gray-100 hover:bg-gray-50">
             <td className="py-3 px-6 text-sm text-gray-500 text-left">{student.id}</td>
             <td className="py-3 px-6 text-sm text-gray-600 text-left">{student.name}</td>
+            <td className="py-3 px-6 text-sm text-gray-600 text-left">{student.courseCode}</td>
             <td className="py-3 px-6 text-sm text-left">
               {editingStudent === student.id ? (
                 <select

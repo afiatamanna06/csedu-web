@@ -5,7 +5,13 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  updateProfile,
+  updateEmail,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  GoogleAuthProvider
 } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
 
@@ -78,6 +84,88 @@ export default function AuthProvider({ children }) {
     }
   };
 
+  // Reauthenticate user
+  const reauthenticate = async (password) => {
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("No user logged in");
+
+      // Check if user is signed in with Google
+      const isGoogleUser = user.providerData[0].providerId === 'google.com';
+      if (isGoogleUser) {
+        throw new Error("Google users cannot update their password directly");
+      }
+
+      const credential = EmailAuthProvider.credential(user.email, password);
+      await reauthenticateWithCredential(user, credential);
+    } catch (error) {
+      console.error("Reauthentication error:", error);
+      throw error;
+    }
+  };
+
+  // Update Profile
+  const updateUserProfile = async (profileData) => {
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("No user logged in");
+
+      console.log("AuthContext: Attempting profile update...");
+      await updateProfile(user, profileData);
+      console.log("AuthContext: Profile update successful");
+      // Update the currentUser state to reflect changes
+      setCurrentUser(prevUser => ({ ...prevUser, ...profileData }));
+    } catch (error) {
+      console.error("AuthContext: Profile update error:", error);
+      throw error;
+    }
+  };
+
+  // Update Email
+  const updateUserEmail = async (newEmail, currentPassword) => {
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("No user logged in");
+
+      // Reauthenticate first if using email/password
+      if (user.providerData[0].providerId === 'password') {
+        await reauthenticate(currentPassword);
+      }
+
+      console.log("AuthContext: Attempting email update...");
+      await updateEmail(user, newEmail);
+      console.log("AuthContext: Email update successful");
+      setCurrentUser(prevUser => ({ ...prevUser, email: newEmail }));
+    } catch (error) {
+      console.error("AuthContext: Email update error:", error);
+      throw error;
+    }
+  };
+
+  // Update Password
+  const updateUserPassword = async (currentPassword, newPassword) => {
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("No user logged in");
+
+      // Check if user is signed in with Google
+      const isGoogleUser = user.providerData[0].providerId === 'google.com';
+      if (isGoogleUser) {
+        throw new Error("Google users cannot update their password directly");
+      }
+
+      // Reauthenticate first
+      await reauthenticate(currentPassword);
+
+      console.log("AuthContext: Attempting password update...");
+      await updatePassword(user, newPassword);
+      console.log("AuthContext: Password update successful");
+    } catch (error) {
+      console.error("AuthContext: Password update error:", error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     console.log("AuthContext: Setting up auth state listener...");
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -95,7 +183,11 @@ export default function AuthProvider({ children }) {
     login,
     signInWithGoogle,
     logout,
-    resetPassword
+    resetPassword,
+    updateUserProfile,
+    updateUserEmail,
+    updateUserPassword,
+    reauthenticate
   };
 
   return (
