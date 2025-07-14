@@ -16,6 +16,7 @@ import OfficersAndStaff from "@/pages/people/staffs/staffs";
 import DashboardLayout from "@/layouts/dashboard-layout";
 import FacultyOverview from "@/pages/dashboard/faculty/overview";
 import FeeStructure from "@/pages/dashboard/fee-structure";
+import EquipmentBooking from "@/pages/dashboard/equipment-booking";
 
 export const routeConfigs = [
   // Base
@@ -96,8 +97,8 @@ export const routeConfigs = [
         component: FeeStructure,
       },
       {
-        path: "equipment-fees",
-        component: Placeholder,
+        path: "equipment-booking",
+        component: EquipmentBooking,
       },
       {
         path: "exam-routine",
