@@ -25,7 +25,8 @@ const quickLinks = [
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="bg-[#2B1472] text-white px-6 md:px-16 lg:px-28 pt-20 pb-10">
+    <div className="bg-[#2B1472] text-white">
+      <footer className=" container mx-auto  px-6 pt-16 pb-10">
       <div className="flex flex-col md:flex-row gap-10">
         {/* Left Section */}
         <div className="flex-1">
@@ -117,5 +118,6 @@ export default function Footer() {
         </div>
       </div>
     </footer>
+    </div>
   );
 }
