@@ -40,6 +40,7 @@ import EditEvents from "@/pages/admin/events/editevents";
 import FeeStructure from "@/pages/dashboard/fee-structure";
 
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
+import Course from "@/pages/dashboard/student/course";
 
 
 export const routeConfigs = [
@@ -140,7 +141,7 @@ export const routeConfigs = [
       },
       {
         path: "courses",
-        component: Placeholder,
+        component: Course,
       },
       {
         path: "semester-routine",
