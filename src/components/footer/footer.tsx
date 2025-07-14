@@ -41,7 +41,7 @@ export default function Footer() {
             </div>
 
             <div className="mt-4 space-y-2 text-sm">
-              <h4 className="font-semibold border-b-2 border-yellow-400 inline-block mb-3">
+              <h4 className="font-semibold border-b-2 border-[#FFB606] inline-block mb-3">
                 Contact
               </h4>
               <p className="flex items-center gap-2">
@@ -66,7 +66,7 @@ export default function Footer() {
           <div className="flex flex-col flex-1 md:flex-row justify-center gap-12">
             {quickLinks.slice(0, 1).map(({ section, links }, index) => (
               <div key={index}>
-                <h4 className="font-semibold border-b-2 border-yellow-400 inline-block mb-3">
+                <h4 className="font-semibold border-b-2 border-[#FFB606] inline-block mb-3">
                   {section}
                 </h4>
                 <ul className="space-y-2 text-sm">
@@ -84,7 +84,7 @@ export default function Footer() {
           <div className="flex flex-col flex-1 md:flex-row justify-center gap-12">
             {quickLinks.slice(1, 2).map(({ section, links }, index) => (
               <div key={index}>
-                <h4 className="font-semibold border-b-2 border-yellow-400 inline-block mb-3">
+                <h4 className="font-semibold border-b-2 border-[#FFB606] inline-block mb-3">
                   {section}
                 </h4>
                 <ul className="space-y-2 text-sm">
