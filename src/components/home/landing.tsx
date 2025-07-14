@@ -9,7 +9,7 @@ export function DepartmentOverview() {
       />
       <div className="w-full h-[100%] absolute bg-gradient-to-b from-[#13274C] to-[#13274C6f] backdrop-blur-[2px]"></div>
       <div className="relative w-full h-[30rem] flex flex-col items-center justify-center p-6 md:p-12 lg:p-16">
-        <p className="text-3xl md:text-4xl lg:text-6xl max-w-[60rem] font-bold text-white text-center">
+        <p className="text-3xl md:text-4xl mt-16 md:mt-0 lg:text-6xl max-w-[60rem] font-bold text-white text-center">
           Department of Computer Science and Engineering
         </p>
         <p className="text-white max-w-[60rem] text-base md:text-lg lg:text-xl mt-12 mb-6 text-center">
@@ -31,7 +31,7 @@ export function DepartmentOverview() {
 function StatCard({ value, label }: { value: string; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <span className="text-3xl lg:text-5xl font-bold">{value}</span>
+      <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#2B1472]">{value}</span>
       <span className="text-center mt-1 lg:text-lg">{label}</span>
     </div>
   );

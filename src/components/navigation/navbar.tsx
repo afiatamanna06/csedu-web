@@ -119,7 +119,9 @@ export const Navbar: React.FC = () => {
             {/* Mobile Search */}
             <Sheet>
               <SheetTrigger asChild>
-                <Search className="mr-2" />
+                <button className="mr-2 bg-[#2B1472] p-2.5 rounded-md hover:bg-[#1a0d4c] transition-colors">
+                  <Search className="text-white" />
+                </button>
               </SheetTrigger>
               <SheetContent className="backdrop-blur-lg bg-white">
                 <SheetHeader>
@@ -151,7 +153,9 @@ export const Navbar: React.FC = () => {
           <div className="hidden lg:flex">
             <Sheet>
               <SheetTrigger asChild>
-                <Search className="mr-2" />
+                <button className="mr-2 bg-[#2B1472] p-2.5 rounded-md hover:bg-[#1a0d4c] transition-colors">
+                  <Search className="text-white" />
+                </button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
