@@ -26,7 +26,6 @@ export const Navbar: React.FC = () => {
       name: "About",
       submenu: [
         { name: "History", href: "/about/history" },
-        { name: "Mission and Vision", href: "/about/mission-vision" },
       ],
     },
     {
