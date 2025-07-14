@@ -8,7 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, X, Search } from "lucide-react";
+import { Menu, X, Search, ChevronDown } from "lucide-react";
 import Banner from "../banner/banner";
 
 type NavItem = {
@@ -171,7 +171,11 @@ export const Navbar: React.FC = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden bg-white border-t shadow-sm max-h-[80vh] overflow-auto">
             {navItems.map((item, index) => (
-              <MobileMenuItem key={index} item={item} />
+              <MobileMenuItem
+                key={index}
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                item={item}
+              />
             ))}
           </div>
         )}
@@ -191,7 +195,9 @@ const DesktopMenuItem: React.FC<{ item: NavItem }> = ({ item }) => {
 
   return (
     <div className="relative group">
-      <button className="hover:text-blue-600 transition">{item.name}</button>
+      <button className="hover:text-blue-600 transition flex flex-row items-center gap-1">
+        {item.name} <ChevronDown size={18} />
+      </button>
       <div className="absolute left-0 top-full bg-white shadow-md rounded-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200">
         {item.submenu.map((sub, idx) => (
           <div key={idx} className="relative group">
@@ -227,12 +233,19 @@ const DesktopMenuItem: React.FC<{ item: NavItem }> = ({ item }) => {
   );
 };
 
-const MobileMenuItem: React.FC<{ item: NavItem }> = ({ item }) => {
+const MobileMenuItem: React.FC<{ item: NavItem; onClick: () => void }> = ({
+  item,
+  onClick,
+}) => {
   const [open, setOpen] = React.useState(false);
 
   if (!item.submenu) {
     return (
-      <Link to={item.href!} className="block px-4 py-2 hover:bg-gray-100">
+      <Link
+        to={item.href!}
+        onClick={onClick}
+        className="block px-4 py-2 hover:bg-gray-100"
+      >
         {item.name}
       </Link>
     );
@@ -253,12 +266,13 @@ const MobileMenuItem: React.FC<{ item: NavItem }> = ({ item }) => {
               {!sub.submenu ? (
                 <Link
                   to={sub.href!}
+                  onClick={onClick}
                   className="block px-4 py-2 hover:bg-gray-100"
                 >
                   {sub.name}
                 </Link>
               ) : (
-                <MobileSubMenu item={sub} />
+                <MobileSubMenu item={sub} onClick={onClick} />
               )}
             </div>
           ))}
@@ -268,7 +282,10 @@ const MobileMenuItem: React.FC<{ item: NavItem }> = ({ item }) => {
   );
 };
 
-const MobileSubMenu: React.FC<{ item: NavItem }> = ({ item }) => {
+const MobileSubMenu: React.FC<{ item: NavItem; onClick: () => void }> = ({
+  item,
+  onClick,
+}) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -285,6 +302,7 @@ const MobileSubMenu: React.FC<{ item: NavItem }> = ({ item }) => {
             <Link
               key={idx}
               to={sub.href!}
+              onClick={onClick}
               className="block px-4 py-2 hover:bg-gray-100"
             >
               {sub.name}
