@@ -14,6 +14,7 @@ import Degree from "@/pages/programs/degree";
 import type { RouteComponent } from "@tanstack/react-router";
 
 import About from "@/pages/about/about";
+import Calender from "@/pages/academic/calender";
 
 import { Placeholder } from "@/components/placeholder";
 import {
@@ -59,7 +60,7 @@ export const routeConfigs = [
   // Academic
   { path: "/academic/programs", component: Placeholder },
   { path: "/academic/courses", component: Placeholder },
-  { path: "/academic/calendar", component: Placeholder },
+  { path: "/academic/calendar", component: Calender },
   { path: "/academic/exam-schedule", component: Placeholder },
 
   // Admission
