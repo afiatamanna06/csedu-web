@@ -25,6 +25,12 @@ import FacultyOverview from "@/pages/dashboard/faculty/overview";
 import FeeStructure from "@/pages/dashboard/fee-structure";
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
 
+import Admission from "@/pages/admission/admission";
+import ApplyMsc from "@/pages/admission/apply-msc";
+import ApplyPhd from "@/pages/admission/apply-phd";
+import ApplyMphil from "@/pages/admission/apply-mphil";
+import FormFillup from "@/pages/admission/form-fillup";
+import AwardAndResearchHighlights from "@/pages/research/award-and-research-highlights";
 
 export const routeConfigs = [
   // Base
@@ -225,6 +231,13 @@ export const routeConfigs = [
     ],
   },
 
+  { path: "/admission", component: Admission },
+  { path: "/apply-msc", component: ApplyMsc },
+  { path: "/apply-phd", component: ApplyPhd },
+  { path: "/apply-mphil", component: ApplyMphil },
+  { path: "/form-fillup", component: FormFillup },
+  { path: "/award_and_research_highlights", component: AwardAndResearchHighlights },
+  
 ] as const satisfies ReadonlyArray<{
   path: string;
   component: RouteComponent;
