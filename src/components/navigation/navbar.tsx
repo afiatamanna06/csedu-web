@@ -59,9 +59,10 @@ export const Navbar: React.FC = () => {
       submenu: [
         // Change "Research Areas" to "Research Highlights"
         { name: "Research Highlights", href: "/award_and_research_highlights" },
-        { name: "Publications", href: "/research/publications" },
-        { name: "Funded Projects", href: "/research/projects" },
-        { name: "Research Facilities", href: "/research/facilities" },
+        { name: "Research Areas", href: "/research-areas" },
+        { name: "Publications", href: "/publications" },
+        { name: "Funded Projects", href: "/funded-projects" },
+        { name: "Research Facilities", href: "/research-facilities" },
       ],
     },
     {

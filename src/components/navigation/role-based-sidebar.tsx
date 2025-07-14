@@ -59,6 +59,7 @@ export default function RoleBasedSidebar({
   const role = getRoleFromPath(location.pathname);
   const links = sidebarLinks[role];
   const title = `${role.charAt(0).toUpperCase() + role.slice(1)} Dashboard`;
+  const profileLink = `/profile/${role}`;
 
-  return <Sidebar title={title} links={links} onLinkClick={onLinkClick} />;
+  return <Sidebar title={title} links={links} onLinkClick={onLinkClick} profileLink={profileLink} />;
 }

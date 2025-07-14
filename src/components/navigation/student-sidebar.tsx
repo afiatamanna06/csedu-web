@@ -1,4 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import { Avatar } from "@/components/ui/avatar";
 
 const links = [
   { label: "Overview", path: "/dashboard/student/overview" },
@@ -17,6 +18,7 @@ export default function StudentSidebar({ onLinkClick }: StudentSidebarProps) {
 
   return (
     <div className="h-full flex flex-col">
+      {/* <div className="p-4 font-bold text-lg border-b">Student Dashboard</div> */}
       <div className="p-4 font-bold text-lg border-b">Student Dashboard</div>
       <nav className="flex flex-col gap-1 p-4 flex-1 overflow-y-auto">
         {links.map((link) => (
@@ -24,9 +26,10 @@ export default function StudentSidebar({ onLinkClick }: StudentSidebarProps) {
             key={link.path}
             to={link.path}
             onClick={onLinkClick}
-            className={`p-2 rounded hover:bg-blue-100 ${
-              location.pathname === link.path ? "bg-blue-200" : ""
-            }`}
+            // className={`p-2 rounded hover:bg-blue-100 ${
+            //   location.pathname === link.path ? "bg-blue-200" : ""
+            // }`}
+            className={`p-2 rounded hover:bg-blue-100 ${location.pathname === link.path ? "bg-blue-200" : ""}`}
           >
             {link.label}
           </Link>
