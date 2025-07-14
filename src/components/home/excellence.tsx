@@ -1,4 +1,7 @@
+import { useRouter } from "@tanstack/react-router";
+
 export const ExcellenceInEducation = () => {
+  const router = useRouter();
   return (
     <div className="container mx-auto mt-[14rem] md:mt-[6rem] lg:mt-[7rem] px-4 sm:px-6 lg:px-8 py-12">
       <div className="flex flex-col lg:flex-row gap-8 w-[100%] justify-between">
@@ -30,7 +33,12 @@ export const ExcellenceInEducation = () => {
             for regional and national level competitive programming contests.
           </p>
 
-          <button className="mt-1 px-6 py-2 bg-[#2B1472] rounded-[6px] font-semibold cursor-pointer hover:bg-[#1a0d4c] text-white transition-colors">
+          <button
+            onClick={() => {
+              router.navigate({ to: "/about/history" as string });
+            }}
+            className="mt-1 px-8 py-3 bg-[#2B1472] rounded-[6px] font-semibold cursor-pointer hover:bg-[#1a0d4c] text-white transition-colors"
+          >
             Read more
           </button>
         </div>
