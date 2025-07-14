@@ -3,7 +3,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const EquipmentBooking = () => {
@@ -83,31 +82,39 @@ const EquipmentBooking = () => {
         {/* Equipment Selection */}
         <div className="bg-white rounded-[20px] p-10 shadow-lg">
           <h3 className="text-2xl font-bold text-[#0F2545] mb-6">Available Equipment</h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {equipmentList.map((equipment) => (
-              <Card 
-                key={equipment.id} 
-                className={`p-6 rounded-[15px] border-2 transition-all ${selectedEquipment.includes(equipment.id) ? 'border-[#F39C12] shadow-md' : 'border-gray-200'}`}
+              <Card
+                key={equipment.id}
+                className={`p-6 rounded-[15px] border-2 transition-all ${
+                  selectedEquipment.includes(equipment.id)
+                    ? "border-[#F39C12] shadow-md"
+                    : "border-gray-200"
+                }`}
               >
                 <div className="flex items-start space-x-4">
-                  <Checkbox 
-                    id={equipment.id} 
+                  <Checkbox
+                    id={equipment.id}
                     checked={selectedEquipment.includes(equipment.id)}
                     onCheckedChange={() => handleEquipmentToggle(equipment.id)}
                     className="mt-1"
                   />
                   <div className="flex-1">
-                    <Label 
-                      htmlFor={equipment.id} 
+                    <Label
+                      htmlFor={equipment.id}
                       className="text-xl font-semibold text-[#0F2545] cursor-pointer"
                     >
                       {equipment.name}
                     </Label>
                     <p className="text-gray-600 mt-1">{equipment.description}</p>
                     <div className="flex justify-between items-center mt-4">
-                      <span className="text-[#F39C12] font-bold text-lg">৳ {equipment.fee}</span>
-                      <span className="text-gray-600 text-sm">{equipment.available} available</span>
+                      <span className="text-[#F39C12] font-bold text-lg">
+                        ৳ {equipment.fee}
+                      </span>
+                      <span className="text-gray-600 text-sm">
+                        {equipment.available} available
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -119,47 +126,55 @@ const EquipmentBooking = () => {
         {/* Booking Form */}
         <div className="bg-white rounded-[20px] p-10 shadow-lg">
           <h3 className="text-2xl font-bold text-[#0F2545] mb-6">Booking Details</h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="purpose" className="text-lg font-medium text-[#0F2545]">
                   Purpose of Booking
                 </Label>
-                <Select id="purpose">
+                <select
+                  id="purpose"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2"
+                >
                   <option value="">Select purpose</option>
                   <option value="project">Course Project</option>
                   <option value="research">Research Work</option>
                   <option value="event">Department Event</option>
                   <option value="personal">Personal Use</option>
-                </Select>
+                </select>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="start-date" className="text-lg font-medium text-[#0F2545]">
                   Start Date
                 </Label>
                 <Input type="date" id="start-date" className="w-full" />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="end-date" className="text-lg font-medium text-[#0F2545]">
                   End Date
                 </Label>
                 <Input type="date" id="end-date" className="w-full" />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="supervisor" className="text-lg font-medium text-[#0F2545]">
                   Supervising Faculty (if applicable)
                 </Label>
-                <Input type="text" id="supervisor" placeholder="Faculty name" className="w-full" />
+                <Input
+                  type="text"
+                  id="supervisor"
+                  placeholder="Faculty name"
+                  className="w-full"
+                />
               </div>
             </div>
-            
+
             <div className="bg-gray-50 p-6 rounded-[15px]">
               <h4 className="text-xl font-bold text-[#0F2545] mb-4">Booking Summary</h4>
-              
+
               {selectedEquipment.length > 0 ? (
                 <div className="space-y-4">
                   {equipmentList
@@ -167,14 +182,18 @@ const EquipmentBooking = () => {
                     .map((equipment) => (
                       <div key={equipment.id} className="flex justify-between items-center">
                         <span className="text-gray-700">{equipment.name}</span>
-                        <span className="text-[#0F2545] font-semibold">৳ {equipment.fee}</span>
+                        <span className="text-[#0F2545] font-semibold">
+                          ৳ {equipment.fee}
+                        </span>
                       </div>
                     ))}
-                  
+
                   <div className="border-t border-gray-200 pt-4 mt-4">
                     <div className="flex justify-between items-center">
                       <span className="text-[#0F2545] font-bold">Total Fee</span>
-                      <span className="text-[#0F2545] font-bold text-xl">৳ {calculateTotalFee()}</span>
+                      <span className="text-[#0F2545] font-bold text-xl">
+                        ৳ {calculateTotalFee()}
+                      </span>
                     </div>
                     <p className="text-gray-500 text-sm mt-2">
                       A security deposit of ৳ {calculateTotalFee() * 0.5} will be required at the time of pickup.
@@ -184,8 +203,8 @@ const EquipmentBooking = () => {
               ) : (
                 <p className="text-gray-500">No equipment selected</p>
               )}
-              
-              <Button 
+
+              <Button
                 className="w-full mt-6 bg-[#F39C12] hover:bg-[#E67E22] text-white py-6 rounded-xl font-bold text-xl transition-colors"
                 disabled={selectedEquipment.length === 0}
               >
@@ -194,19 +213,20 @@ const EquipmentBooking = () => {
             </div>
           </div>
         </div>
-        
-        {/* Equipment Usage Policy */}
+
+        {/* User Manual */}
         <div className="bg-white rounded-[20px] p-10 shadow-lg">
-          <h3 className="text-2xl font-bold text-[#0F2545] mb-6">Equipment Usage Policy</h3>
-          
-          <div className="space-y-4 text-gray-700">
-            <p>1. All equipment must be returned in the same condition as received.</p>
-            <p>2. Late returns will incur additional fees of ৳ 100 per day.</p>
-            <p>3. Any damage to equipment will result in forfeiture of the security deposit.</p>
-            <p>4. Booking cancellations must be made at least 24 hours in advance.</p>
-            <p>5. Students must present their ID card when collecting equipment.</p>
-            <p>6. Department events and academic projects have priority for equipment booking.</p>
-          </div>
+          <h3 className="text-2xl font-bold text-[#0F2545] mb-6">How to Book Equipment</h3>
+          <ol className="list-decimal list-inside space-y-2 text-gray-700 text-lg">
+            <li>Select the equipment you wish to book by ticking the checkbox.</li>
+            <li>Fill in the purpose, duration, and supervisor (if any) under "Booking Details".</li>
+            <li>Review your selection in the "Booking Summary" section.</li>
+            <li>
+              Click <span className="font-semibold text-[#F39C12]">"Proceed to Booking"</span> to
+              submit your request.
+            </li>
+            <li>Wait for admin approval before collecting your equipment.</li>
+          </ol>
         </div>
       </div>
     </div>
