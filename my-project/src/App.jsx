@@ -30,7 +30,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/exam-schedule" element={<ExamSchedule />} />
           <Route path="/grade-input" element={<GradeManagement />} />
-          <Route path="/room-availability" element={<RoomAvailability />} />
+          <Route path="/teacher/room-availability" element={<RoomAvailability />} />
           <Route path="/book-room" element={<BookRoom />} />
           <Route path="/achievements" element={<Achievements />} />
 

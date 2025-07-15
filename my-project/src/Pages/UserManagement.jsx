@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useEffect } from 'react';
 
 export default function UserManagement() {
   const [userType, setUserType] = useState('student');
@@ -7,6 +8,9 @@ export default function UserManagement() {
   const [name, setName] = useState('');
   const [registrationNumber, setRegistrationNumber] = useState('');
   const [semester, setSemester] = useState('');
+  const [session, setSession] = useState('');
+  const [hall, setHall] = useState('');
+  const [degree, setDegree] = useState('');
   const [department, setDepartment] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -14,8 +18,18 @@ export default function UserManagement() {
 
   const { addStudent, addTeacher } = useAuth();
 
+  // ✅ Add debug useEffect
+  useEffect(() => {
+    console.log('🔍 UserManagement mounted');
+    console.log('🔍 Token in localStorage:', localStorage.getItem('token'));
+  }, []);
+
   async function handleSubmit(e) {
     e.preventDefault();
+
+    // ✅ Add debug logging before making request
+    console.log('🔍 Submitting form...');
+    console.log('🔍 Token at submit:', localStorage.getItem('token'));
 
     try {
       setError('');
@@ -27,7 +41,10 @@ export default function UserManagement() {
           email,
           name,
           registration_number: registrationNumber,
-          semester
+          semester,
+          session,
+          hall,
+          degree
         };
         const result = await addStudent(studentData);
         setSuccess(result.message);
@@ -47,6 +64,9 @@ export default function UserManagement() {
       setName('');
       setRegistrationNumber('');
       setSemester('');
+      setSession('');
+      setHall('');
+      setDegree('');
       setDepartment('');
     } catch (error) {
       setError(error.message || 'Failed to add user');
@@ -80,22 +100,24 @@ export default function UserManagement() {
         )}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div className="mb-4">
-              <label htmlFor="user-type" className="sr-only">User Type</label>
+          <div className="space-y-4">
+            {/* User Type Selection */}
+            <div>
+              <label htmlFor="user-type" className="block text-sm font-medium text-gray-700">User Type</label>
               <select
                 id="user-type"
                 value={userType}
                 onChange={(e) => setUserType(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               >
                 <option value="student">Student</option>
                 <option value="teacher">Teacher</option>
               </select>
             </div>
 
+            {/* Email */}
             <div>
-              <label htmlFor="email" className="sr-only">Email address</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
               <input
                 id="email"
                 name="email"
@@ -104,13 +126,14 @@ export default function UserManagement() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Email address"
               />
             </div>
 
+            {/* Name */}
             <div>
-              <label htmlFor="name" className="sr-only">Name</label>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
               <input
                 id="name"
                 name="name"
@@ -118,13 +141,14 @@ export default function UserManagement() {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Full Name"
               />
             </div>
 
+            {/* Registration Number */}
             <div>
-              <label htmlFor="registration-number" className="sr-only">Registration Number</label>
+              <label htmlFor="registration-number" className="block text-sm font-medium text-gray-700">Registration Number</label>
               <input
                 id="registration-number"
                 name="registration-number"
@@ -132,28 +156,76 @@ export default function UserManagement() {
                 required
                 value={registrationNumber}
                 onChange={(e) => setRegistrationNumber(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Registration Number"
               />
             </div>
 
-            {userType === 'student' ? (
+            {/* Student specific fields */}
+            {userType === 'student' && (
+              <>
+                <div>
+                  <label htmlFor="semester" className="block text-sm font-medium text-gray-700">Semester</label>
+                  <input
+                    id="semester"
+                    name="semester"
+                    type="text"
+                    required
+                    value={semester}
+                    onChange={(e) => setSemester(e.target.value)}
+                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="e.g., 1st, 2nd, 3rd..."
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="session" className="block text-sm font-medium text-gray-700">Session</label>
+                  <input
+                    id="session"
+                    name="session"
+                    type="text"
+                    required
+                    value={session}
+                    onChange={(e) => setSession(e.target.value)}
+                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="e.g., 2023-2024"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="hall" className="block text-sm font-medium text-gray-700">Hall</label>
+                  <input
+                    id="hall"
+                    name="hall"
+                    type="text"
+                    required
+                    value={hall}
+                    onChange={(e) => setHall(e.target.value)}
+                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Hall name"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="degree" className="block text-sm font-medium text-gray-700">Degree</label>
+                  <input
+                    id="degree"
+                    name="degree"
+                    type="text"
+                    required
+                    value={degree}
+                    onChange={(e) => setDegree(e.target.value)}
+                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="e.g., BSc in CSE"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Teacher specific fields */}
+            {userType === 'teacher' && (
               <div>
-                <label htmlFor="semester" className="sr-only">Semester</label>
-                <input
-                  id="semester"
-                  name="semester"
-                  type="text"
-                  required
-                  value={semester}
-                  onChange={(e) => setSemester(e.target.value)}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Semester"
-                />
-              </div>
-            ) : (
-              <div>
-                <label htmlFor="department" className="sr-only">Department</label>
+                <label htmlFor="department" className="block text-sm font-medium text-gray-700">Department</label>
                 <input
                   id="department"
                   name="department"
@@ -161,8 +233,8 @@ export default function UserManagement() {
                   required
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Department"
+                  className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="Department name"
                 />
               </div>
             )}
@@ -172,7 +244,7 @@ export default function UserManagement() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Adding...' : `Add ${userType}`}
             </button>
@@ -181,4 +253,4 @@ export default function UserManagement() {
       </div>
     </div>
   );
-} 
+}
