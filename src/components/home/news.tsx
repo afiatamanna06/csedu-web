@@ -21,7 +21,7 @@ const news = [
 const newsCards = [
   {
     title:
-      'B-TopCS Training of Trainers (ToT) on “How to Make Top Management Aware of Cybersecurity (TMA)”',
+      "B-TopCS Training of Trainers (ToT) on “How to Make Top Management Aware of Cybersecurity (TMA)”",
     image: "/seminar.jpg",
   },
   {
@@ -44,12 +44,16 @@ const News = () => {
           {newsCards.map((item, i) => (
             <div
               key={i}
-              className={`relative rounded-md overflow-hidden ${i === 0 ? "col-span-2" : "col-span-1"}`}
+              className={`relative rounded-md overflow-hidden ${
+                i === 0 ? "col-span-2" : "col-span-1"
+              }`}
             >
               <img
                 src={item.image}
                 alt={item.title}
-                className={`w-full ${i === 0 ? "h-[18rem]" : "h-[12rem]"} object-cover`}
+                className={`w-full ${
+                  i === 0 ? "h-[18rem]" : "h-[12rem]"
+                } object-cover`}
               />
               <div className="absolute bottom-0 left-0 w-full bg-black/60 text-white text-sm px-3 py-2">
                 {item.title}
@@ -60,7 +64,7 @@ const News = () => {
 
         {/* Events list */}
         <div>
-          <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+          <h3 className="text-4xl font-semibold text-gray-900 leading-14 border-b-2 border-[#FFB606] mb-8">
             News and Events
           </h3>
           <div className="space-y-6">
@@ -74,14 +78,18 @@ const News = () => {
               return (
                 <div
                   key={index}
-                  className="bg-[#f9f9ff] border border-purple-100 rounded-md p-4 flex gap-4 hover:shadow-sm transition"
+                  className="bg-[#f9f9ff] shadow-lg shadow-[#e8e8ff] rounded-md p-4 flex gap-4 transition"
                 >
-                  <div className="bg-[#3D007B] text-white text-center px-3 py-1 rounded-md text-sm font-medium">
-                    <div className="text-xs">{month}</div>
-                    <div className="text-lg font-bold">{day}</div>
-                    <div className="text-[10px]">2025</div>
+                  <div className="bg-[#E3DDF6] w-[7rem] h-[5rem] text-[#2B1472] flex flex-col justify-center items-center px-3 py-1 rounded-md">
+                    <div className="w-min">
+                      <div className="text-xs font-semibold min-w-[3rem] text-center">
+                        {month}, {day}
+                      </div>
+
+                      <div className="text-xs text-center">2025</div>
+                    </div>
                   </div>
-                  <div className="text-sm leading-snug">{item.title}</div>
+                  <div className="text-base md:text-xl leading-snug">{item.title}</div>
                 </div>
               );
             })}
@@ -89,7 +97,7 @@ const News = () => {
           <div className="mt-8 text-right">
             <Link
               to="/"
-              className="text-sm font-medium text-[#3D007B] hover:underline"
+              className="font-medium text-[#2B1472] text-lg hover:underline"
             >
               See all news and events →
             </Link>
