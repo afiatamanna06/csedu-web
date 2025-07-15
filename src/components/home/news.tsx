@@ -36,7 +36,7 @@ const newsCards = [
 
 const News = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-20">
       {/* News and Events */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Image side */}
@@ -89,7 +89,9 @@ const News = () => {
                       <div className="text-xs text-center">2025</div>
                     </div>
                   </div>
-                  <div className="text-base md:text-xl leading-snug">{item.title}</div>
+                  <div className="text-base md:text-xl leading-snug">
+                    {item.title}
+                  </div>
                 </div>
               );
             })}
