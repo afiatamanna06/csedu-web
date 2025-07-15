@@ -87,7 +87,7 @@ export default function ResearchOpportunities() {
               <p className="text-gray-600 text-lg mb-4">{news.desc}</p>
               <Link
                 to="/"
-                className="text-yellow-500 text-lg font-semibold hover:underline"
+                className="text-[#FFB606] text-lg font-semibold hover:underline"
               >
                 Read more
               </Link>
