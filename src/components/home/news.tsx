@@ -55,7 +55,7 @@ const News = () => {
                   i === 0 ? "h-[18rem]" : "h-[12rem]"
                 } object-cover`}
               />
-              <div className="absolute bottom-0 left-0 w-full bg-black/60 text-white text-sm px-3 py-2">
+              <div className="absolute bottom-0 left-0 backdrop-blur-3xl w-full bg-black/60 text-white text-sm px-3 py-2">
                 {item.title}
               </div>
             </div>
