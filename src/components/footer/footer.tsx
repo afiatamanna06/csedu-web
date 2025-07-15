@@ -15,7 +15,7 @@ const quickLinks = [
   {
     section: "Quick Links",
     links: [
-      { label: "Faculty", path: "/people/faculty/all" },
+      { label: "Faculty", path: "/people/faculty" },
       { label: "Scholarship and Financial Aids", path: "/scholarships" },
       { label: "Foreign Student Admission Fees", path: "/foreign-admissions" },
     ],

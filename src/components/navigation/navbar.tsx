@@ -24,9 +24,7 @@ export const Navbar: React.FC = () => {
     { name: "Home", href: "/" },
     {
       name: "About",
-      submenu: [
-        { name: "History", href: "/about/history" },
-      ],
+      submenu: [{ name: "History", href: "/about/history" }],
     },
     {
       name: "Academic",
@@ -49,11 +47,12 @@ export const Navbar: React.FC = () => {
       submenu: [
         {
           name: "Faculty Members",
-          submenu: [
-            { name: "All", href: "/people/faculty/all" },
-            { name: "Position", href: "/people/faculty/position" },
-            { name: "Research", href: "/people/faculty/research" },
-          ],
+          href: "/people/faculty",
+          // submenu: [
+          //   { name: "All", href: "/people/faculty/all" },
+          //   { name: "Position", href: "/people/faculty/position" },
+          //   { name: "Research", href: "/people/faculty/research" },
+          // ],
         },
         { name: "Officers and Staffs", href: "/people/staffs" },
       ],
