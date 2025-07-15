@@ -1,9 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import SelectField from '../components/SelectField';
 import Sidebar from '../components/Sidebar';
 
 const MeetingList = () => {
+  const navigate = useNavigate();
+  
+  // Authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMeetings, setIsLoadingMeetings] = useState(false);
+
+  // Existing state
   const [selectedFaculty, setSelectedFaculty] = useState('All');
   const [selectedDateRange, setSelectedDateRange] = useState('This Week');
   const [activeTab, setActiveTab] = useState('upcoming');
@@ -14,55 +23,394 @@ const MeetingList = () => {
   const [showActionMenu, setShowActionMenu] = useState(null);
   const [showUpdateDialog, setShowUpdateDialog] = useState(false);
   const [meetingToUpdate, setMeetingToUpdate] = useState(null);
+  const [message, setMessage] = useState({ text: '', type: '' });
   const [newMeeting, setNewMeeting] = useState({
     topic: '',
     date: '',
     time: '',
     host_name: '',
-    isOnline: false,
-    location: {
-      isOnline: false,
-      room: '',
-      meetingLink: ''
-    }
+    location: '',
+    is_online: false,
+    meeting_link: ''
   });
 
-  // Sample meeting data with creator information
-  const [meetings, setMeetings] = useState([
-    {
-      id: 'M1',
-      date: '2024-03-15',
-      time: '10:00 AM',
-      topic: 'Project Discussion',
-      host_name: 'Dr. Rahman',
-      status: 'pending',
-      createdBy: 'user123',
-      location: {
-        isOnline: false,
-        room: 'Room 301'
-      }
-    },
-    {
-      id: 'M2',
-      date: '2024-03-16',
-      time: '02:00 PM',
-      topic: 'Course Advising',
-      host_name: 'Prof. Khan',
-      status: 'pending',
-      createdBy: 'user456',
-      location: {
-        isOnline: true,
-        meetingLink: 'https://meet.google.com/abc-defg-hij'
-      }
-    }
-  ]);
+  // API configuration
+  const API_BASE_URL = 'http://localhost:8000';
 
-  // Filter options
-  const filterOptions = {
-    faculty: ['All', 'Dr. Rahman', 'Prof. Khan', 'Dr. Islam', 'Mr. Ahmed'],
-    dateRange: ['Today', 'This Week', 'This Month', 'Custom']
+  // Authentication functions
+  const getAuthToken = () => {
+    return localStorage.getItem('token') || sessionStorage.getItem('token');
   };
 
+  const getAuthHeaders = () => {
+    const token = getAuthToken();
+    return {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      ...(token && { 'Authorization': `Bearer ${token}` })
+    };
+  };
+
+  const decodeJWT = (token) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  };
+
+  const isTokenExpired = (token) => {
+    const decoded = decodeJWT(token);
+    if (!decoded || !decoded.exp) return true;
+    
+    const currentTime = Date.now() / 1000;
+    return decoded.exp < currentTime;
+  };
+
+  // Authentication check
+  useEffect(() => {
+    const checkAuthentication = () => {
+      try {
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+          console.log('No token found');
+          setIsAuthenticated(false);
+          setIsLoading(false);
+          return;
+        }
+
+        if (isTokenExpired(token)) {
+          console.log('Token expired');
+          localStorage.removeItem('token');
+          setIsAuthenticated(false);
+          setIsLoading(false);
+          return;
+        }
+
+        const decoded = decodeJWT(token);
+        
+        if (!decoded) {
+          console.log('Invalid token');
+          localStorage.removeItem('token');
+          setIsAuthenticated(false);
+          setIsLoading(false);
+          return;
+        }
+
+        console.log('Decoded token:', decoded);
+        // Check if user role is teacher or admin
+        if (!['Teacher', 'Admin'].includes(decoded.role)) {
+          console.log('Access denied: User is not a teacher or admin');
+          setIsAuthenticated(false);
+          setIsLoading(false);
+          return;
+        }
+
+        console.log('Authentication successful');
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error('Authentication error:', error);
+        localStorage.removeItem('token');
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthentication();
+  }, []);
+
+  // Meeting data state
+  const [meetings, setMeetings] = useState([]);
+  const [allMeetings, setAllMeetings] = useState([]);
+
+  // Fetch meetings from backend
+  const fetchMeetings = async () => {
+    const token = getAuthToken();
+    if (!token) return;
+
+    try {
+      setIsLoadingMeetings(true);
+      
+      // Build query parameters for filtering
+      const params = new URLSearchParams();
+      
+      if (selectedFaculty !== 'All') {
+        params.append('host_name', selectedFaculty);
+      }
+      
+      // You can add more filters based on selectedDateRange if needed
+      
+      const response = await axios.get(`${API_BASE_URL}/meetings/filter?${params.toString()}`, {
+        headers: getAuthHeaders()
+      });
+
+      setAllMeetings(response.data);
+      setMeetings(response.data);
+      
+    } catch (error) {
+      console.error('Failed to fetch meetings:', error);
+      if (error.response?.status === 401) {
+        setMessage({ 
+          text: 'Authentication failed. Please log in again.', 
+          type: 'error' 
+        });
+        setIsAuthenticated(false);
+      } else if (error.response?.status === 403) {
+        setMessage({ 
+          text: 'You do not have permission to view meetings.', 
+          type: 'error' 
+        });
+      } else {
+        setMessage({ 
+          text: 'Failed to load meetings. Please try again.', 
+          type: 'error' 
+        });
+      }
+    } finally {
+      setIsLoadingMeetings(false);
+    }
+  };
+
+  // Fetch meetings when authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchMeetings();
+    }
+  }, [isAuthenticated, selectedFaculty]);
+
+  // Create meeting function
+// Create meeting function
+const handleCreateMeeting = async () => {
+  if (!newMeeting.topic || !newMeeting.date || !newMeeting.time || !newMeeting.host_name) {
+    setMessage({ text: 'Please fill in all required fields', type: 'error' });
+    return;
+  }
+
+  const token = getAuthToken();
+  if (!token) {
+    setMessage({ text: 'Authentication required. Please log in again.', type: 'error' });
+    return;
+  }
+
+  try {
+    setIsLoading(true);
+    setMessage({ text: '', type: '' });
+
+    const meetingData = {
+      topic: newMeeting.topic,
+      date: newMeeting.date,
+      time: newMeeting.time,
+      host_name: newMeeting.host_name,
+      location: newMeeting.is_online ? newMeeting.meeting_link : newMeeting.location,
+      is_online: newMeeting.is_online,
+      meeting_link: newMeeting.is_online ? newMeeting.meeting_link : null
+    };
+
+    const response = await axios.post(
+      `${API_BASE_URL}/meetings/`,
+      meetingData,
+      {
+        headers: getAuthHeaders()
+      }
+    );
+
+    // Log the response to see the structure
+    console.log('Meeting created successfully:', response.data);
+
+    // The response.data should contain the newly created meeting with its ID
+    const createdMeeting = response.data;
+
+    setMessage({ text: 'Meeting created successfully!', type: 'success' });
+    setShowCreateDialog(false);
+    
+    // Reset form
+    setNewMeeting({
+      topic: '',
+      date: '',
+      time: '',
+      host_name: '',
+      location: '',
+      is_online: false,
+      meeting_link: ''
+    });
+
+    // Refresh meetings list to include the new meeting
+    fetchMeetings();
+
+  } catch (error) {
+    console.error('Error creating meeting:', error);
+    
+    if (error.response?.status === 401) {
+      setMessage({ 
+        text: 'Authentication failed. Please log in again.', 
+        type: 'error' 
+      });
+      setIsAuthenticated(false);
+    } else if (error.response?.status === 403) {
+      setMessage({ 
+        text: 'You do not have permission to create meetings.', 
+        type: 'error' 
+      });
+    } else {
+      setMessage({ 
+        text: 'Failed to create meeting. Please try again.', 
+        type: 'error' 
+      });
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+  // Update meeting function
+  const handleUpdateMeeting = async () => {
+    if (!meetingToUpdate) return;
+
+    const token = getAuthToken();
+    if (!token) {
+      setMessage({ text: 'Authentication required. Please log in again.', type: 'error' });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setMessage({ text: '', type: '' });
+
+      const updateData = {
+        topic: meetingToUpdate.topic,
+        date: meetingToUpdate.date,
+        time: meetingToUpdate.time,
+        host_name: meetingToUpdate.host_name,
+        location: meetingToUpdate.is_online ? meetingToUpdate.meeting_link : meetingToUpdate.location,
+        is_online: meetingToUpdate.is_online,
+        meeting_link: meetingToUpdate.is_online ? meetingToUpdate.meeting_link : null
+      };
+
+      await axios.put(
+        `${API_BASE_URL}/meetings/${meetingToUpdate.id}`,
+        updateData,
+        {
+          headers: getAuthHeaders()
+        }
+      );
+
+      setMessage({ text: 'Meeting updated successfully!', type: 'success' });
+      setShowUpdateDialog(false);
+      setMeetingToUpdate(null);
+
+      // Refresh meetings list
+      fetchMeetings();
+
+    } catch (error) {
+      console.error('Error updating meeting:', error);
+      
+      if (error.response?.status === 401) {
+        setMessage({ 
+          text: 'Authentication failed. Please log in again.', 
+          type: 'error' 
+        });
+        setIsAuthenticated(false);
+      } else if (error.response?.status === 403) {
+        setMessage({ 
+          text: 'You do not have permission to update meetings.', 
+          type: 'error' 
+        });
+      } else if (error.response?.status === 404) {
+        setMessage({ 
+          text: 'Meeting not found.', 
+          type: 'error' 
+        });
+      } else {
+        setMessage({ 
+          text: 'Failed to update meeting. Please try again.', 
+          type: 'error' 
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Delete meeting function
+  const handleDeleteMeeting = async (meetingId) => {
+    const token = getAuthToken();
+    if (!token) {
+      setMessage({ text: 'Authentication required. Please log in again.', type: 'error' });
+      return;
+    }
+
+    if (!window.confirm('Are you sure you want to delete this meeting?')) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setMessage({ text: '', type: '' });
+
+      await axios.delete(
+        `${API_BASE_URL}/meetings/${meetingId}`,
+        {
+          headers: getAuthHeaders()
+        }
+      );
+
+      setMessage({ text: 'Meeting deleted successfully!', type: 'success' });
+
+      // Refresh meetings list
+      fetchMeetings();
+
+    } catch (error) {
+      console.error('Error deleting meeting:', error);
+      
+      if (error.response?.status === 401) {
+        setMessage({ 
+          text: 'Authentication failed. Please log in again.', 
+          type: 'error' 
+        });
+        setIsAuthenticated(false);
+      } else if (error.response?.status === 403) {
+        setMessage({ 
+          text: 'You do not have permission to delete meetings.', 
+          type: 'error' 
+        });
+      } else if (error.response?.status === 404) {
+        setMessage({ 
+          text: 'Meeting not found.', 
+          type: 'error' 
+        });
+      } else {
+        setMessage({ 
+          text: 'Failed to delete meeting. Please try again.', 
+          type: 'error' 
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Clear message after 5 seconds
+  useEffect(() => {
+    if (message.text) {
+      const timer = setTimeout(() => {
+        setMessage({ text: '', type: '' });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  // Existing functions for dialog handling
   const handleMeetingAction = (meeting, action) => {
     setSelectedMeeting(meeting);
     setDialogAction(action);
@@ -88,51 +436,8 @@ const MeetingList = () => {
     setSelectedMeeting(null);
   };
 
-  const handleCreateMeeting = () => {
-    const newMeetingId = `M${meetings.length + 1}`;
-    const createdMeeting = {
-      ...newMeeting,
-      id: newMeetingId,
-      status: 'pending',
-      createdBy: 'currentUser', // Replace with actual user ID
-      location: {
-        isOnline: newMeeting.isOnline,
-        room: newMeeting.isOnline ? '' : newMeeting.location.room,
-        meetingLink: newMeeting.isOnline ? newMeeting.location.meetingLink : ''
-      }
-    };
-    setMeetings([...meetings, createdMeeting]);
-    setShowCreateDialog(false);
-    setNewMeeting({
-      topic: '',
-      date: '',
-      time: '',
-      host_name: '',
-      isOnline: false,
-      location: {
-        isOnline: false,
-        room: '',
-        meetingLink: ''
-      }
-    });
-  };
-
-  const handleUpdateMeeting = () => {
-    setMeetings(prevMeetings =>
-      prevMeetings.map(m =>
-        m.id === meetingToUpdate.id ? { ...meetingToUpdate } : m
-      )
-    );
-    setShowUpdateDialog(false);
-    setMeetingToUpdate(null);
-  };
-
-  const handleDeleteMeeting = (meetingId) => {
-    setMeetings(prevMeetings => prevMeetings.filter(m => m.id !== meetingId));
-  };
-
   const getStatusStyle = (status) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case 'im joining':
         return 'bg-green-100 text-green-800';
       case 'not joining':
@@ -144,9 +449,15 @@ const MeetingList = () => {
     }
   };
 
-  // Filter meetings by creator
-  const userMeetings = meetings.filter(m => m.createdBy === 'currentUser');
-  const otherMeetings = meetings.filter(m => m.createdBy !== 'currentUser');
+  // Get unique host names for filter
+  const filterOptions = {
+    faculty: ['All', ...new Set(allMeetings.map(m => m.host_name))],
+    dateRange: ['Today', 'This Week', 'This Month', 'Custom']
+  };
+
+  // Filter meetings by creator (you'll need to add this field to your backend)
+  const userMeetings = meetings.filter(m => m.createdBy === 'currentUser'); // Update this logic based on your backend
+  const otherMeetings = meetings.filter(m => m.createdBy !== 'currentUser'); // Update this logic based on your backend
 
   const renderActionMenu = (meeting) => {
     if (showActionMenu !== meeting.id) return null;
@@ -200,9 +511,20 @@ const MeetingList = () => {
     );
   };
 
-  // Update the table cell to show meeting link for online meetings
   const renderMeetingTable = (meetingList, showActions = true) => (
     <div className="bg-white rounded-lg shadow overflow-hidden">
+      {isLoadingMeetings && (
+        <div className="bg-blue-50 border-l-4 border-blue-400 p-4">
+          <div className="flex items-center">
+            <svg className="animate-spin h-5 w-5 text-blue-600 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span className="text-blue-800 font-medium">Loading meetings...</span>
+          </div>
+        </div>
+      )}
+
       <table className="w-full">
         <thead>
           <tr className="bg-[#FFC300]">
@@ -217,55 +539,63 @@ const MeetingList = () => {
           </tr>
         </thead>
         <tbody>
-          {meetingList.map((meeting) => (
-            <tr key={meeting.id} className="border-b border-gray-100">
-              <td className="py-3 px-6 text-sm text-gray-600">
-                {meeting.date} {meeting.time}
-              </td>
-              <td className="py-3 px-6 text-sm text-gray-600">{meeting.topic}</td>
-              <td className="py-3 px-6 text-sm text-gray-600">{meeting.host_name}</td>
-              <td className="py-3 px-6 text-sm text-gray-600">
-                {meeting.location.isOnline ? (
-                  meeting.status === 'confirmed' ? (
-                    <a 
-                      href={meeting.location.meetingLink} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      Join Online Meeting
-                    </a>
-                  ) : (
-                    'Online Meeting'
-                  )
-                ) : (
-                  meeting.location.room
-                )}
-              </td>
-              <td className="py-3 px-6">
-                <span
-                  className={`px-3 py-1 text-sm font-medium rounded-full ${getStatusStyle(
-                    meeting.status
-                  )}`}
-                >
-                  {meeting.status.charAt(0).toUpperCase() + meeting.status.slice(1)}
-                </span>
-              </td>
-              {showActions && (
-                <td className="py-3 px-6 relative">
-                  <div className="relative">
-                    <button
-                      onClick={() => setShowActionMenu(showActionMenu === meeting.id ? null : meeting.id)}
-                      className="text-gray-600 hover:text-gray-800 text-xl font-bold"
-                    >
-                      ⋮
-                    </button>
-                    {renderActionMenu(meeting)}
-                  </div>
+          {!isLoadingMeetings && meetingList.length > 0 ? (
+            meetingList.map((meeting) => (
+              <tr key={meeting.id} className="border-b border-gray-100">
+                <td className="py-3 px-6 text-sm text-gray-600">
+                  {meeting.date} {meeting.time}
                 </td>
-              )}
+                <td className="py-3 px-6 text-sm text-gray-600">{meeting.topic}</td>
+                <td className="py-3 px-6 text-sm text-gray-600">{meeting.host_name}</td>
+                <td className="py-3 px-6 text-sm text-gray-600">
+                  {meeting.is_online ? (
+                    meeting.meeting_link ? (
+                      <a 
+                        href={meeting.meeting_link} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        Join Online Meeting
+                      </a>
+                    ) : (
+                      'Online Meeting'
+                    )
+                  ) : (
+                    meeting.location
+                  )}
+                </td>
+                <td className="py-3 px-6">
+                  <span
+                    className={`px-3 py-1 text-sm font-medium rounded-full ${getStatusStyle(
+                      meeting.status || 'pending'
+                    )}`}
+                  >
+                    {(meeting.status || 'pending').charAt(0).toUpperCase() + (meeting.status || 'pending').slice(1)}
+                  </span>
+                </td>
+                {showActions && (
+                  <td className="py-3 px-6 relative">
+                    <div className="relative">
+                      <button
+                        onClick={() => setShowActionMenu(showActionMenu === meeting.id ? null : meeting.id)}
+                        className="text-gray-600 hover:text-gray-800 text-xl font-bold"
+                      >
+                        ⋮
+                      </button>
+                      {renderActionMenu(meeting)}
+                    </div>
+                  </td>
+                )}
+              </tr>
+            ))
+          ) : !isLoadingMeetings ? (
+            <tr>
+              <td colSpan={showActions ? "6" : "5"} className="py-8 text-center text-gray-500">
+                No meetings found.
+              </td>
             </tr>
-          ))}
+          ) : null}
         </tbody>
       </table>
     </div>
@@ -286,9 +616,51 @@ const MeetingList = () => {
     };
   }, []);
 
+  // Show loading spinner while checking authentication
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-center items-center min-h-96">
+          <div className="flex items-center space-x-3">
+            <svg className="animate-spin h-8 w-8 text-[#13274C]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <div className="text-lg text-gray-600">Loading...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show not authenticated message if user is not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col justify-center items-center min-h-96">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h1>
+            <p className="text-gray-600 mb-6">
+              You are not authenticated or do not have permission to access this page.
+            </p>
+            <p className="text-gray-500 mb-8">
+              Please login with a teacher or admin account to access meetings.
+            </p>
+            <button
+              onClick={() => navigate('/login')}
+              className="bg-[#13274C] text-white px-6 py-3 rounded-md hover:bg-[#1a3561] transition-colors"
+            >
+              Go to Login
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         <div className="flex-1 p-8">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Meeting List</h1>
@@ -299,6 +671,26 @@ const MeetingList = () => {
               Create Meeting
             </button>
           </div>
+
+          {/* Success/Error Messages */}
+          {message.text && (
+            <div className={`mb-6 p-4 rounded-lg flex items-center space-x-3 ${
+              message.type === 'success' 
+                ? 'bg-green-50 border border-green-200 text-green-800' 
+                : 'bg-red-50 border border-red-200 text-red-800'
+            }`}>
+              {message.type === 'success' ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
+              <span className="font-medium">{message.text}</span>
+            </div>
+          )}
 
           {/* Filters Section */}
           <div className="bg-[#13274C] rounded-lg p-6 mb-8">
@@ -366,8 +758,8 @@ const MeetingList = () => {
             </button>
           </div>
 
-          {/* Other Meetings */}
-          {renderMeetingTable(otherMeetings)}
+          {/* Meetings Table */}
+          {renderMeetingTable(meetings)}
 
           {/* User Created Meetings */}
           {userMeetings.length > 0 && (
@@ -394,15 +786,15 @@ const MeetingList = () => {
                         <td className="py-3 px-6 text-sm text-gray-600">{meeting.topic}</td>
                         <td className="py-3 px-6 text-sm text-gray-600">{meeting.host_name}</td>
                         <td className="py-3 px-6 text-sm text-gray-600">
-                          {meeting.location.isOnline ? 'Online Meeting' : meeting.location.room}
+                          {meeting.is_online ? 'Online Meeting' : meeting.location}
                         </td>
                         <td className="py-3 px-6">
                           <span
                             className={`px-3 py-1 text-sm font-medium rounded-full ${getStatusStyle(
-                              meeting.status
+                              meeting.status || 'pending'
                             )}`}
                           >
-                            {meeting.status.charAt(0).toUpperCase() + meeting.status.slice(1)}
+                            {(meeting.status || 'pending').charAt(0).toUpperCase() + (meeting.status || 'pending').slice(1)}
                           </span>
                         </td>
                         <td className="py-3 px-6 space-x-2">
@@ -432,6 +824,7 @@ const MeetingList = () => {
         </div>
       </div>
 
+      {/* Existing dialogs remain the same... */}
       {/* Action Dialog */}
       {dialogOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
@@ -521,17 +914,14 @@ const MeetingList = () => {
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Location Type</label>
                   <select
-                    value={newMeeting.isOnline}
+                    value={newMeeting.is_online}
                     onChange={(e) => {
                       const isOnline = e.target.value === 'true';
                       setNewMeeting({
                         ...newMeeting,
-                        isOnline,
-                        location: {
-                          isOnline,
-                          room: '',
-                          meetingLink: ''
-                        }
+                        is_online: isOnline,
+                        location: '',
+                        meeting_link: ''
                       });
                     }}
                     className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm bg-white"
@@ -541,18 +931,13 @@ const MeetingList = () => {
                   </select>
                 </div>
 
-                {newMeeting.isOnline ? (
+                {newMeeting.is_online ? (
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Meeting Link</label>
                     <input
                       type="text"
-                      value={newMeeting.location.meetingLink}
-                      onChange={(e) =>
-                        setNewMeeting({
-                          ...newMeeting,
-                          location: { ...newMeeting.location, meetingLink: e.target.value }
-                        })
-                      }
+                      value={newMeeting.meeting_link}
+                      onChange={(e) => setNewMeeting({ ...newMeeting, meeting_link: e.target.value })}
                       placeholder="Enter meeting link (e.g., https://meet.google.com/...)"
                       className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
                     />
@@ -562,26 +947,13 @@ const MeetingList = () => {
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Room Number</label>
                     <input
                       type="text"
-                      value={newMeeting.location.room}
-                      onChange={(e) =>
-                        setNewMeeting({
-                          ...newMeeting,
-                          location: { ...newMeeting.location, room: e.target.value }
-                        })
-                      }
+                      value={newMeeting.location}
+                      onChange={(e) => setNewMeeting({ ...newMeeting, location: e.target.value })}
                       placeholder="Enter room number (e.g., Room 301)"
                       className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
                     />
                   </div>
                 )}
-              </div>
-
-              {/* Status - Always starts as pending */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
-                <div className="px-4 py-2.5 rounded-lg bg-yellow-50 text-yellow-800 text-sm">
-                  Pending (Waiting for your response)
-                </div>
               </div>
             </div>
 
@@ -594,9 +966,10 @@ const MeetingList = () => {
               </button>
               <button
                 onClick={handleCreateMeeting}
-                className="px-6 py-2.5 bg-[#13274C] text-white text-sm font-medium rounded-lg hover:bg-opacity-90 transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#13274C]"
+                disabled={isLoading}
+                className="px-6 py-2.5 bg-[#13274C] text-white text-sm font-medium rounded-lg hover:bg-opacity-90 transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#13274C] disabled:opacity-50"
               >
-                Create Meeting
+                {isLoading ? 'Creating...' : 'Create Meeting'}
               </button>
             </div>
           </div>
@@ -604,7 +977,7 @@ const MeetingList = () => {
       )}
 
       {/* Update Meeting Dialog */}
-      {showUpdateDialog && (
+      {showUpdateDialog && meetingToUpdate && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-8 rounded-xl max-w-md w-full mx-4 shadow-2xl">
             <h2 className="text-2xl font-bold text-[#13274C] mb-6 text-center">Update Meeting</h2>
@@ -660,16 +1033,14 @@ const MeetingList = () => {
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Location Type</label>
                   <select
-                    value={meetingToUpdate.location?.isOnline}
+                    value={meetingToUpdate.is_online}
                     onChange={(e) => {
                       const isOnline = e.target.value === 'true';
                       setMeetingToUpdate({
                         ...meetingToUpdate,
-                        location: {
-                          isOnline,
-                          room: '',
-                          meetingLink: ''
-                        }
+                        is_online: isOnline,
+                        location: isOnline ? meetingToUpdate.location : '',
+                        meeting_link: isOnline ? meetingToUpdate.meeting_link : ''
                       });
                     }}
                     className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm bg-white"
@@ -679,18 +1050,13 @@ const MeetingList = () => {
                   </select>
                 </div>
 
-                {meetingToUpdate.location?.isOnline ? (
+                {meetingToUpdate.is_online ? (
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Meeting Link</label>
                     <input
                       type="text"
-                      value={meetingToUpdate.location.meetingLink}
-                      onChange={(e) =>
-                        setMeetingToUpdate({
-                          ...meetingToUpdate,
-                          location: { ...meetingToUpdate.location, meetingLink: e.target.value }
-                        })
-                      }
+                      value={meetingToUpdate.meeting_link || ''}
+                      onChange={(e) => setMeetingToUpdate({ ...meetingToUpdate, meeting_link: e.target.value })}
                       placeholder="Enter meeting link (e.g., https://meet.google.com/...)"
                       className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
                     />
@@ -700,26 +1066,13 @@ const MeetingList = () => {
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Room Number</label>
                     <input
                       type="text"
-                      value={meetingToUpdate.location?.room}
-                      onChange={(e) =>
-                        setMeetingToUpdate({
-                          ...meetingToUpdate,
-                          location: { ...meetingToUpdate.location, room: e.target.value }
-                        })
-                      }
+                      value={meetingToUpdate.location || ''}
+                      onChange={(e) => setMeetingToUpdate({ ...meetingToUpdate, location: e.target.value })}
                       placeholder="Enter room number (e.g., Room 301)"
                       className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
                     />
                   </div>
                 )}
-              </div>
-
-              {/* Status */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
-                <div className="px-4 py-2.5 rounded-lg bg-yellow-50 text-yellow-800 text-sm">
-                  {meetingToUpdate.status}
-                </div>
               </div>
             </div>
 
@@ -732,9 +1085,10 @@ const MeetingList = () => {
               </button>
               <button
                 onClick={handleUpdateMeeting}
-                className="px-6 py-2.5 bg-[#13274C] text-white text-sm font-medium rounded-lg hover:bg-opacity-90 transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#13274C]"
+                disabled={isLoading}
+                className="px-6 py-2.5 bg-[#13274C] text-white text-sm font-medium rounded-lg hover:bg-opacity-90 transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#13274C] disabled:opacity-50"
               >
-                Update Meeting
+                {isLoading ? 'Updating...' : 'Update Meeting'}
               </button>
             </div>
           </div>
@@ -744,4 +1098,4 @@ const MeetingList = () => {
   );
 };
 
-export default MeetingList; 
+export default MeetingList;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -72,6 +72,7 @@ const BookingRequests = () => {
 
   const [showAddRoom, setShowAddRoom] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingRooms, setIsLoadingRooms] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' });
 
   const API_BASE_URL = 'http://localhost:8000'; // Update this to match your backend
@@ -90,6 +91,46 @@ const BookingRequests = () => {
       ...(token && { 'Authorization': `Bearer ${token}` })
     };
   };
+
+  // Fetch all rooms from the API
+  const fetchAllRooms = async () => {
+    const token = getAuthToken();
+    if (!token) {
+      console.warn('No authentication token found');
+      return;
+    }
+
+    try {
+      setIsLoadingRooms(true);
+      const response = await axios.get(`${API_BASE_URL}/room/all`, {
+        headers: getAuthHeaders()
+      });
+      
+      setRooms(response.data);
+    } catch (error) {
+      console.warn('Failed to fetch rooms:', error);
+      if (error.response?.status === 401) {
+        setMessage({ 
+          text: 'Authentication failed. Please log in again.', 
+          type: 'error' 
+        });
+      } else if (error.response?.status === 403) {
+        setMessage({ 
+          text: 'You do not have permission to view rooms.', 
+          type: 'error' 
+        });
+      } else {
+        console.warn('API not available, rooms will be shown when added manually');
+      }
+    } finally {
+      setIsLoadingRooms(false);
+    }
+  };
+
+  // Fetch rooms on component mount
+  useEffect(() => {
+    fetchAllRooms();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -130,13 +171,8 @@ const BookingRequests = () => {
   
         setMessage({ text: 'Room added successfully!', type: 'success' });
         
-        // Add to local rooms state if API succeeds
-        setRooms(prevRooms => [...prevRooms, {
-          id: response.data.id || newRoom.room_id, // Use room_id as fallback
-          room_id: newRoom.room_id,
-          location: newRoom.location,
-          capacity: parseInt(newRoom.capacity)
-        }]);
+        // Refresh the rooms list after successful addition
+        await fetchAllRooms();
   
       } catch (apiError) {
         console.warn('API call failed:', apiError);
@@ -172,8 +208,7 @@ const BookingRequests = () => {
         } else {
           // Fallback: Add to local state for development
           setRooms(prevRooms => [...prevRooms, {
-            id: Date.now().toString(),
-            room_id: newRoom.room_id,
+            id: newRoom.room_id,
             location: newRoom.location,
             capacity: parseInt(newRoom.capacity)
           }]);
@@ -199,6 +234,7 @@ const BookingRequests = () => {
       setIsLoading(false);
     }
   };
+
   // Updated handleAction function with Bearer token for booking actions
   const handleAction = async (action, booking) => {
     let newStatus;
@@ -295,7 +331,7 @@ const BookingRequests = () => {
   };
 
   // Clear message after 5 seconds
-  React.useEffect(() => {
+  useEffect(() => {
     if (message.text) {
       const timer = setTimeout(() => {
         setMessage({ text: '', type: '' });
@@ -312,16 +348,41 @@ const BookingRequests = () => {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Booking Requests</h1>
+              <p className="text-gray-600">Manage room bookings and room inventory.</p>
             </div>
-            <button
-              onClick={() => setShowAddRoom(!showAddRoom)}
-              className="px-6 py-3 bg-[#13274C] text-white rounded-lg font-semibold hover:bg-[#1e3a5f] transition-colors duration-200 flex items-center space-x-2 shadow-lg"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              <span>Add New Room</span>
-            </button>
+            <div className="flex space-x-4">
+              <button
+                onClick={fetchAllRooms}
+                disabled={isLoadingRooms}
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-2 shadow-lg disabled:opacity-50"
+              >
+                {isLoadingRooms ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Loading...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    <span>Refresh Rooms</span>
+                  </>
+                )}
+              </button>
+              <button
+                onClick={() => setShowAddRoom(!showAddRoom)}
+                className="px-6 py-3 bg-[#13274C] text-white rounded-lg font-semibold hover:bg-[#1e3a5f] transition-colors duration-200 flex items-center space-x-2 shadow-lg"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                <span>Add New Room</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -485,18 +546,21 @@ const BookingRequests = () => {
         )}
 
         {/* Booking Table */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+          <div className="px-6 py-4 bg-[#FFC300]">
+            <h3 className="text-lg font-bold text-[#13274C]">Booking Requests</h3>
+          </div>
           <table className="w-full">
             <thead>
-              <tr className="bg-[#FFC300]">
-                <th className="text-left py-4 px-6 text-sm font-semibold text-[#13274C]">Room</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-[#13274C]">Course Code</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-[#13274C]">Date</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-[#13274C]">Time</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-[#13274C]">Requester</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-[#13274C]">Purpose</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-[#13274C]">Status</th>
-                <th className="text-left py-4 px-6 text-sm font-semibold text-[#13274C]">Actions</th>
+              <tr className="bg-gray-50">
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Room</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Course Code</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Date</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Time</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Requester</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Purpose</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Status</th>
+                <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -541,21 +605,52 @@ const BookingRequests = () => {
           </table>
         </div>
 
-        {/* Added Rooms Display (Optional) */}
-        {rooms.length > 0 && (
-          <div className="mt-8 bg-white rounded-2xl shadow-xl p-6">
-            <h3 className="text-lg font-bold text-[#13274C] mb-4">Recently Added Rooms</h3>
-            <div className="grid md:grid-cols-3 gap-4">
-              {rooms.map((room) => (
-                <div key={room.id} className="border border-gray-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-gray-800">{room.room_id}</h4>
-                  <p className="text-sm text-gray-600">{room.location}</p>
-                  <p className="text-sm text-gray-500">Capacity: {room.capacity}</p>
-                </div>
-              ))}
-            </div>
+        {/* All Rooms Display */}
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div className="px-6 py-4 bg-[#FFC300] flex justify-between items-center">
+            <h3 className="text-lg font-bold text-[#13274C]">All Rooms</h3>
+            {isLoadingRooms && (
+              <div className="flex items-center space-x-2 text-[#13274C]">
+                <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span className="text-sm font-medium">Loading rooms...</span>
+              </div>
+            )}
           </div>
-        )}
+          
+          {rooms.length > 0 ? (
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Room ID</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Location</th>
+                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Capacity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rooms.map((room) => (
+                  <tr key={room.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+                    <td className="py-4 px-6 text-sm text-gray-700 font-medium">{room.id}</td>
+                    <td className="py-4 px-6 text-sm text-gray-600">{room.location}</td>
+                    <td className="py-4 px-6 text-sm text-gray-600">{room.capacity}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="p-8 text-center">
+              <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              <h3 className="mt-2 text-sm font-medium text-gray-900">No rooms found</h3>
+              <p className="mt-1 text-sm text-gray-500">
+                {isLoadingRooms ? 'Loading rooms...' : 'Get started by adding a new room.'}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
