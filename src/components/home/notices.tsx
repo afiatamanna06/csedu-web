@@ -28,7 +28,7 @@ const Notices = () => {
         {notices.map((notice, index) => (
           <div
             key={index}
-            className="border-t-2 border-gray-100 hover:bg-[#fbf7ff] hover:border-t-2 hover:border-[#2B14728f] hover:shadow-lg hover:shadow-[#e8e0ff] group transition"
+            className="border-t-2 cursor-pointer border-gray-100 hover:bg-[#fbf7ff] hover:border-t-2 hover:border-[#2B14728f] hover:shadow-lg hover:shadow-[#e8e0ff] group transition"
           >
             <Link
               to="/"

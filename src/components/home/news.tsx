@@ -78,7 +78,7 @@ const News = () => {
               return (
                 <div
                   key={index}
-                  className="bg-[#f9f9ff] shadow-lg shadow-[#e8e8ff] rounded-md p-4 flex gap-4 transition"
+                  className="bg-[#f9f9ff] cursor-pointer shadow-lg shadow-[#e8e8ff] rounded-md p-4 flex gap-4 transition"
                 >
                   <div className="bg-[#E3DDF6] w-[7rem] h-[5rem] text-[#2B1472] flex flex-col justify-center items-center px-3 py-1 rounded-md">
                     <div className="w-min">
