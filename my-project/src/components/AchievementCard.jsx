@@ -6,12 +6,6 @@ const AchievementCard = ({
   fullContent,
   imageUrl = "https://cdn.builder.io/api/v1/image/assets/TEMP/efc7f2f5f4d1653c03959e03d906668889a54bb1?width=2708",
 }) => {
-  const [showFullContent, setShowFullContent] = useState(false);
-
-  const handleReadMore = () => {
-    setShowFullContent(!showFullContent);
-  };
-
   return (
     <div className="w-full max-w-[1355px] bg-white rounded-lg shadow-lg overflow-hidden">
       {/* Image Section */}
@@ -41,20 +35,10 @@ const AchievementCard = ({
         </div>
 
         {/* Content */}
-        <div className="prose max-w-none mb-8">
+        <div className="prose max-w-none">
           <p className="text-black font-['Inter'] text-lg font-light leading-relaxed">
-            {showFullContent ? fullContent : content}
+            {fullContent}
           </p>
-        </div>
-
-        {/* Read More Button */}
-        <div className="flex justify-end">
-          <button
-            onClick={handleReadMore}
-            className="inline-flex h-10 px-6 items-center justify-center rounded-full bg-[#0F264F] text-white font-['Public_Sans'] text-sm font-bold hover:bg-[#1a3562] transition-colors duration-200"
-          >
-            {showFullContent ? "Read Less" : "Read More"}
-          </button>
         </div>
       </div>
     </div>

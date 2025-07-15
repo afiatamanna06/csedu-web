@@ -507,18 +507,13 @@ const MeetingList = () => {
               {/* Host Name */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Host Name</label>
-                <select
+                <input
+                  type="text"
                   value={newMeeting.host_name}
                   onChange={(e) => setNewMeeting({ ...newMeeting, host_name: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm bg-white"
-                >
-                  <option value="">Select Host</option>
-                  {filterOptions.faculty.filter(f => f !== 'All').map((faculty) => (
-                    <option key={faculty} value={faculty}>
-                      {faculty}
-                    </option>
-                  ))}
-                </select>
+                  placeholder="Enter host name"
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
+                />
               </div>
 
               {/* Location Section */}
@@ -611,116 +606,133 @@ const MeetingList = () => {
       {/* Update Meeting Dialog */}
       {showUpdateDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg max-w-md w-full">
-            <h2 className="text-xl font-bold mb-4">Update Meeting</h2>
-            <div className="space-y-4">
+          <div className="bg-white p-8 rounded-xl max-w-md w-full mx-4 shadow-2xl">
+            <h2 className="text-2xl font-bold text-[#13274C] mb-6 text-center">Update Meeting</h2>
+            <div className="space-y-6">
+              {/* Date and Time Group */}
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Date</label>
+                  <input
+                    type="date"
+                    value={meetingToUpdate.date}
+                    onChange={(e) => setMeetingToUpdate({ ...meetingToUpdate, date: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Time</label>
+                  <input
+                    type="time"
+                    value={meetingToUpdate.time}
+                    onChange={(e) => setMeetingToUpdate({ ...meetingToUpdate, time: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Topic */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Topic</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Topic</label>
                 <input
                   type="text"
                   value={meetingToUpdate.topic}
                   onChange={(e) => setMeetingToUpdate({ ...meetingToUpdate, topic: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Enter meeting topic"
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
                 />
               </div>
+
+              {/* Host Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Date</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Host Name</label>
                 <input
-                  type="date"
-                  value={meetingToUpdate.date}
-                  onChange={(e) => setMeetingToUpdate({ ...meetingToUpdate, date: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Time</label>
-                <input
-                  type="time"
-                  value={meetingToUpdate.time}
-                  onChange={(e) => setMeetingToUpdate({ ...meetingToUpdate, time: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Host Name</label>
-                <select
+                  type="text"
                   value={meetingToUpdate.host_name}
                   onChange={(e) => setMeetingToUpdate({ ...meetingToUpdate, host_name: e.target.value })}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                >
-                  {filterOptions.faculty.filter(f => f !== 'All').map((faculty) => (
-                    <option key={faculty} value={faculty}>
-                      {faculty}
-                    </option>
-                  ))}
-                </select>
+                  placeholder="Enter host name"
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
+                />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Meeting Type</label>
-                <select
-                  value={meetingToUpdate.location.isOnline}
-                  onChange={(e) => {
-                    const isOnline = e.target.value === 'true';
-                    setMeetingToUpdate({
-                      ...meetingToUpdate,
-                      location: {
-                        isOnline,
-                        room: '',
-                        meetingLink: ''
+
+              {/* Location Section */}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Location Type</label>
+                  <select
+                    value={meetingToUpdate.location?.isOnline}
+                    onChange={(e) => {
+                      const isOnline = e.target.value === 'true';
+                      setMeetingToUpdate({
+                        ...meetingToUpdate,
+                        location: {
+                          isOnline,
+                          room: '',
+                          meetingLink: ''
+                        }
+                      });
+                    }}
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm bg-white"
+                  >
+                    <option value="false">In-Person</option>
+                    <option value="true">Online</option>
+                  </select>
+                </div>
+
+                {meetingToUpdate.location?.isOnline ? (
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Meeting Link</label>
+                    <input
+                      type="text"
+                      value={meetingToUpdate.location.meetingLink}
+                      onChange={(e) =>
+                        setMeetingToUpdate({
+                          ...meetingToUpdate,
+                          location: { ...meetingToUpdate.location, meetingLink: e.target.value }
+                        })
                       }
-                    });
-                  }}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                >
-                  <option value="false">In-Person</option>
-                  <option value="true">Online</option>
-                </select>
+                      placeholder="Enter meeting link (e.g., https://meet.google.com/...)"
+                      className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Room Number</label>
+                    <input
+                      type="text"
+                      value={meetingToUpdate.location?.room}
+                      onChange={(e) =>
+                        setMeetingToUpdate({
+                          ...meetingToUpdate,
+                          location: { ...meetingToUpdate.location, room: e.target.value }
+                        })
+                      }
+                      placeholder="Enter room number (e.g., Room 301)"
+                      className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
+                    />
+                  </div>
+                )}
               </div>
-              {meetingToUpdate.location.isOnline ? (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Meeting Link</label>
-                  <input
-                    type="text"
-                    value={meetingToUpdate.location.meetingLink}
-                    onChange={(e) =>
-                      setMeetingToUpdate({
-                        ...meetingToUpdate,
-                        location: { ...meetingToUpdate.location, meetingLink: e.target.value }
-                      })
-                    }
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
+
+              {/* Status */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                <div className="px-4 py-2.5 rounded-lg bg-yellow-50 text-yellow-800 text-sm">
+                  {meetingToUpdate.status}
                 </div>
-              ) : (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Room</label>
-                  <input
-                    type="text"
-                    value={meetingToUpdate.location.room}
-                    onChange={(e) =>
-                      setMeetingToUpdate({
-                        ...meetingToUpdate,
-                        location: { ...meetingToUpdate.location, room: e.target.value }
-                      })
-                    }
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
-              )}
+              </div>
             </div>
-            <div className="mt-6 flex justify-end space-x-4">
+
+            <div className="mt-8 flex justify-end space-x-4">
               <button
-                onClick={() => {
-                  setShowUpdateDialog(false);
-                  setMeetingToUpdate(null);
-                }}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                onClick={() => setShowUpdateDialog(false)}
+                className="px-6 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 transition duration-150"
               >
                 Cancel
               </button>
               <button
                 onClick={handleUpdateMeeting}
-                className="px-4 py-2 bg-[#13274C] text-white rounded hover:bg-opacity-90"
+                className="px-6 py-2.5 bg-[#13274C] text-white text-sm font-medium rounded-lg hover:bg-opacity-90 transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#13274C]"
               >
                 Update Meeting
               </button>

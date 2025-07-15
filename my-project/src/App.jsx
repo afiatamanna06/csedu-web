@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignUp from "./Pages/Signup";
 import Login from "./Pages/Login";
+import AdminLogin from "./Pages/AdminLogin";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ExamSchedule from "./Pages/ExamSchedule";
 import GradeInput from "./Pages/GradeInput";
@@ -14,6 +15,8 @@ import AuthProvider from "./contexts/AuthContext";
 import SidebarLayout from "./components/SidebarLayout";
 import "./App.css";
 import GradeManagement from "./Pages/GradeManagement";
+import UserManagement from "./Pages/UserManagement";
+import AdminSignup from "./Pages/AdminSignup";
 
 function App() {
   return (
@@ -21,6 +24,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/admin/signup" element={<AdminSignup />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/exam-schedule" element={<ExamSchedule />} />
@@ -28,14 +33,8 @@ function App() {
           <Route path="/room-availability" element={<RoomAvailability />} />
           <Route path="/book-room" element={<BookRoom />} />
           <Route path="/achievements" element={<Achievements />} />
-          <Route
-            path="/bookings"
-            element={
-              <SidebarLayout>
-                <BookingRequests />
-              </SidebarLayout>
-            }
-          />
+
+         
           <Route
             path="/admin/bookings"
             element={
@@ -45,7 +44,15 @@ function App() {
             }
           />
           <Route
-            path="/meetings"
+            path="/admin/user-management"
+            element={
+              <SidebarLayout>
+                <UserManagement />
+              </SidebarLayout>
+            }
+          />
+          <Route
+            path="teacher/meetings"
             element={
               <SidebarLayout>
                 <MeetingList />

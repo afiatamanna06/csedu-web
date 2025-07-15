@@ -1,11 +1,19 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   
   const isActive = (path) => {
     return location.pathname === path;
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
   };
 
   return (
@@ -16,7 +24,7 @@ const Sidebar = () => {
           <Link
             to="/admin/dashboard" 
             className={`flex items-center px-4 py-2 rounded-lg ${
-              isActive('/dashboard') 
+              isActive('/admin/dashboard') 
                 ? 'bg-[#FFC300] text-[#13274C]' 
                 : 'text-gray-700 hover:bg-gray-100'
             }`}
@@ -25,7 +33,18 @@ const Sidebar = () => {
             Dashboard
           </Link>
           <Link
-            to="/bookings"
+            to="/admin/user-management"
+            className={`flex items-center px-4 py-2 rounded-lg ${
+              isActive('/admin/user-management') 
+                ? 'bg-[#FFC300] text-[#13274C]' 
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            <span className="mr-3">👥</span>
+            User Management
+          </Link>
+          <Link
+            to="/admin/bookings"
             className={`flex items-center px-4 py-2 rounded-lg ${
               isActive('/bookings') 
                 ? 'bg-[#FFC300] text-[#13274C]' 
@@ -36,7 +55,7 @@ const Sidebar = () => {
             Bookings
           </Link>
           <Link
-            to="/meetings"
+            to="/teacher/meetings"
             className={`flex items-center px-4 py-2 rounded-lg ${
               isActive('/meetings') 
                 ? 'bg-[#FFC300] text-[#13274C]' 
@@ -46,29 +65,13 @@ const Sidebar = () => {
             <span className="mr-3">📊</span>
             Meetings
           </Link>
-          <Link 
-            to="/users" 
-            className={`flex items-center px-4 py-2 rounded-lg ${
-              isActive('/users') 
-                ? 'bg-[#FFC300] text-[#13274C]' 
-                : 'text-gray-700 hover:bg-gray-100'
-            }`}
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100"
           >
-            <span className="mr-3">👥</span>
-            Users
-          </Link>
-          <Link 
-            to="/settings" 
-            className={`flex items-center px-4 py-2 rounded-lg ${
-              isActive('/settings') 
-                ? 'bg-[#FFC300] text-[#13274C]' 
-                : 'text-gray-700 hover:bg-gray-100'
-            }`}
-          >
-            <span className="mr-3">⚙️</span>
-            Settings
-          </Link>
-          
+            <span className="mr-3">🚪</span>
+            Logout
+          </button>
         </nav>
       </div>
     </div>

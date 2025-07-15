@@ -52,13 +52,6 @@ const Achievements = () => {
           ))}
         </div>
       </div>
-
-      {/* View More Achievements Button */}
-      <div className="text-center pb-16">
-        <button className="inline-flex h-12 px-8 justify-center items-center rounded-full bg-[#0F264F] hover:bg-[#1a3562] transition-colors duration-200 text-white font-['Public_Sans'] text-base font-bold shadow-lg">
-          View More Achievements
-        </button>
-      </div>
     </div>
   );
 };
