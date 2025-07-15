@@ -30,7 +30,7 @@ export default function ResearchOpportunities() {
       <div className="grid lg:grid-cols-2 gap-10 relative z-1 mx-auto container">
         {/* Left */}
         <div>
-          <h2 className="text-4xl font-bold mb-4 lg:mt-6">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 lg:mt-6">
             Research Opportunities
           </h2>
           <p className="leading-relaxed text-xl mb-4">

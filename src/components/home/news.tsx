@@ -64,7 +64,7 @@ const News = () => {
 
         {/* Events list */}
         <div>
-          <h3 className="text-4xl font-semibold text-gray-900 leading-14 border-b-2 border-[#FFB606] mb-8">
+          <h3 className="text-3xl md:text-4xl font-semibold text-gray-900 leading-14 border-b-2 border-[#FFB606] mb-8">
             News and Events
           </h3>
           <div className="space-y-6">

@@ -21,7 +21,7 @@ const notices = [
 const Notices = () => {
   return (
     <div className="container mx-auto px-4 py-20">
-      <h3 className="text-4xl font-semibold text-center text-gray-900">
+      <h3 className="text-3xl md:text-4xl font-semibold text-center text-gray-900">
         Notice and Announcements
       </h3>
       <div className="my-10">
