@@ -1,23 +1,18 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import SelectField from "../components/SelectField";
 import ExamTable from "../components/ExamTable";
+import axios from "axios";
+
+const API_BASE_URL = "http://localhost:8000";
 
 const ExamSchedule = () => {
   const [selectedSemester, setSelectedSemester] = useState("4th year - 1st Semester");
   const [selectedCourse, setSelectedCourse] = useState("Artificial Intelligence");
   const [selectedRoom, setSelectedRoom] = useState("3rd floor : 412");
   const [selectedInvigilator, setSelectedInvigilator] = useState("All");
-  const [showForm, setShowForm] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    date: '',
-    time: '',
-    courseCode: '',
-    courseName: '',
-    roomNo: '',
-    invigilator: '',
-    semester: ''
-  });
+  const [examData, setExamData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   // Dropdown options moved to a separate object for better organization
   const dropdownOptions = {
@@ -59,106 +54,49 @@ const ExamSchedule = () => {
     ]
   };
 
-  // Sample exam data
-  const [examData, setExamData] = useState([
-    {
-      date: "2025-06-10",
-      time: "10:00 AM",
-      courseCode: "CSE 4112",
-      courseName: "Artificial Intelligence",
-      roomNo: "412",
-      invigilator: "Md Mosaddek Khan",
-      semester: "4th year - 1st Semester"
-    },
-    {
-      date: "2025-06-10",
-      time: "2:00 PM",
-      courseCode: "CSE 4113",
-      courseName: "Operating Systems",
-      roomNo: "201",
-      invigilator: "Dr. Sarah Johnson",
-      semester: "4th year - 1st Semester"
-    },
-    {
-      date: "2025-06-11",
-      time: "10:00 AM",
-      courseCode: "CSE 3101",
-      courseName: "Data Structures and Algorithms 2012",
-      roomNo: "301",
-      invigilator: "Prof. David Lee",
-      semester: "3rd year - 1st Semester"
-    },
-    {
-      date: "2025-06-12",
-      time: "11:00 AM",
-      courseCode: "CSE 2201",
-      courseName: "Linear Algebra",
-      roomNo: "412",
-      invigilator: "Dr. Emily Chen",
-      semester: "2nd year - 2nd Semester"
-    },
-  ]);
-
-  // Filter the exam data based on selected options
-  const filteredExamData = useMemo(() => {
-    return examData.filter(exam => {
-      const matchesSemester = selectedSemester === "All" || exam.semester === selectedSemester;
-      const matchesCourse = selectedCourse === "All" || exam.courseName === selectedCourse;
-      const matchesRoom = selectedRoom === "All" || exam.roomNo === selectedRoom.split(" : ")[1];
-      const matchesInvigilator = selectedInvigilator === "All" || exam.invigilator === selectedInvigilator;
-      
-      return matchesSemester && matchesCourse && matchesRoom && matchesInvigilator;
-    });
-  }, [selectedSemester, selectedCourse, selectedRoom, selectedInvigilator, examData]);
-
   // Add "All" option to dropdowns
   const getOptionsWithAll = (options) => ["All", ...options];
 
-  const handleUpdate = (exam) => {
-    setFormData(exam);
-    setIsEditing(true);
-    setShowForm(true);
-  };
-
-  const handleDelete = (exam) => {
-    setExamData(examData.filter(e => 
-      e.courseCode !== exam.courseCode || 
-      e.date !== exam.date || 
-      e.time !== exam.time
-    ));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isEditing) {
-      setExamData(examData.map(exam => 
-        (exam.courseCode === formData.courseCode && 
-         exam.date === formData.date && 
-         exam.time === formData.time) ? formData : exam
-      ));
-    } else {
-      setExamData([...examData, formData]);
-    }
-    setShowForm(false);
-    setIsEditing(false);
-    setFormData({
-      date: '',
-      time: '',
-      courseCode: '',
-      courseName: '',
-      roomNo: '',
-      invigilator: '',
-      semester: ''
-    });
-  };
+  // Fetch exams from backend when filters change
+  useEffect(() => {
+    const fetchExams = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const params = {};
+        if (selectedSemester !== "All") params.semester = selectedSemester;
+        if (selectedRoom !== "All") params.room_no = selectedRoom.split(" : ")[1];
+        if (selectedInvigilator !== "All") params.invigilator = selectedInvigilator;
+        if (selectedCourse !== "All") params.course_title = selectedCourse;
+        const response = await axios.get(`${API_BASE_URL}/exam/filter`, { params });
+        // Map backend data to ExamTable format
+        const mapped = response.data.map((exam) => ({
+          date: exam.date,
+          time: exam.start_time ? `${exam.start_time.substring(0,5)} - ${exam.end_time ? exam.end_time.substring(0,5) : ''}` : '',
+          courseCode: exam.course && exam.course.code ? exam.course.code : '',
+          courseName: exam.course && exam.course.title ? exam.course.title : '',
+          roomNo: exam.room_no,
+          invigilator: exam.invigilator,
+          semester: exam.semester
+        }));
+        setExamData(mapped);
+      } catch (err) {
+        setError("Failed to fetch exam schedule.");
+        setExamData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchExams();
+  }, [selectedSemester, selectedCourse, selectedRoom, selectedInvigilator]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main Container with max width and center alignment */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header Section with Add Button */}
+        {/* Header Section */}
         <header className="flex justify-between items-center mb-8">
-          <div className="text-center">
+          <div className="text-center w-full">
             <h1 className="text-4xl font-medium text-gray-900 font-poppins">
               Exam Schedule
             </h1>
@@ -166,27 +104,6 @@ const ExamSchedule = () => {
               Welcome to our exam scheduling system
             </p>
           </div>
-          <button
-            onClick={() => {
-              setIsEditing(false);
-              setFormData({
-                date: '',
-                time: '',
-                courseCode: '',
-                courseName: '',
-                roomNo: '',
-                invigilator: '',
-                semester: ''
-              });
-              setShowForm(true);
-            }}
-            className="px-4 py-2 bg-[#13274C] text-white rounded-lg hover:bg-[#1e3a5f] transition-colors duration-200 flex items-center space-x-2"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            <span>Add Exam</span>
-          </button>
         </header>
 
         {/* Filters Section */}
@@ -228,11 +145,15 @@ const ExamSchedule = () => {
 
         {/* Table Section */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          {filteredExamData.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-8 text-gray-500">Loading exam schedule...</div>
+          ) : error ? (
+            <div className="text-center py-8 text-red-500">{error}</div>
+          ) : examData.length > 0 ? (
             <ExamTable 
-              data={filteredExamData} 
-              onUpdate={handleUpdate}
-              onDelete={handleDelete}
+              data={examData} 
+              onUpdate={undefined}
+              onDelete={undefined}
             />
           ) : (
             <div className="text-center py-8 text-gray-500">
@@ -240,132 +161,6 @@ const ExamSchedule = () => {
             </div>
           )}
         </div>
-
-        {/* Add/Edit Form Modal */}
-        {showForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-[#13274C]">
-                  {isEditing ? 'Update Exam' : 'Add New Exam'}
-                </h2>
-                <button
-                  onClick={() => setShowForm(false)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                    <input
-                      type="date"
-                      value={formData.date}
-                      onChange={(e) => setFormData({...formData, date: e.target.value})}
-                      className="w-full p-2 border rounded-lg"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-                    <input
-                      type="time"
-                      value={formData.time}
-                      onChange={(e) => setFormData({...formData, time: e.target.value})}
-                      className="w-full p-2 border rounded-lg"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Course Code</label>
-                    <input
-                      type="text"
-                      value={formData.courseCode}
-                      onChange={(e) => setFormData({...formData, courseCode: e.target.value})}
-                      className="w-full p-2 border rounded-lg"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Course Name</label>
-                    <select
-                      value={formData.courseName}
-                      onChange={(e) => setFormData({...formData, courseName: e.target.value})}
-                      className="w-full p-2 border rounded-lg"
-                      required
-                    >
-                      <option value="">Select Course</option>
-                      {dropdownOptions.course.map(course => (
-                        <option key={course} value={course}>{course}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Room No</label>
-                    <select
-                      value={formData.roomNo}
-                      onChange={(e) => setFormData({...formData, roomNo: e.target.value.split(" : ")[1]})}
-                      className="w-full p-2 border rounded-lg"
-                      required
-                    >
-                      <option value="">Select Room</option>
-                      {dropdownOptions.room.map(room => (
-                        <option key={room} value={room}>{room}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Invigilator</label>
-                    <select
-                      value={formData.invigilator}
-                      onChange={(e) => setFormData({...formData, invigilator: e.target.value})}
-                      className="w-full p-2 border rounded-lg"
-                      required
-                    >
-                      <option value="">Select Invigilator</option>
-                      {dropdownOptions.invigilator.map(invigilator => (
-                        <option key={invigilator} value={invigilator}>{invigilator}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Semester</label>
-                    <select
-                      value={formData.semester}
-                      onChange={(e) => setFormData({...formData, semester: e.target.value})}
-                      className="w-full p-2 border rounded-lg"
-                      required
-                    >
-                      <option value="">Select Semester</option>
-                      {dropdownOptions.semester.map(semester => (
-                        <option key={semester} value={semester}>{semester}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="flex justify-end space-x-3 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowForm(false)}
-                    className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-[#13274C] text-white rounded-lg hover:bg-[#1e3a5f]"
-                  >
-                    {isEditing ? 'Update Exam' : 'Add Exam'}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ import "./App.css";
 import GradeManagement from "./Pages/GradeManagement";
 import UserManagement from "./Pages/UserManagement";
 import AdminSignup from "./Pages/AdminSignup";
+import AdminCreateExamSchedule from "./Pages/AdminCreateExamSchedule";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/exam-schedule" element={<ExamSchedule />} />
+          <Route path="/admin/create-examschedule" element={<AdminCreateExamSchedule />} />
           <Route path="/grade-input" element={<GradeManagement />} />
           <Route path="/teacher/room-availability" element={<RoomAvailability />} />
           <Route path="/book-room" element={<BookRoom />} />
