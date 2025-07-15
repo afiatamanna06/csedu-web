@@ -121,7 +121,11 @@ export default function AcademicPrograms() {
               >
                 {/* Icon and Title */}
                 <div className="flex items-start gap-4 flex-1">
-                  <div className={`${isActive ? "bg-[#FFB606]" : "bg-[#E3DDF6]"} text-[#2B1472] p-4 rounded-full`}>
+                  <div
+                    className={`${
+                      isActive ? "bg-[#FFB606]" : "bg-[#E3DDF6]"
+                    } text-[#2B1472] p-4 rounded-full`}
+                  >
                     {program.icon}
                   </div>
                   <div>
