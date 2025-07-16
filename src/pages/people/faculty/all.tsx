@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/utils/get-initials";
+import { useNavigate } from "@tanstack/react-router";
 
 interface Faculty {
   name: string;
@@ -89,6 +90,7 @@ const allInterests = [
 export default function FacultyMembers() {
   const [selectedRanks, setSelectedRanks] = useState<string[]>([]);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   const toggleFilter = (
     value: string,
@@ -176,7 +178,7 @@ export default function FacultyMembers() {
                 <p className="text-sm text-gray-500">{faculty.title}</p>
                 <p className="text-sm mt-2">Email: {faculty.email}</p>
                 <p className="text-sm">Phone: {faculty.phone}</p>
-                <Button className="mt-4 w-full">View</Button>
+                <Button className="mt-4 w-full" onClick={() => { window.location.href = `/profile?name=${encodeURIComponent(faculty.name)}`; }}>View</Button>
               </Card>
             ))}
           </div>
