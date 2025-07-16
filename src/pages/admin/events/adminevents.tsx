@@ -43,7 +43,7 @@ const AdminEvents: React.FC = () => {
             <div className="w-48 h-1 bg-yellow-400 mt-2"></div>
           </div>
           <button
-            onClick={() => navigate({ to: "/dashboard/admin/events/addevents" })}
+            onClick={() => navigate({ to: "/dashboard/admin/events/addevents" as string })}
             className="bg-yellow-400 hover:bg-yellow-500 text-primary font-semibold px-6 py-2 rounded-md text-sm transition cursor-pointer flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
