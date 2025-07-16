@@ -1,19 +1,26 @@
 import { useState } from "react";
-import { Outlet } from "@tanstack/react-router";
+import { Outlet, useRouter } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react"; // icons for hamburger and close
 import RoleBasedSidebar from "@/components/navigation/role-based-sidebar";
+import { ProtectedRoute } from "@/components/auth/protected-route";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { currentUser } = useAuth();
+  const router = useRouter();
+
+  // Get the current dashboard type from the URL
+  const dashboardType = router.state.location.pathname.split('/')[2]; // e.g., 'student', 'faculty', 'admin'
 
   // Toggle sidebar open/close
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   return (
-    <>
+    <ProtectedRoute allowedRoles={[dashboardType]}>
       {/* Mobile top nav with menu button */}
       <header className="fixed top-[4.35rem] left-0 right-0 bg-white shadow-md lg:hidden flex items-center justify-between px-4 h-16 z-30">
-        <h1 className="font-bold text-lg">Student Dashboard</h1>
+        <h1 className="font-bold text-lg capitalize">{dashboardType} Dashboard</h1>
         <button
           onClick={toggleSidebar}
           aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
@@ -53,6 +60,6 @@ export default function DashboardLayout() {
           </main>
         </div>
       </div>
-    </>
+    </ProtectedRoute>
   );
 }

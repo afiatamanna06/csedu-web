@@ -7,7 +7,6 @@ import Events from "@/pages/events/events";
 import EventDetails from "@/pages/events/eventdetails";
 import StudentActivity from "@/pages/studentactivity/studentactivity";
 
-
 import Profile from "@/pages/profile/profile";
 import Programs from "@/pages/programs/programs";
 import Degree from "@/pages/programs/degree";
@@ -16,12 +15,8 @@ import type { RouteComponent } from "@tanstack/react-router";
 import About from "@/pages/about/about";
 
 import { Placeholder } from "@/components/placeholder";
-import {
-  AdminLogin,
-  AlumniLogin,
-  FacultyLogin,
-  StudentLogin,
-} from "@/pages/auth/login/login";
+import { LoginPage } from "@/pages/auth/login/login";
+import { Signup, AdminSignup } from "@/pages/auth/signup/signup";
 
 import StudentOverview from "@/pages/dashboard/student/overview";
 import FacultyMembers from "@/pages/people/faculty/all";
@@ -37,9 +32,17 @@ import AddEvents from "@/pages/admin/events/addevents";
 import EditEvents from "@/pages/admin/events/editevents";
 
 import FeeStructure from "@/pages/dashboard/fee-structure";
-
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
 
+// Import new pages
+import ExamSchedule from "@/pages/dashboard/student/exam-schedule";
+import AdminCreateExamSchedule from "@/pages/dashboard/admin/create-exam-schedule";
+import GradeManagement from "@/pages/dashboard/faculty/grade-management";
+import RoomAvailability from "@/pages/dashboard/faculty/room-availability";
+import BookRoom from "@/pages/dashboard/faculty/book-room";
+import BookingRequests from "@/pages/dashboard/admin/booking-requests";
+import MeetingList from "@/pages/dashboard/faculty/meeting-list";
+import UserManagement from "@/pages/dashboard/admin/user-management";
 
 export const routeConfigs = [
   // Base
@@ -98,11 +101,10 @@ export const routeConfigs = [
   { path: "/news/events/$eventId", component: EventDetails },
 
 
-  // Login
-  { path: "/login/faculty", component: FacultyLogin },
-  { path: "/login/student", component: StudentLogin },
-  { path: "/login/admin", component: AdminLogin },
-  { path: "/login/alumni", component: AlumniLogin },
+  // Auth routes
+  { path: "/login", component: LoginPage },
+  { path: "/signup", component: Signup },
+  { path: "/admin/signup", component: AdminSignup },
 
   // Student Dashboard with layout and child routes
   {
@@ -116,6 +118,10 @@ export const routeConfigs = [
       {
         path: "overview",
         component: StudentOverview,
+      },
+      {
+        path: "exam-schedule",
+        component: ExamSchedule,
       },
       {
         path: "grades",
@@ -145,7 +151,6 @@ export const routeConfigs = [
         path: "semester-routine",
         component: SemesterRoutine,
       },
-    
       {
         path: "settings",
         component: Placeholder,
@@ -166,20 +171,20 @@ export const routeConfigs = [
         component: FacultyOverview,
       },
       {
-        path: "schedule-exams",
-        component: Placeholder,
+        path: "grade-management",
+        component: GradeManagement,
       },
       {
-        path: "grade-submission",
-        component: Placeholder,
+        path: "room-availability",
+        component: RoomAvailability,
       },
       {
-        path: "room-booking",
-        component: Placeholder,
+        path: "book-room",
+        component: BookRoom,
       },
       {
         path: "meetings",
-        component: Placeholder,
+        component: MeetingList,
       },
       {
         path: "settings",
@@ -202,7 +207,19 @@ export const routeConfigs = [
       },
       {
         path: "users",
-        component: Placeholder,
+        component: UserManagement,
+      },
+      {
+        path: "rooms",
+        component: () => import("@/pages/dashboard/admin/room-management").then(mod => mod.default),
+      },
+      {
+        path: "create-exam-schedule",
+        component: AdminCreateExamSchedule,
+      },
+      {
+        path: "booking-requests",
+        component: BookingRequests,
       },
       {
         path: "courses",
@@ -228,7 +245,6 @@ export const routeConfigs = [
         path: "notices/editnotice",
         component: EditNotice,
       },
-
       {
         path: "events",
         component: AdminEvents,
