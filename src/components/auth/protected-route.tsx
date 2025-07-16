@@ -14,7 +14,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
   useEffect(() => {
     if (!loading) {
       if (!currentUser) {
-        navigate({ to: '/login/student'  });
+        navigate({ to: '/login/student' as string });
         return;
       }
 
@@ -22,16 +22,16 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
         // Redirect to appropriate dashboard based on role
         switch (currentUser.role.toLowerCase()) {
           case 'student':
-            navigate({ to: '/dashboard/student' });
+            navigate({ to: '/dashboard/student' as string });
             break;
           case 'faculty':
-            navigate({ to: '/dashboard/faculty' });
+            navigate({ to: '/dashboard/faculty' as string });
             break;
           case 'admin':
-            navigate({ to: '/dashboard/admin' });
+            navigate({ to: '/dashboard/admin' as string });
             break;
           case 'alumni':
-            navigate({ to: '/dashboard/alumni' });
+            navigate({ to: '/dashboard/alumni' as string });
             break;
           default:
             navigate({ to: '/' });

@@ -193,21 +193,21 @@ const AdminCreateExamSchedule = () => {
     }
   };
 
-  const handleStatusUpdate = async (row: ExamData, newStatus: string) => {
-    try {
-      await axios.put(`${API_BASE_URL}/exam/update/${row.raw.id}`, { status: newStatus }, {
-        headers: getAuthHeaders(),
-      });
-      setMessage({ text: `Exam schedule status updated to ${newStatus}!`, type: "success" });
-      fetchExams();
-    } catch (error: any) {
-      let msg = "Failed to update status.";
-      if (error.response?.data?.detail) {
-        msg = error.response.data.detail;
-      }
-      setMessage({ text: msg, type: "error" });
-    }
-  };
+  // const handleStatusUpdate = async (row: ExamData, newStatus: string) => {
+  //   try {
+  //     await axios.put(`${API_BASE_URL}/exam/update/${row.raw.id}`, { status: newStatus }, {
+  //       headers: getAuthHeaders(),
+  //     });
+  //     setMessage({ text: `Exam schedule status updated to ${newStatus}!`, type: "success" });
+  //     fetchExams();
+  //   } catch (error: any) {
+  //     let msg = "Failed to update status.";
+  //     if (error.response?.data?.detail) {
+  //       msg = error.response.data.detail;
+  //     }
+  //     setMessage({ text: msg, type: "error" });
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -114,8 +114,7 @@ const GradeManagement = () => {
                         label: grade,
                         value: grade
                       }))}
-                      onChange={(value) => handleGradeUpdate(student.id, value)}
-                    />
+                      onChange={(value) => handleGradeUpdate(student.id, value)} label={""}                    />
                   </td>
                 </tr>
               ))}

@@ -72,7 +72,7 @@ const BookingRequests = () => {
     }
   ]);
 
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [, setRooms] = useState<Room[]>([]);
   const [newRoom, setNewRoom] = useState<NewRoom>({
     room_id: '',
     location: '',
@@ -81,7 +81,7 @@ const BookingRequests = () => {
 
   const [showAddRoom, setShowAddRoom] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingRooms, setIsLoadingRooms] = useState(false);
+  const [, setIsLoadingRooms] = useState(false);
   const [message, setMessage] = useState<Message>({ text: '', type: '' });
 
   // Fetch all rooms from the API
@@ -145,20 +145,20 @@ const BookingRequests = () => {
       setIsLoading(true);
       setMessage({ text: '', type: '' });
 
-      const response = await axios.post(
-        `${API_BASE_URL}/room/add`, 
-        {
-          room_id: newRoom.room_id,
-          location: newRoom.location,
-          capacity: parseInt(newRoom.capacity)
-        }, 
-        {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+      // const response = await axios.post(
+      //   `${API_BASE_URL}/room/add`, 
+      //   {
+      //     room_id: newRoom.room_id,
+      //     location: newRoom.location,
+      //     capacity: parseInt(newRoom.capacity)
+      //   }, 
+      //   {
+      //     headers: {
+      //       'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      //       'Content-Type': 'application/json'
+      //     }
+      //   }
+      // );
 
       setMessage({ text: 'Room added successfully!', type: 'success' });
       await fetchAllRooms();

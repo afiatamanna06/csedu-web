@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '@/contexts/auth-context';
@@ -38,7 +38,7 @@ const BookRoom = () => {
   // Convert time string to backend format (HH:MM:SS)
   const formatTimeForBackend = (timeString: string) => {
     const [time, period] = timeString.split(' ');
-    let [hours, minutes] = time.split(':');
+    const [hours, minutes] = time.split(':');
     let hoursNum = parseInt(hours);
     
     if (period === 'PM' && hoursNum !== 12) {

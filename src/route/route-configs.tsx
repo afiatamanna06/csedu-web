@@ -51,7 +51,6 @@ import StudentProfile from "@/pages/profile/student-profile";
 
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
 import Course from "@/pages/dashboard/student/course";
-import { AdminSignUp } from "@/pages/auth/signup/signup";
 
 // Import new pages
 import ExamSchedule from "@/pages/dashboard/student/exam-schedule";
@@ -126,7 +125,7 @@ export const routeConfigs = [
   // { path: "/login/alumni", component: AlumniLogin },
 
   // Signup
-  { path: "/signup/admin", component: AdminSignUp },
+  // { path: "/signup/admin", component: AdminSignUp },
 
     //admission
   { path: "/admission", component: Admission },

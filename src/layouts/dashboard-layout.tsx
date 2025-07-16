@@ -3,11 +3,11 @@ import { Outlet, useRouter } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react"; // icons for hamburger and close
 import RoleBasedSidebar from "@/components/navigation/role-based-sidebar";
 import { ProtectedRoute } from "@/components/auth/protected-route";
-import { useAuth } from "@/contexts/auth-context";
+//import { useAuth } from "@/contexts/auth-context";
 
 export default function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { currentUser } = useAuth();
+  //const { currentUser } = useAuth();
   const router = useRouter();
 
   // Get the current dashboard type from the URL

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { SelectField } from '@/components/ui/select-field';
 import { useAuth } from '@/contexts/auth-context';
@@ -35,7 +34,7 @@ interface CustomDateRange {
 }
 
 const MeetingList = () => {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const { currentUser } = useAuth();
   
   const [isLoadingMeetings, setIsLoadingMeetings] = useState(false);
@@ -127,11 +126,11 @@ const MeetingList = () => {
           return meetingDate.toDateString() === today.toDateString();
         
         case 'This Week':
-          const weekStart = new Date(today);
+          { const weekStart = new Date(today);
           weekStart.setDate(today.getDate() - today.getDay()); // Start of week (Sunday)
           const weekEnd = new Date(weekStart);
           weekEnd.setDate(weekStart.getDate() + 6); // End of week (Saturday)
-          return meetingDate >= weekStart && meetingDate <= weekEnd;
+          return meetingDate >= weekStart && meetingDate <= weekEnd; }
         
         case 'This Month':
           return meetingDate.getMonth() === today.getMonth() && 
