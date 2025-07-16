@@ -1,28 +1,36 @@
-import React, { useState } from 'react';
-import { Plus, Edit, Trash2} from 'lucide-react';
-import { sampleNotices } from '../../../assets/assets';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Plus, Edit, Trash2 } from 'lucide-react';
+// Remove: import { sampleNotices } from '../../../assets/assets';
 import type { Notice } from '../../../assets/assets';
-// Removed: import AddNoticeModal from '../../../components/admin/notice/addnoticemodal';
 import EditNoticeModal from '../../../components/admin/notice/editnoticemodal';
 import DeleteConfirmModal from '../../../components/admin/notice/deleteconfirmmodal';
 import { useNavigate } from '@tanstack/react-router';
 
 const AdminNotice: React.FC = () => {
-  const [notices, setNotices] = useState<Notice[]>(sampleNotices);
-  // Removed: const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [notices, setNotices] = useState<Notice[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedNotice, setSelectedNotice] = useState<Notice | null>(null);
   const navigate = useNavigate();
 
-  // const handleAddNotice = (newNotice: Omit<Notice, 'id'>) => {
-  //   const notice: Notice = {
-  //     ...newNotice,
-  //     id: Math.max(...notices.map(n => n.id)) + 1
-  //   };
-  //   setNotices([notice, ...notices]);
-  //   // Removed: setIsAddModalOpen(false);
-  // };
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        const response = await axios.get("http://localhost:8000/notice/all", {
+          headers: {
+            "Accept": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+        });
+        setNotices(response.data);
+      } catch (error) {
+        setNotices([]);
+      }
+    };
+    fetchNotices();
+  }, []);
 
   const handleEditNotice = (updatedNotice: Notice) => {
     setNotices(notices.map(notice => 
