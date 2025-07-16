@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-// import { useAuth } from '../../../contexts/auth-context';
+import { useAuth } from '../../../contexts/auth-context';
 import type { UserRole } from '../../../contexts/auth-context';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,7 @@ export function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  // const { login } = useAuth();
+  const { login } = useAuth();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -24,11 +24,11 @@ export function LoginPage() {
       setError('');
       setLoading(true);
       
-      // const result = await login({ email, password, role });
+      const result = await login({ email, password, role });
       
       // Navigate based on role
       switch(role) {
-        case 'admin':
+        case 'Admin':
           navigate({ to: '/dashboard/admin' }); // Will update with proper admin dashboard route
           break;
         case 'teacher':

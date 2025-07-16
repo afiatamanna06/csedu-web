@@ -8,7 +8,7 @@ interface User {
   role: string;
 }
 
-export type UserRole = 'student' | 'teacher' | 'admin';
+export type UserRole = 'student' | 'teacher' | 'Admin';
 
 interface AuthContextType {
   currentUser: User | null;

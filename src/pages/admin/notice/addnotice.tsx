@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Calendar, User, MapPin, Clock, FileText } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
@@ -29,9 +30,47 @@ const AddNotice: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+const getAuthToken = () => {
+  return localStorage.getItem("token") || sessionStorage.getItem("token");
+};
 
+const getAuthHeaders = () => {
+  const token = getAuthToken();
+  return {
+    "Accept": "application/json",
+    ...(token && { Authorization: `Bearer ${token}` }),
+  };
+};
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const form = new FormData();
+  form.append("title", formData.title);
+  form.append("description", formData.description);
+  form.append("detailed_description", formData.detailedDescription);
+  form.append("category", formData.category);
+  form.append("date", formData.date);
+  form.append("expiry_date", formData.expiryDate);
+  form.append("author", formData.author);
+  form.append("location", formData.location);
+  form.append("time", formData.time);
+  if (formData.pdfFile) {
+    form.append("pdf_file", formData.pdfFile);
+  }
+
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/notice/create",
+      form,
+      {
+        headers: {
+          ...getAuthHeaders(),
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    toast.success(response.data.message || "Notice added successfully!");
     setFormData({
       title: "",
       description: "",
@@ -45,24 +84,11 @@ const AddNotice: React.FC = () => {
       time: "",
       isArchived: false,
     });
-    toast.success("Notice added successfully!");
-  };
+  } catch (error: any) {
+    toast.error(error.response?.data?.detail || "Failed to add notice.");
+  }
+};
 
-  // const handleReset = () => {
-  //   setFormData({
-  //     title: "",
-  //     description: "",
-  //     detailedDescription: "",
-  //     pdfFile: null,
-  //     category: "general",
-  //     date: new Date().toISOString().split("T")[0],
-  //     expiryDate: "",
-  //     author: "",
-  //     location: "",
-  //     time: "",
-  //     isArchived: false,
-  //   });
-  // };
 
   return (
     <div className="p-4 bg-gray-50 min-h-screen">

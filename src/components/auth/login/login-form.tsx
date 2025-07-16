@@ -8,7 +8,7 @@ import { useForm, type ControllerRenderProps } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 interface LoginFormProps {
-  role: 'student' | 'faculty' | 'admin' | 'alumni';
+  role: 'student' | 'faculty' | 'Admin' | 'alumni';
 }
 
 const formSchema = z.object({
