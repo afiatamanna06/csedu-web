@@ -72,6 +72,12 @@ export default function LoginForm({ role }: LoginFormProps) {
             <Button type="submit" className="bg-[#FFB606] text-black w-full">
               Login
             </Button>
+
+            {role === 'admin' && (
+            <div>
+              Don't have an account? <a href="/signup/admin" className="text-blue-500">Sign up as Admin</a>
+            </div>
+            )}
           </form>
         </Form>
       </div>
