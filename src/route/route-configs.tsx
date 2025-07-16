@@ -56,7 +56,7 @@ export const routeConfigs = [
   { path: "/about/mission-vision", component: Placeholder },
 
   // Academic
-  { path: "/academic/programs", component: Placeholder },
+  { path: "/academic/programs", component: Programs },
   { path: "/academic/courses", component: Placeholder },
   { path: "/academic/calendar", component: Calender },
   { path: "/academic/exam-schedule", component: Placeholder },
