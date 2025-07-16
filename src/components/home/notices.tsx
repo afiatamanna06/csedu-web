@@ -45,7 +45,7 @@ const Notices = () => {
       </div>
       <div className="flex justify-center">
         <Link
-          to="/"
+          to={"/news/notice" as string}
           className="bg-[#FFB606] hover:bg-[#FFB606] text-[#2B1472] font-semibold  px-8 py-3 rounded-md transition"
         >
           View all announcements
