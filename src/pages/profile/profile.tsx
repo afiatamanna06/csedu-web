@@ -366,7 +366,7 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState("PROFILE");
 
   return (
-    <div className="profile-page">
+    <div className="profile-page min-h-screen bg-gray-100 px-4 py-6 mt-[4rem] lg:mt-[8rem]">
       {/* Header */}
       <div className="profile-header">
         FACULTY AND RESEARCH &gt; {data.name}

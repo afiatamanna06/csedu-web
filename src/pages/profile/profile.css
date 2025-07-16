@@ -73,7 +73,7 @@
   font-size: 1.2rem;
   font-weight: 600;
   color: #001b3a;
-  margin: 32px 0 24px 0;
+  margin: 1px 0 12px 0;
   padding-left: 16px;
 }
 
@@ -894,3 +894,12 @@ section {
     font-size: 0.97rem;
   }
 } 
+
+.avatar {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+}

@@ -7,9 +7,9 @@ const sidebarLinks: Record<string, SidebarLink[]> = {
     { label: "Overview", path: "/dashboard/student/overview" },
     { label: "Courses", path: "/dashboard/student/courses" },
     { label: "Grades", path: "/dashboard/student/grades" },
-    { label: "Fee Structure", path: "/dashboard/student/fee-structure" },
+    // Fee Structure entry removed
     { label: "Exam Payments", path: "/dashboard/student/payments" },
-    { label: "Equipment Fees", path: "/dashboard/student/equipment-fees" },
+    { label: "Equipment Booking", path: "/dashboard/student/equipment-booking" },
     { label: "Exam Routine", path: "/dashboard/student/exam-routine" },
     { label: "Semester Routine", path: "/dashboard/student/semester-routine" },
     { label: "Settings", path: "/dashboard/student/settings" },
@@ -62,6 +62,7 @@ export default function RoleBasedSidebar({
   const role = getRoleFromPath(location.pathname);
   const links = sidebarLinks[role];
   const title = `${role.charAt(0).toUpperCase() + role.slice(1)} Dashboard`;
+  const profileLink = `/profile/${role}`;
 
-  return <Sidebar title={title} links={links} onLinkClick={onLinkClick} />;
+  return <Sidebar title={title} links={links} onLinkClick={onLinkClick} profileLink={profileLink} />;
 }
