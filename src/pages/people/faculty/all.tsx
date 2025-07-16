@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getInitials } from "@/utils/get-initials";
-import { useNavigate } from "@tanstack/react-router";
+import { FileUser, Link2 } from "lucide-react";
 
 interface Faculty {
   name: string;
@@ -22,7 +22,7 @@ const facultyMembers: Faculty[] = [
     title: "Professor & Chairman",
     email: "razzaque@du.ac.bd",
     phone: "01840663980",
-    photo: "/faculty1.jpg",
+    photo: "/chairman.jpg",
     rank: "Professor",
     interests: ["IoT", "Distributed Systems"],
   },
@@ -31,7 +31,7 @@ const facultyMembers: Faculty[] = [
     title: "Professor (Deputation)",
     email: "haider@du.ac.bd",
     phone: "+880244685057",
-    photo: "/faculty2.jpg",
+    photo: "/ha.jpg",
     rank: "Professor",
     interests: ["AI", "ML"],
   },
@@ -40,7 +40,7 @@ const facultyMembers: Faculty[] = [
     title: "Professor",
     email: "hafizbabu@du.ac.bd",
     phone: "+88-01713310515",
-    photo: "/faculty3.jpg",
+    photo: "/babu.jpg",
     rank: "Professor",
     interests: ["Quantum Computing", "VLSI"],
   },
@@ -49,7 +49,7 @@ const facultyMembers: Faculty[] = [
     title: "Professor",
     email: "karim@du.ac.bd",
     phone: "880-2-9661900/7424",
-    photo: "/faculty4.jpg",
+    photo: "/rk.jpg",
     rank: "Professor",
     interests: ["Database", "Information Systems"],
   },
@@ -58,7 +58,7 @@ const facultyMembers: Faculty[] = [
     title: "Professor",
     email: "mustafiz@du.ac.bd",
     phone: "880-1927-196-301",
-    photo: "/faculty5.jpg",
+    photo: "/rony.jpg",
     rank: "Professor",
     interests: ["Software Engineering"],
   },
@@ -67,7 +67,7 @@ const facultyMembers: Faculty[] = [
     title: "Professor",
     email: "sm.tareeq@du.ac.bd",
     phone: "880-2-9661900",
-    photo: "/faculty6.jpg",
+    photo: "/tareq.jpg",
     rank: "Professor",
     interests: ["Cybersecurity"],
   },
@@ -90,7 +90,6 @@ const allInterests = [
 export default function FacultyMembers() {
   const [selectedRanks, setSelectedRanks] = useState<string[]>([]);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
-  const navigate = useNavigate();
 
   const toggleFilter = (
     value: string,
@@ -116,12 +115,24 @@ export default function FacultyMembers() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-100 px-4 py-6 mt-[4rem] lg:mt-[8rem]">
-      <h1 className="text-3xl font-bold mb-6 text-center">Faculty Members</h1>
+    <div className="min-h-screen bg-gray-100 mt-[4rem] lg:mt-[8rem]">
+      <div className="relative w-full h-[100%]">
+        <img
+          src="/landing.jpg"
+          alt="Department Banner"
+          className="w-full h-[100%] absolute object-cover"
+        />
+        <div className="w-full h-[100%] absolute bg-gradient-to-b from-[#13274C] to-[#13274C6f] backdrop-blur-[2px]"></div>
+        <div className="relative w-full h-[15rem] md:h-[17rem] flex flex-col items-center justify-center p-6 md:p-12 lg:p-16">
+          <p className="text-3xl md:text-5xl mt-8 md:mt-0 max-w-[60rem] font-bold text-white text-center">
+            Faculty Members
+          </p>
+        </div>
+      </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-8 lg:container mx-auto px-4 pt-10 pb-20">
         {/* Sidebar Filters */}
-        <aside className="w-full lg:w-64 bg-white p-4 rounded-lg shadow-md">
+        <aside className="w-full h-full lg:w-64 bg-white p-4 rounded-lg shadow-lg shadow-[#e5ddff]">
           <h2 className="text-xl font-semibold mb-4">Filter By</h2>
 
           <div className="mb-6">
@@ -161,24 +172,39 @@ export default function FacultyMembers() {
 
         {/* Faculty Cards */}
         <div className="flex-1">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full max-w-7xl mx-auto">
+          <div className="grid gap-8 lg:gap-x-20 sm:grid-cols-2 lg:grid-cols-3 w-full">
             {filtered.map((faculty, i) => (
-              <Card
-                key={i}
-                className="shadow-lg rounded-2xl flex flex-col items-center text-center p-6"
-              >
-                <Avatar className="mb-4">
-                  <AvatarImage
+              <Card key={i} className="shadow-lg shadow-[#e5ddff] border-none rounded-2xl flex flex-col p-0">
+                {faculty.photo ? (
+                  <div className="pt-4 px-4 overflow-hidden">
+                    <img
                     src={faculty.photo}
-                    className="w-24 h-24 object-cover rounded-full"
+                    alt={faculty.name}
+                    className="w-full h-[20rem] lg:h-[18rem] rounded-xl object-cover"
                   />
-                  <AvatarFallback>{getInitials(faculty.name)}</AvatarFallback>
-                </Avatar>
-                <h2 className="text-lg font-semibold">{faculty.name}</h2>
-                <p className="text-sm text-gray-500">{faculty.title}</p>
-                <p className="text-sm mt-2">Email: {faculty.email}</p>
-                <p className="text-sm">Phone: {faculty.phone}</p>
-                <Button className="mt-4 w-full" onClick={() => { window.location.href = `/profile?name=${encodeURIComponent(faculty.name)}`; }}>View</Button>
+                  </div>
+                ) : (
+                  <Avatar className="mb-4">
+                    <AvatarFallback>{getInitials(faculty.name)}</AvatarFallback>
+                  </Avatar>
+                )}
+                <h2 className="text-lg font-semibold px-4">{faculty.name}</h2>
+                <p className="text-sm text-gray-500 -mt-4 px-4">
+                  {faculty.title}
+                </p>
+                <p className="text-sm px-4">Email: {faculty.email}</p>
+                <p className="text-sm px-4 -mt-4">Phone: {faculty.phone}</p>
+                <div className="flex flex-row justify-between items-center gap-2 -mt-4 p-4">
+                  <div className="flex flex-row items-center gap-2">
+                    <button>
+                      <Link2 size={22} />
+                    </button>
+                    <button>
+                      <FileUser size={22} />
+                    </button>
+                  </div>
+                  <Button className="mt-1 px-8 py-3 bg-[#2B1472] rounded-[6px] font-semibold cursor-pointer hover:bg-[#1a0d4c] text-white transition-colors">View</Button>
+                </div>
               </Card>
             ))}
           </div>
