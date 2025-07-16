@@ -894,3 +894,12 @@ section {
     font-size: 0.97rem;
   }
 } 
+
+.avatar {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+}

@@ -35,13 +35,8 @@ export const Navbar: React.FC = () => {
         { name: "Exam Schedule", href: "/academic/exam-schedule" },
       ],
     },
-    {
-      name: "Admission",
-      submenu: [
-        { name: "Undergraduate", href: "/admission/undergraduate" },
-        { name: "Graduate", href: "/admission/graduate" },
-      ],
-    },
+    // Update Admission section - remove submenu
+    { name: "Admission", href: "/admission" },
     {
       name: "People",
       submenu: [
@@ -60,10 +55,12 @@ export const Navbar: React.FC = () => {
     {
       name: "Research",
       submenu: [
-        { name: "Research Areas", href: "/research/areas" },
-        { name: "Publications", href: "/research/publications" },
-        { name: "Funded Projects", href: "/research/projects" },
-        { name: "Research Facilities", href: "/research/facilities" },
+        // Change "Research Areas" to "Research Highlights"
+        { name: "Research Highlights", href: "/award_and_research_highlights" },
+        { name: "Research Areas", href: "/research-areas" },
+        { name: "Publications", href: "/publications" },
+        { name: "Funded Projects", href: "/funded-projects" },
+        { name: "Research Facilities", href: "/research-facilities" },
       ],
     },
     {

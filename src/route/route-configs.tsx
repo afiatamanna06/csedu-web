@@ -39,8 +39,23 @@ import EditEvents from "@/pages/admin/events/editevents";
 import FeeStructure from "@/pages/dashboard/fee-structure";
 import EquipmentBooking from "@/pages/dashboard/equipment-booking";
 
+import Admission from "@/pages/admission/admission";
+import ApplyMsc from "@/pages/admission/apply-msc";
+import ApplyPhd from "@/pages/admission/apply-phd";
+import ApplyMphil from "@/pages/admission/apply-mphil";
+import FormFillup from "@/pages/admission/form-fillup";
+import AwardAndResearchHighlights from "@/pages/research/award-and-research-highlights";
+import ResearchAreas from "@/pages/research/research-areas";
+import Publications from "@/pages/research/publications";
+import FundedProjects from "@/pages/research/funded-projects";
+import ResearchFacilities from "@/pages/research/research-facilities";
+
+import FacultyProfile from "@/pages/profile/faculty-profile";
+import StudentProfile from "@/pages/profile/student-profile";
+
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
 import Course from "@/pages/dashboard/student/course";
+
 
 export const routeConfigs = [
   // Base
@@ -72,11 +87,7 @@ export const routeConfigs = [
   { path: "/people/faculty", component: FacultyMembers },
   { path: "/people/staffs", component: OfficersAndStaff },
 
-  // Research
-  { path: "/research/areas", component: Placeholder },
-  { path: "/research/publications", component: Placeholder },
-  { path: "/research/projects", component: Placeholder },
-  { path: "/research/facilities", component: Placeholder },
+
 
   // Student
   { path: "/student/activities", component: StudentActivity },
@@ -102,6 +113,23 @@ export const routeConfigs = [
   { path: "/login/admin", component: AdminLogin },
   { path: "/login/alumni", component: AlumniLogin },
 
+    //admission
+  { path: "/admission", component: Admission },
+  { path: "/apply-msc", component: ApplyMsc },
+  { path: "/apply-phd", component: ApplyPhd },
+  { path: "/apply-mphil", component: ApplyMphil },
+  { path: "/form-fillup", component: FormFillup },
+
+  // Research
+  { path: "/award_and_research_highlights", component: AwardAndResearchHighlights },
+  { path: "/research-areas", component: ResearchAreas },
+  { path: "/publications", component: Publications },
+  { path: "/funded-projects", component: FundedProjects },
+  { path: "/research-facilities", component: ResearchFacilities },
+
+  //faculty profile, student profile
+  { path: "/profile/faculty", component: FacultyProfile },
+  { path: "/profile/student", component: StudentProfile },
   // Student Dashboard with layout and child routes
   {
     path: "/dashboard/student",
