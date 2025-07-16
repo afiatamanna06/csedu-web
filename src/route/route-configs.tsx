@@ -1,12 +1,19 @@
 import Contact from "@/pages/contact/contact";
 import Home from "@/pages/home/home";
 
+import Notice from "@/pages/notice/notice";
+import NoticeDetails from "@/pages/notice/noticedetails";
+import Events from "@/pages/events/events";
+import EventDetails from "@/pages/events/eventdetails";
+import StudentActivity from "@/pages/studentactivity/studentactivity";
+
 import Profile from "@/pages/profile/profile";
 import Programs from "@/pages/programs/programs";
 import Degree from "@/pages/programs/degree";
 import type { RouteComponent } from "@tanstack/react-router";
 
 import About from "@/pages/about/about";
+import Calender from "@/pages/academic/calender";
 
 import { Placeholder } from "@/components/placeholder";
 import {
@@ -22,8 +29,15 @@ import OfficersAndStaff from "@/pages/people/staffs/staffs";
 import DashboardLayout from "@/layouts/dashboard-layout";
 import FacultyOverview from "@/pages/dashboard/faculty/overview";
 
+import AdminNotice from "@/pages/admin/notice/adminnotice";
+import AddNotice from "@/pages/admin/notice/addnotice";
+import EditNotice from "@/pages/admin/notice/editnotice";
+import AdminEvents from "@/pages/admin/events/adminevents";
+import AddEvents from "@/pages/admin/events/addevents";
+import EditEvents from "@/pages/admin/events/editevents";
+
 import FeeStructure from "@/pages/dashboard/fee-structure";
-import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
+import EquipmentBooking from "@/pages/dashboard/equipment-booking";
 
 import Admission from "@/pages/admission/admission";
 import ApplyMsc from "@/pages/admission/apply-msc";
@@ -39,6 +53,10 @@ import ResearchFacilities from "@/pages/research/research-facilities";
 import FacultyProfile from "@/pages/profile/faculty-profile";
 import StudentProfile from "@/pages/profile/student-profile";
 
+import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
+import Course from "@/pages/dashboard/student/course";
+
+
 export const routeConfigs = [
   // Base
   { path: "/", component: Home },
@@ -53,9 +71,9 @@ export const routeConfigs = [
   { path: "/about/mission-vision", component: Placeholder },
 
   // Academic
-  { path: "/academic/programs", component: Placeholder },
+  { path: "/academic/programs", component: Programs },
   { path: "/academic/courses", component: Placeholder },
-  { path: "/academic/calendar", component: Placeholder },
+  { path: "/academic/calendar", component: Calender },
   { path: "/academic/exam-schedule", component: Placeholder },
 
   // Admission
@@ -63,15 +81,16 @@ export const routeConfigs = [
   { path: "/admission/graduate", component: Placeholder },
 
   // People
-  { path: "/people/faculty/all", component: FacultyMembers },
-  { path: "/people/faculty/position", component: FacultyMembers },
-  { path: "/people/faculty/research", component: FacultyMembers },
+  // { path: "/people/faculty/all", component: FacultyMembers },
+  // { path: "/people/faculty/position", component: FacultyMembers },
+  // { path: "/people/faculty/research", component: FacultyMembers },
+  { path: "/people/faculty", component: FacultyMembers },
   { path: "/people/staffs", component: OfficersAndStaff },
 
 
 
   // Student
-  { path: "/student/activities", component: Placeholder },
+  { path: "/student/activities", component: StudentActivity },
   { path: "/student/acheivements", component: Placeholder },
   { path: "/student/scholarships", component: Placeholder },
   { path: "/student/foreign", component: Placeholder },
@@ -82,9 +101,11 @@ export const routeConfigs = [
   { path: "/alumni/events", component: Placeholder },
 
   // News
-  { path: "/news/latest", component: Placeholder },
-  { path: "/news/events", component: Placeholder },
-  { path: "/news/announcements", component: Placeholder },
+  { path: "news/notice", component: Notice },
+  { path: "news/notice/archived", component: Notice },
+  { path: "news/notice/$noticeId", component: NoticeDetails },
+  { path: "/news/events", component: Events },
+  { path: "/news/events/$eventId", component: EventDetails },
 
   // Login
   { path: "/login/faculty", component: FacultyLogin },
@@ -135,8 +156,8 @@ export const routeConfigs = [
         component: FeeStructure,
       },
       {
-        path: "equipment-fees",
-        component: Placeholder,
+        path: "equipment-booking",
+        component: EquipmentBooking,
       },
       {
         path: "exam-routine",
@@ -144,13 +165,13 @@ export const routeConfigs = [
       },
       {
         path: "courses",
-        component: Placeholder,
+        component: Course,
       },
       {
         path: "semester-routine",
         component: SemesterRoutine,
       },
-    
+
       {
         path: "settings",
         component: Placeholder,
@@ -222,6 +243,31 @@ export const routeConfigs = [
         component: Placeholder,
       },
       {
+        path: "notices",
+        component: AdminNotice,
+      },
+      {
+        path: "notices/addnotice",
+        component: AddNotice,
+      },
+      {
+        path: "notices/editnotice",
+        component: EditNotice,
+      },
+
+      {
+        path: "events",
+        component: AdminEvents,
+      },
+      {
+        path: "events/addevents",
+        component: AddEvents,
+      },
+      {
+        path: "events/editevents",
+        component: EditEvents,
+      },
+      {
         path: "settings",
         component: Placeholder,
       },
@@ -250,8 +296,6 @@ export const routeConfigs = [
       },
     ],
   },
-
-
 ] as const satisfies ReadonlyArray<{
   path: string;
   component: RouteComponent;

@@ -15,8 +15,10 @@ export default function Home() {
       <ChairmanMessage />
       <AcademicPrograms />
       <ResearchOpportunities />
-      <News />
-      <Notices />
+      <div className="bg-[#F7F7FA] -mt-12">
+        <News />
+        <Notices />
+      </div>
       <GoogleMap />
     </div>
   );

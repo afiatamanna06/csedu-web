@@ -1035,7 +1035,7 @@ export default function Programs() {
   const courseTypes = Array.from(new Set(courses.map((c) => c.type)));
 
   return (
-    <div className="programs-page">
+    <div className="programs-page min-h-screen bg-gray-100 px-4 py-6 mt-[4rem] lg:mt-[8rem]">
       <aside className="programs-sidebar">
         <div className="programs-sidebar-title">PROGRAMS</div>
         {sidebarItems.map((item) => (
