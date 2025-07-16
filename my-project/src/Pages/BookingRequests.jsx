@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 
 const BookingRequests = () => {
+  const { currentUser } = useAuth();
+  
   // Convert bookings to state so we can update it
   const [bookings, setBookings] = useState([
     {
       id: "B1",
-      room: "Room 101",
+      room: "Room 415",
       room_id: "A101",
       date: "2024-07-20",
       time: "10:00 AM - 12:00 PM",
@@ -18,7 +21,7 @@ const BookingRequests = () => {
     },
     {
       id: "B2",
-      room: "Room 202",
+      room: "Room 413",
       room_id: "A102",
       date: "2024-07-21",
       time: "02:00 PM - 04:00 PM",
@@ -29,7 +32,7 @@ const BookingRequests = () => {
     },
     {
       id: "B3",
-      room: "Room 103",
+      room: "Room 415",
       room_id: "B201",
       date: "2024-07-22",
       time: "11:00 AM - 01:00 PM",
@@ -40,7 +43,7 @@ const BookingRequests = () => {
     },
     {
       id: "B4",
-      room: "Room 201",
+      room: "Room 413",
       room_id: "B202",
       date: "2024-07-23",
       time: "09:00 AM - 11:00 AM",
@@ -74,8 +77,22 @@ const BookingRequests = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingRooms, setIsLoadingRooms] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' });
+  
+  // State for dropdown menus
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, action: '', booking: null });
 
   const API_BASE_URL = 'http://localhost:8000'; // Update this to match your backend
+
+  // Auto-clear messages after 3 seconds
+  useEffect(() => {
+    if (message.text) {
+      const timer = setTimeout(() => {
+        setMessage({ text: '', type: '' });
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   // Function to get the authorization token
   const getAuthToken = () => {
@@ -263,13 +280,18 @@ const BookingRequests = () => {
       // Make API call to update booking status
       if (token) {
         try {
-          await axios.put(
-            `${API_BASE_URL}/booking/${booking.id}/status`,
-            { status: newStatus },
+          const response = await axios.put(
+            `${API_BASE_URL}/room/booking/status`,
+            { 
+              booking_id: booking.id,
+              status: newStatus 
+            },
             { headers: getAuthHeaders() }
           );
+          console.log('API response:', response.data);
         } catch (apiError) {
           console.warn('API call for booking update failed:', apiError.message);
+          console.warn('API error details:', apiError.response?.data);
           // Continue with local update even if API fails
         }
       }
@@ -292,7 +314,46 @@ const BookingRequests = () => {
         type: 'error' 
       });
     }
+    
+    // Close dropdown and dialog
+    setActiveDropdown(null);
+    setConfirmDialog({ isOpen: false, action: '', booking: null });
   };
+
+  // Handle dropdown toggle
+  const toggleDropdown = (bookingId) => {
+    setActiveDropdown(activeDropdown === bookingId ? null : bookingId);
+  };
+
+  // Handle action confirmation
+  const handleConfirmAction = (action, booking) => {
+    setConfirmDialog({ isOpen: true, action, booking });
+    setActiveDropdown(null);
+  };
+
+  // Confirm and execute action
+  const confirmAction = () => {
+    if (confirmDialog.booking && confirmDialog.action) {
+      handleAction(confirmDialog.action, confirmDialog.booking);
+    }
+  };
+
+  // Cancel action
+  const cancelAction = () => {
+    setConfirmDialog({ isOpen: false, action: '', booking: null });
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setActiveDropdown(null);
+    };
+    
+    if (activeDropdown) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [activeDropdown]);
 
   const getStatusStyle = (status) => {
     switch (status.toLowerCase()) {
@@ -340,6 +401,18 @@ const BookingRequests = () => {
     }
   }, [message]);
 
+  // Access control - only admins can access this page
+  if (!currentUser || currentUser.role !== 'Admin') {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h2>
+          <p className="text-gray-600">You must be logged in as an admin to access this page.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Main Content */}
@@ -354,7 +427,7 @@ const BookingRequests = () => {
               <button
                 onClick={fetchAllRooms}
                 disabled={isLoadingRooms}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-2 shadow-lg disabled:opacity-50"
+                className="px-6 py-3 bg-[#FFC300] text-[#13274C] rounded-lg font-semibold hover:bg-[#FFD700] transition-colors duration-200 flex items-center space-x-2 shadow-lg disabled:opacity-50 border border-[#13274C]"
               >
                 {isLoadingRooms ? (
                   <>
@@ -386,23 +459,33 @@ const BookingRequests = () => {
           </div>
         </div>
 
-        {/* Success/Error Messages */}
+        {/* Toast Messages - Bottom Right */}
         {message.text && (
-          <div className={`mb-6 p-4 rounded-lg flex items-center space-x-3 ${
-            message.type === 'success' 
-              ? 'bg-green-50 border border-green-200 text-green-800' 
-              : 'bg-red-50 border border-red-200 text-red-800'
-          }`}>
-            {message.type === 'success' ? (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            )}
-            <span className="font-medium">{message.text}</span>
+          <div className="fixed bottom-4 right-4 z-50 animate-slide-in-right">
+            <div className={`flex items-center space-x-3 px-6 py-4 rounded-lg shadow-lg border max-w-sm ${
+              message.type === 'success' 
+                ? 'bg-green-50 border-green-200 text-green-800' 
+                : 'bg-red-50 border-red-200 text-red-800'
+            }`}>
+              {message.type === 'success' ? (
+                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              )}
+              <span className="font-medium text-sm">{message.text}</span>
+              <button
+                onClick={() => setMessage({ text: '', type: '' })}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
         )}
 
@@ -578,24 +661,56 @@ const BookingRequests = () => {
                     </span>
                   </td>
                   <td className="py-4 px-6">
-                    <div className="flex space-x-2">
-                      {(booking.status === 'm' || booking.status === 'rejected') && (
-                        <button 
-                          onClick={() => handleAction('accept', booking)}
-                          disabled={!isActionEnabled('accept', booking.status)}
-                          className={getButtonStyle('accept', isActionEnabled('accept', booking.status))}
-                        >
-                          Accept
-                        </button>
-                      )}
-                      {(booking.status === 'm' || booking.status === 'accepted') && (
-                        <button 
-                          onClick={() => handleAction('reject', booking)}
-                          disabled={!isActionEnabled('reject', booking.status)}
-                          className={getButtonStyle('reject', isActionEnabled('reject', booking.status))}
-                        >
-                          Reject
-                        </button>
+                    <div className="relative">
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleDropdown(booking.id);
+                        }}
+                        className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <svg className="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                        </svg>
+                      </button>
+                      
+                      {activeDropdown === booking.id && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+                          <div className="py-1">
+                            {(booking.status === 'm' || booking.status === 'rejected') && isActionEnabled('accept', booking.status) && (
+                              <button
+                                onClick={() => handleConfirmAction('accept', booking)}
+                                className="flex items-center w-full px-4 py-2 text-sm text-green-700 hover:bg-green-50 transition-colors duration-200"
+                              >
+                                <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                                Accept Booking
+                              </button>
+                            )}
+                            {(booking.status === 'm' || booking.status === 'accepted') && isActionEnabled('reject', booking.status) && (
+                              <button
+                                onClick={() => handleConfirmAction('reject', booking)}
+                                className="flex items-center w-full px-4 py-2 text-sm text-red-700 hover:bg-red-50 transition-colors duration-200"
+                              >
+                                <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                Reject Booking
+                              </button>
+                            )}
+                            {booking.status === 'accepted' && (
+                              <div className="px-4 py-2 text-sm text-gray-500 italic">
+                                Already accepted
+                              </div>
+                            )}
+                            {booking.status === 'rejected' && booking.status !== 'm' && !isActionEnabled('accept', booking.status) && (
+                              <div className="px-4 py-2 text-sm text-gray-500 italic">
+                                Already rejected
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       )}
                     </div>
                   </td>
@@ -624,17 +739,17 @@ const BookingRequests = () => {
             <table className="w-full">
               <thead>
                 <tr className="bg-gray-50">
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Room ID</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Location</th>
-                  <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">Capacity</th>
+                  <th className="text-center py-4 px-6 text-sm font-semibold text-gray-700 w-1/3">Room ID</th>
+                  <th className="text-center py-4 px-6 text-sm font-semibold text-gray-700 w-1/3">Location</th>
+                  <th className="text-center py-4 px-6 text-sm font-semibold text-gray-700 w-1/3">Capacity</th>
                 </tr>
               </thead>
               <tbody>
                 {rooms.map((room) => (
                   <tr key={room.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-150">
-                    <td className="py-4 px-6 text-sm text-gray-700 font-medium">{room.id}</td>
-                    <td className="py-4 px-6 text-sm text-gray-600">{room.location}</td>
-                    <td className="py-4 px-6 text-sm text-gray-600">{room.capacity}</td>
+                    <td className="py-4 px-6 text-sm text-gray-700 font-medium text-center">{room.id}</td>
+                    <td className="py-4 px-6 text-sm text-gray-600 text-center">{room.location}</td>
+                    <td className="py-4 px-6 text-sm text-gray-600 text-center">{room.capacity}</td>
                   </tr>
                 ))}
               </tbody>
@@ -652,6 +767,82 @@ const BookingRequests = () => {
           )}
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      {confirmDialog.isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div className="p-6">
+              <div className="flex items-center mb-4">
+                {confirmDialog.action === 'accept' ? (
+                  <div className="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                    <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                ) : (
+                  <div className="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4">
+                    <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                )}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {confirmDialog.action === 'accept' ? 'Accept Booking' : 'Reject Booking'}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {confirmDialog.booking?.room} - {confirmDialog.booking?.requester}
+                  </p>
+                </div>
+              </div>
+              
+              <p className="text-gray-700 mb-6">
+                Are you sure you want to {confirmDialog.action} this booking request? 
+                {confirmDialog.action === 'reject' && ' This action will decline the room reservation.'}
+                {confirmDialog.action === 'accept' && ' This action will approve the room reservation.'}
+              </p>
+              
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={cancelAction}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmAction}
+                  className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors duration-200 ${
+                    confirmDialog.action === 'accept'
+                      ? 'bg-green-600 hover:bg-green-700'
+                      : 'bg-red-600 hover:bg-red-700'
+                  }`}
+                >
+                  {confirmDialog.action === 'accept' ? 'Accept' : 'Reject'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* CSS Styles for Toast Animation */}
+      <style jsx>{`
+        @keyframes slide-in-right {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        
+        .animate-slide-in-right {
+          animation: slide-in-right 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };

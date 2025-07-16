@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
+const API_BASE_URL = 'http://localhost:8000';
+
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
 
@@ -25,31 +27,106 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 };
 
 const AdminDashboard = () => {
-  const { currentUser, updateUserProfile, updateUserEmail, updateUserPassword } = useAuth();
+  const { currentUser, updateUserProfile, updateUserPassword } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [showEmailModal, setShowEmailModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [formData, setFormData] = useState({
-    displayName: '',
-    email: currentUser?.email || '',
-    phoneNumber: '',
+    name: '',
+    email: '',
+    phone: '',
     currentPassword: '',
     newPassword: '',
-    newEmail: '',
     image: null,
     imageUrl: null
   });
   const [message, setMessage] = useState({ text: '', type: '' });
+  const [loading, setLoading] = useState(true);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
+  // Auto-clear messages after 3 seconds
   useEffect(() => {
-    if (currentUser) {
+    if (message.text) {
+      const timer = setTimeout(() => {
+        setMessage({ text: '', type: '' });
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  // Fetch admin details from backend
+  const fetchAdminDetails = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/admin/me`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Failed to fetch admin details (${response.status})`);
+      }
+
+      const adminData = await response.json();
+      
       setFormData(prevData => ({
         ...prevData,
-        displayName: currentUser.displayName || '',
-        email: currentUser.email || '',
-        phoneNumber: currentUser.phoneNumber || '',
-        imageUrl: currentUser.photoURL || null
+        name: adminData.name || '',
+        email: adminData.email || '',
+        phone: adminData.phone || '',
+        imageUrl: null // Backend doesn't provide image URL in your schema
       }));
+      
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching admin details:', error);
+      setMessage({ text: `Error loading admin details: ${error.message}`, type: 'error' });
+      setLoading(false);
+    }
+  };
+
+  // Update admin details on backend
+  const updateAdminDetails = async (updateData) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await fetch(`${API_BASE_URL}/admin/update`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Failed to update admin details (${response.status})`);
+      }
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('Error updating admin details:', error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser && currentUser.role === 'Admin') {
+      fetchAdminDetails();
+    } else {
+      setLoading(false);
     }
   }, [currentUser]);
 
@@ -74,27 +151,16 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleEmailUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      await updateUserEmail(formData.newEmail, formData.currentPassword);
-      setFormData(prev => ({
-        ...prev,
-        email: formData.newEmail,
-        newEmail: '',
-        currentPassword: ''
-      }));
-      setMessage({ text: 'Email updated successfully!', type: 'success' });
-      setShowEmailModal(false);
-    } catch (error) {
-      setMessage({ text: error.message, type: 'error' });
-    }
-  };
-
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
     try {
-      await updateUserPassword(formData.currentPassword, formData.newPassword);
+      // Update password through backend admin update endpoint
+      await updateAdminDetails({
+        name: formData.name,
+        phone: formData.phone,
+        password: formData.newPassword
+      });
+      
       setFormData(prev => ({
         ...prev,
         currentPassword: '',
@@ -109,101 +175,65 @@ const AdminDashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setShowConfirmDialog(true);
+  };
+
+  const confirmSave = async () => {
     setMessage({ text: '', type: '' });
+    setShowConfirmDialog(false);
 
     try {
-      const updates = {
-        displayName: formData.displayName,
-      };
-
-      if (formData.imageUrl) {
-        updates.photoURL = formData.imageUrl;
-      }
-
-      if (currentUser) {
-        await updateUserProfile(updates);
-      }
+      // Update admin details via backend API
+      await updateAdminDetails({
+        name: formData.name,
+        phone: formData.phone,
+        password: formData.currentPassword || 'unchanged' // Backend might require password
+      });
 
       setMessage({ text: 'Profile updated successfully!', type: 'success' });
       setIsEditing(false);
+      // Refresh admin details
+      await fetchAdminDetails();
     } catch (error) {
       setMessage({ text: error.message, type: 'error' });
     }
   };
 
+  const cancelSave = () => {
+    setShowConfirmDialog(false);
+  };
+
   const handleCancel = () => {
-    setFormData(prev => ({
-      ...prev,
-      displayName: currentUser?.displayName || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      imageUrl: currentUser?.photoURL || null,
-      image: null
-    }));
+    // Reset form data to original values
+    fetchAdminDetails();
     setIsEditing(false);
     setMessage({ text: '', type: '' });
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading admin details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentUser || currentUser.role !== 'Admin') {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h2>
+          <p className="text-gray-600">You must be logged in as an admin to access this page.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen p-6">
-      {/* Email Update Modal */}
-      <Modal
-        isOpen={showEmailModal}
-        onClose={() => {
-          setShowEmailModal(false);
-          setFormData(prev => ({ ...prev, newEmail: '', currentPassword: '' }));
-        }}
-        title="Update Email Address"
-      >
-        <form onSubmit={handleEmailUpdate} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              New Email Address
-            </label>
-            <input
-              type="email"
-              name="newEmail"
-              value={formData.newEmail}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter new email address"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Current Password
-            </label>
-            <input
-              type="password"
-              name="currentPassword"
-              value={formData.currentPassword}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter current password"
-              required
-            />
-          </div>
-          <div className="flex justify-end space-x-3 mt-6">
-            <button
-              type="button"
-              onClick={() => {
-                setShowEmailModal(false);
-                setFormData(prev => ({ ...prev, newEmail: '', currentPassword: '' }));
-              }}
-              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-[#13274C] text-white rounded-lg hover:bg-[#1e3a5f]"
-            >
-              Update Email
-            </button>
-          </div>
-        </form>
-      </Modal>
-
       {/* Password Update Modal */}
       <Modal
         isOpen={showPasswordModal}
@@ -307,7 +337,7 @@ const AdminDashboard = () => {
                   )}
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold">{formData.displayName || 'Admin User'}</h2>
+                  <h2 className="text-2xl font-bold">{formData.name || 'Admin User'}</h2>
                   <p className="text-blue-200">{formData.email}</p>
                   <div className="flex items-center mt-2">
                     <div className="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
@@ -341,8 +371,8 @@ const AdminDashboard = () => {
                   <div className="relative">
                     <input
                       type="text"
-                      name="displayName"
-                      value={formData.displayName}
+                      name="name"
+                      value={formData.name}
                       onChange={handleChange}
                       disabled={!isEditing}
                       className={`w-full px-4 py-3 border-2 rounded-lg transition-all duration-200 ${
@@ -366,20 +396,9 @@ const AdminDashboard = () => {
                       name="email"
                       value={formData.email}
                       disabled
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50 pr-12"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg bg-gray-50"
                       placeholder="Enter your email"
                     />
-                    {isEditing && (
-                      <button
-                        type="button"
-                        onClick={() => setShowEmailModal(true)}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-blue-500 transition-colors duration-200"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                      </button>
-                    )}
                   </div>
                 </div>
 
@@ -391,8 +410,8 @@ const AdminDashboard = () => {
                   <div className="relative">
                     <input
                       type="tel"
-                      name="phoneNumber"
-                      value={formData.phoneNumber}
+                      name="phone"
+                      value={formData.phone}
                       onChange={handleChange}
                       disabled={!isEditing}
                       className={`w-full px-4 py-3 border-2 rounded-lg transition-all duration-200 ${
@@ -425,23 +444,33 @@ const AdminDashboard = () => {
                 )}
               </div>
 
-              {/* Success/Error Messages */}
+              {/* Toast Messages - Bottom Right */}
               {message.text && (
-                <div className={`mt-6 p-4 rounded-lg flex items-center space-x-3 ${
-                  message.type === 'success' 
-                    ? 'bg-green-50 border border-green-200 text-green-800' 
-                    : 'bg-red-50 border border-red-200 text-red-800'
-                }`}>
-                  {message.type === 'success' ? (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  ) : (
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  )}
-                  <span className="font-medium">{message.text}</span>
+                <div className="fixed bottom-4 right-4 z-50 animate-slide-in-right">
+                  <div className={`flex items-center space-x-3 px-6 py-4 rounded-lg shadow-lg border min-w-80 max-w-96 ${
+                    message.type === 'success' 
+                      ? 'bg-green-50 border-green-200 text-green-800' 
+                      : 'bg-red-50 border-red-200 text-red-800'
+                  }`}>
+                    {message.type === 'success' ? (
+                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    ) : (
+                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    )}
+                    <span className="font-medium text-sm flex-1 whitespace-nowrap">{message.text}</span>
+                    <button
+                      onClick={() => setMessage({ text: '', type: '' })}
+                      className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -467,6 +496,60 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      {showConfirmDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div className="p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="flex-shrink-0">
+                  <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Save Changes</h3>
+                  <p className="text-sm text-gray-600">Do you want to save the changes to your profile?</p>
+                </div>
+              </div>
+              
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={cancelSave}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmSave}
+                  className="px-4 py-2 text-sm font-medium text-white bg-[#13274C] hover:bg-[#1e3a5f] rounded-lg transition-colors duration-200"
+                >
+                  Yes, Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CSS Styles for Toast Animation */}
+      <style jsx>{`
+        @keyframes slide-in-right {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        
+        .animate-slide-in-right {
+          animation: slide-in-right 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };
