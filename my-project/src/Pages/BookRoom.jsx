@@ -102,8 +102,8 @@ const BookRoom = () => {
 
       console.log('Booking response:', response.data);
 
-      // Navigate back to room availability with success message
-      navigate('/room-availability', { 
+      // Navigate back to teacher room availability with success message
+      navigate('/teacher/room-availability', { 
         state: { 
           bookingSuccess: true
         }

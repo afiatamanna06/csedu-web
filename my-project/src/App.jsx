@@ -12,6 +12,7 @@ import AdminDashboard from "./Pages/AdminDashboard";
 import Achievements from "./Pages/Achievements";
 import AuthProvider from "./contexts/AuthContext";
 import SidebarLayout from "./components/SidebarLayout";
+import TeacherLayout from "./layouts/TeacherLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
 import GradeManagement from "./Pages/GradeManagement";
@@ -48,18 +49,35 @@ function App() {
             } 
           />
           <Route 
+            path="/dashboard/faculty" 
+            element={
+              <ProtectedRoute requiredRole="Teacher">
+                <TeacherLayout>
+                  <div className="p-6">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-4">Teacher Dashboard</h1>
+                    <p className="text-gray-600">Welcome to the CSEDU Teacher Portal</p>
+                  </div>
+                </TeacherLayout>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
             path="/teacher/room-availability" 
             element={
               <ProtectedRoute requiredRole="Teacher">
-                <RoomAvailability />
+                <TeacherLayout>
+                  <RoomAvailability />
+                </TeacherLayout>
               </ProtectedRoute>
             } 
           />
           <Route 
             path="/book-room" 
             element={
-              <ProtectedRoute>
-                <BookRoom />
+              <ProtectedRoute requiredRole="Teacher">
+                <TeacherLayout>
+                  <BookRoom />
+                </TeacherLayout>
               </ProtectedRoute>
             } 
           />
@@ -90,9 +108,9 @@ function App() {
             path="/teacher/meetings"
             element={
               <ProtectedRoute requiredRole="Teacher">
-                <SidebarLayout>
+                <TeacherLayout>
                   <MeetingList />
-                </SidebarLayout>
+                </TeacherLayout>
               </ProtectedRoute>
             }
           />
