@@ -8,7 +8,7 @@ interface User {
   role: string;
 }
 
-export type UserRole = 'student' | 'teacher' | 'Admin';
+export type UserRole = 'student' | 'teacher' | 'Admin' | 'admin'; // Add both cases
 
 interface AuthContextType {
   currentUser: User | null;
@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (decoded.exp * 1000 > Date.now()) {
           setCurrentUser({
             id: decoded.id,
-            role: decoded.role
+            role: decoded.role.toLowerCase() === 'admin' ? 'Admin' : decoded.role, // Normalize to "Admin"
           });
         } else {
           localStorage.removeItem('token');
@@ -94,8 +94,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       const decoded = jwtDecode<{ id: string; role: string }>(data.access_token);
       
-      // Verify that the token's role matches the requested role
-      if (decoded.role.toLowerCase() !== credentials.role) {
+      // Allow both "admin" and "Admin" case-insensitively
+      if (decoded.role.toLowerCase() !== credentials.role.toLowerCase()) {
         throw new Error('Account type does not match selected role');
       }
       
@@ -103,7 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       const userInfo = {
         id: decoded.id,
-        role: decoded.role
+        role: decoded.role.toLowerCase() === 'admin' ? 'Admin' : decoded.role, // Normalize to "Admin"
       };
       
       setCurrentUser(userInfo);
@@ -148,7 +148,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         const userInfo = {
           id: decoded.id,
-          role: decoded.role
+          role: decoded.role.toLowerCase() === 'admin' ? 'Admin' : decoded.role, // Normalize to "Admin"
         };
         
         setCurrentUser(userInfo);
@@ -196,7 +196,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         const userInfo = {
           id: decoded.id,
-          role: decoded.role
+          role: decoded.role.toLowerCase() === 'admin' ? 'Admin' : decoded.role, // Normalize to "Admin"
         };
         
         setCurrentUser(userInfo);
@@ -244,7 +244,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         const userInfo = {
           id: decoded.id,
-          role: decoded.role
+          role: decoded.role.toLowerCase() === 'admin' ? 'Admin' : decoded.role, // Normalize to "Admin"
         };
         
         setCurrentUser(userInfo);
@@ -358,4 +358,4 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default AuthContext; 
+export default AuthContext;

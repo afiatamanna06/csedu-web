@@ -24,18 +24,19 @@ export function LoginPage() {
       setError('');
       setLoading(true);
       
-      const result = await login({ email, password, role });
+      const normalizedRole = role.toLowerCase() === 'admin' ? 'Admin' : role; // Normalize to "Admin"
+      const result = await login({ email, password, role: normalizedRole });
       
       // Navigate based on role
-      switch(role) {
+      switch (normalizedRole) {
         case 'Admin':
-          navigate({ to: '/dashboard/admin' }); // Will update with proper admin dashboard route
+          navigate({ to: '/dashboard/admin' });
           break;
         case 'teacher':
-          navigate({ to: '/dashboard/teacher' }); // Will update with proper faculty dashboard route
+          navigate({ to: '/dashboard/teacher' });
           break;
         case 'student':
-          navigate({ to: '/dashboard/student' }); // Will update with proper student dashboard route
+          navigate({ to: '/dashboard/student' });
           break;
         default:
           setError('Invalid user role');
@@ -72,7 +73,7 @@ export function LoginPage() {
                   <SelectContent>
                     <SelectItem value="student">Student</SelectItem>
                     <SelectItem value="teacher">Teacher</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="Admin">Admin</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -119,36 +120,3 @@ export function LoginPage() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import LoginForm from "@/components/auth/login/login-form";
-
-// export function FacultyLogin() {
-//   return <LoginForm role="faculty" />;
-// }
-
-// export function StudentLogin() {
-//   return <LoginForm role="student" />;
-// }
-
-// export function AdminLogin() {
-//   return <LoginForm role="admin" />;
-// }
-
-// export function AlumniLogin() {
-//   return <LoginForm role="alumni" />;
-// }
