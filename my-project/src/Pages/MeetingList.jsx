@@ -15,7 +15,6 @@ const MeetingList = () => {
   // Existing state
   const [selectedFaculty, setSelectedFaculty] = useState('All');
   const [selectedDateRange, setSelectedDateRange] = useState('This Week');
-  const [activeTab, setActiveTab] = useState('upcoming');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState(null);
   const [dialogAction, setDialogAction] = useState('');
@@ -24,14 +23,18 @@ const MeetingList = () => {
   const [showUpdateDialog, setShowUpdateDialog] = useState(false);
   const [meetingToUpdate, setMeetingToUpdate] = useState(null);
   const [message, setMessage] = useState({ text: '', type: '' });
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [meetingToDelete, setMeetingToDelete] = useState(null);
   const [newMeeting, setNewMeeting] = useState({
     topic: '',
     date: '',
     time: '',
     host_name: '',
-    location: '',
-    is_online: false,
-    meeting_link: ''
+    location: ''
+  });
+  const [customDateRange, setCustomDateRange] = useState({
+    startDate: '',
+    endDate: ''
   });
 
   // API configuration
@@ -142,21 +145,14 @@ const MeetingList = () => {
     try {
       setIsLoadingMeetings(true);
       
-      // Build query parameters for filtering
-      const params = new URLSearchParams();
-      
-      if (selectedFaculty !== 'All') {
-        params.append('host_name', selectedFaculty);
-      }
-      
-      // You can add more filters based on selectedDateRange if needed
-      
-      const response = await axios.get(`${API_BASE_URL}/meetings/filter?${params.toString()}`, {
+      // Fetch all meetings first
+      const response = await axios.get(`${API_BASE_URL}/meetings/filter`, {
         headers: getAuthHeaders()
       });
 
       setAllMeetings(response.data);
-      setMeetings(response.data);
+      // Apply client-side filtering
+      applyFilters(response.data);
       
     } catch (error) {
       console.error('Failed to fetch meetings:', error);
@@ -182,17 +178,75 @@ const MeetingList = () => {
     }
   };
 
+  // Apply filters to meetings
+  const applyFilters = (meetingsData) => {
+    let filteredMeetings = [...meetingsData];
+
+    // Filter by faculty/host name
+    if (selectedFaculty !== 'All') {
+      filteredMeetings = filteredMeetings.filter(meeting => 
+        meeting.host_name && meeting.host_name.toLowerCase().includes(selectedFaculty.toLowerCase())
+      );
+    }
+
+    // Filter by date range
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    filteredMeetings = filteredMeetings.filter(meeting => {
+      if (!meeting.date) return false;
+      
+      const meetingDate = new Date(meeting.date);
+      
+      switch (selectedDateRange) {
+        case 'Today':
+          return meetingDate.toDateString() === today.toDateString();
+        
+        case 'This Week':
+          const weekStart = new Date(today);
+          weekStart.setDate(today.getDate() - today.getDay()); // Start of week (Sunday)
+          const weekEnd = new Date(weekStart);
+          weekEnd.setDate(weekStart.getDate() + 6); // End of week (Saturday)
+          return meetingDate >= weekStart && meetingDate <= weekEnd;
+        
+        case 'This Month':
+          return meetingDate.getMonth() === today.getMonth() && 
+                 meetingDate.getFullYear() === today.getFullYear();
+        
+        case 'Custom':
+          if (customDateRange.startDate && customDateRange.endDate) {
+            const startDate = new Date(customDateRange.startDate);
+            const endDate = new Date(customDateRange.endDate);
+            return meetingDate >= startDate && meetingDate <= endDate;
+          }
+          return true;
+        
+        default:
+          return true;
+      }
+    });
+
+    setMeetings(filteredMeetings);
+  };
+
   // Fetch meetings when authenticated
   useEffect(() => {
     if (isAuthenticated) {
       fetchMeetings();
     }
-  }, [isAuthenticated, selectedFaculty]);
+  }, [isAuthenticated]);
+
+  // Apply filters when filter criteria change
+  useEffect(() => {
+    if (allMeetings.length > 0) {
+      applyFilters(allMeetings);
+    }
+  }, [selectedFaculty, selectedDateRange, allMeetings, customDateRange]);
 
   // Create meeting function
 // Create meeting function
 const handleCreateMeeting = async () => {
-  if (!newMeeting.topic || !newMeeting.date || !newMeeting.time || !newMeeting.host_name) {
+  if (!newMeeting.topic || !newMeeting.date || !newMeeting.time || !newMeeting.host_name || !newMeeting.location) {
     setMessage({ text: 'Please fill in all required fields', type: 'error' });
     return;
   }
@@ -207,15 +261,26 @@ const handleCreateMeeting = async () => {
     setIsLoading(true);
     setMessage({ text: '', type: '' });
 
-    const meetingData = {
-      topic: newMeeting.topic,
-      date: newMeeting.date,
-      time: newMeeting.time,
-      host_name: newMeeting.host_name,
-      location: newMeeting.is_online ? newMeeting.meeting_link : newMeeting.location,
-      is_online: newMeeting.is_online,
-      meeting_link: newMeeting.is_online ? newMeeting.meeting_link : null
+    // Format time to include seconds if not present
+    const formatTime = (time) => {
+      if (!time) return '';
+      // If time already has seconds (HH:MM:SS), return as is
+      if (time.includes(':') && time.split(':').length === 3) {
+        return time;
+      }
+      // If time is HH:MM format, add seconds
+      return `${time}:00`;
     };
+
+    const meetingData = {
+      date: newMeeting.date,
+      time: formatTime(newMeeting.time),
+      topic: newMeeting.topic,
+      host_name: newMeeting.host_name,
+      location: newMeeting.location
+    };
+
+    console.log('Sending meeting data:', meetingData);
 
     const response = await axios.post(
       `${API_BASE_URL}/meetings/`,
@@ -225,11 +290,7 @@ const handleCreateMeeting = async () => {
       }
     );
 
-    // Log the response to see the structure
     console.log('Meeting created successfully:', response.data);
-
-    // The response.data should contain the newly created meeting with its ID
-    const createdMeeting = response.data;
 
     setMessage({ text: 'Meeting created successfully!', type: 'success' });
     setShowCreateDialog(false);
@@ -240,9 +301,7 @@ const handleCreateMeeting = async () => {
       date: '',
       time: '',
       host_name: '',
-      location: '',
-      is_online: false,
-      meeting_link: ''
+      location: ''
     });
 
     // Refresh meetings list to include the new meeting
@@ -262,9 +321,14 @@ const handleCreateMeeting = async () => {
         text: 'You do not have permission to create meetings.', 
         type: 'error' 
       });
+    } else if (error.response?.status === 422) {
+      setMessage({ 
+        text: 'Invalid data format. Please check your inputs.', 
+        type: 'error' 
+      });
     } else {
       setMessage({ 
-        text: 'Failed to create meeting. Please try again.', 
+        text: `Failed to create meeting: ${error.response?.data?.detail || error.message}`, 
         type: 'error' 
       });
     }
@@ -277,6 +341,12 @@ const handleCreateMeeting = async () => {
   const handleUpdateMeeting = async () => {
     if (!meetingToUpdate) return;
 
+    // Validate required fields
+    if (!meetingToUpdate.topic || !meetingToUpdate.date || !meetingToUpdate.time || !meetingToUpdate.host_name || !meetingToUpdate.location) {
+      setMessage({ text: 'Please fill in all required fields', type: 'error' });
+      return;
+    }
+
     const token = getAuthToken();
     if (!token) {
       setMessage({ text: 'Authentication required. Please log in again.', type: 'error' });
@@ -287,15 +357,29 @@ const handleCreateMeeting = async () => {
       setIsLoading(true);
       setMessage({ text: '', type: '' });
 
-      const updateData = {
-        topic: meetingToUpdate.topic,
-        date: meetingToUpdate.date,
-        time: meetingToUpdate.time,
-        host_name: meetingToUpdate.host_name,
-        location: meetingToUpdate.is_online ? meetingToUpdate.meeting_link : meetingToUpdate.location,
-        is_online: meetingToUpdate.is_online,
-        meeting_link: meetingToUpdate.is_online ? meetingToUpdate.meeting_link : null
+      // Format time to include seconds if not present
+      const formatTime = (time) => {
+        if (!time) return '';
+        // If time already has seconds (HH:MM:SS), return as is
+        if (time.includes(':') && time.split(':').length === 3) {
+          return time;
+        }
+        // If time is HH:MM format, add seconds
+        return `${time}:00`;
       };
+
+      // Ensure all required fields are strings and properly formatted
+      const updateData = {
+        date: String(meetingToUpdate.date),
+        time: formatTime(String(meetingToUpdate.time)),
+        topic: String(meetingToUpdate.topic),
+        host_name: String(meetingToUpdate.host_name),
+        location: String(meetingToUpdate.location),
+        status: String(meetingToUpdate.status || 'pending')
+      };
+
+      console.log('Sending update data:', updateData);
+      console.log('Update URL:', `${API_BASE_URL}/meetings/${meetingToUpdate.id}`);
 
       await axios.put(
         `${API_BASE_URL}/meetings/${meetingToUpdate.id}`,
@@ -314,6 +398,7 @@ const handleCreateMeeting = async () => {
 
     } catch (error) {
       console.error('Error updating meeting:', error);
+      console.error('Error response:', error.response?.data);
       
       if (error.response?.status === 401) {
         setMessage({ 
@@ -331,9 +416,24 @@ const handleCreateMeeting = async () => {
           text: 'Meeting not found.', 
           type: 'error' 
         });
+      } else if (error.response?.status === 422) {
+        // More specific error handling for validation errors
+        const errorDetail = error.response?.data?.detail;
+        if (Array.isArray(errorDetail)) {
+          const errorMessages = errorDetail.map(err => `${err.loc?.[1] || 'Field'}: ${err.msg}`).join(', ');
+          setMessage({ 
+            text: `Validation error: ${errorMessages}`, 
+            type: 'error' 
+          });
+        } else {
+          setMessage({ 
+            text: `Invalid data format: ${errorDetail || 'Please check your inputs.'}`, 
+            type: 'error' 
+          });
+        }
       } else {
         setMessage({ 
-          text: 'Failed to update meeting. Please try again.', 
+          text: `Failed to update meeting: ${error.response?.data?.detail || error.message}`, 
           type: 'error' 
         });
       }
@@ -350,10 +450,6 @@ const handleCreateMeeting = async () => {
       return;
     }
 
-    if (!window.confirm('Are you sure you want to delete this meeting?')) {
-      return;
-    }
-
     try {
       setIsLoading(true);
       setMessage({ text: '', type: '' });
@@ -366,6 +462,8 @@ const handleCreateMeeting = async () => {
       );
 
       setMessage({ text: 'Meeting deleted successfully!', type: 'success' });
+      setShowDeleteDialog(false);
+      setMeetingToDelete(null);
 
       // Refresh meetings list
       fetchMeetings();
@@ -400,6 +498,12 @@ const handleCreateMeeting = async () => {
     }
   };
 
+  // Show delete confirmation dialog
+  const showDeleteConfirmation = (meeting) => {
+    setMeetingToDelete(meeting);
+    setShowDeleteDialog(true);
+  };
+
   // Clear message after 5 seconds
   useEffect(() => {
     if (message.text) {
@@ -418,17 +522,58 @@ const handleCreateMeeting = async () => {
     setShowActionMenu(null);
   };
 
+  const handleEditMeeting = (meeting) => {
+    // Format time for HTML time input (remove seconds if present)
+    const formatTimeForInput = (time) => {
+      if (!time) return '';
+      // Extract HH:MM from HH:MM:SS or return as is if already HH:MM
+      const timeStr = String(time);
+      return timeStr.substring(0, 5);
+    };
+
+    // Map old status values to new API-compliant values
+    const mapStatusToApi = (status) => {
+      if (!status) return 'pending';
+      switch (status.toLowerCase()) {
+        case 'im joining':
+          return 'approved';
+        case 'not joining':
+          return 'rejected';
+        case 'pending':
+        case 'approved':
+        case 'rejected':
+          return status;
+        default:
+          return 'pending';
+      }
+    };
+
+    console.log('Editing meeting:', meeting); // Debug log
+
+    setMeetingToUpdate({
+      id: meeting.id,
+      topic: meeting.topic || '',
+      date: meeting.date || '',
+      time: formatTimeForInput(meeting.time),
+      host_name: meeting.host_name || '',
+      location: meeting.location || '',
+      status: mapStatusToApi(meeting.status)
+    });
+    setShowUpdateDialog(true);
+    setShowActionMenu(null);
+  };
+
   const handleDialogConfirm = () => {
     if (dialogAction === 'join') {
       setMeetings(prevMeetings =>
         prevMeetings.map(m =>
-          m.id === selectedMeeting.id ? { ...m, status: 'im joining' } : m
+          m.id === selectedMeeting.id ? { ...m, status: 'approved' } : m
         )
       );
     } else if (dialogAction === 'notjoin') {
       setMeetings(prevMeetings =>
         prevMeetings.map(m =>
-          m.id === selectedMeeting.id ? { ...m, status: 'not joining' } : m
+          m.id === selectedMeeting.id ? { ...m, status: 'rejected' } : m
         )
       );
     }
@@ -438,8 +583,10 @@ const handleCreateMeeting = async () => {
 
   const getStatusStyle = (status) => {
     switch (status?.toLowerCase()) {
+      case 'approved':
       case 'im joining':
         return 'bg-green-100 text-green-800';
+      case 'rejected':
       case 'not joining':
         return 'bg-red-100 text-red-800';
       case 'pending':
@@ -456,8 +603,8 @@ const handleCreateMeeting = async () => {
   };
 
   // Filter meetings by creator (you'll need to add this field to your backend)
-  const userMeetings = meetings.filter(m => m.createdBy === 'currentUser'); // Update this logic based on your backend
-  const otherMeetings = meetings.filter(m => m.createdBy !== 'currentUser'); // Update this logic based on your backend
+  // const userMeetings = meetings.filter(m => m.createdBy === 'currentUser'); // Update this logic based on your backend
+  // const otherMeetings = meetings.filter(m => m.createdBy !== 'currentUser'); // Update this logic based on your backend
 
   const renderActionMenu = (meeting) => {
     if (showActionMenu !== meeting.id) return null;
@@ -474,7 +621,7 @@ const handleCreateMeeting = async () => {
         className="absolute w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
       >
         <div className="py-1" role="menu">
-          {meeting.status === 'pending' && (
+          {(meeting.status === 'pending' || !meeting.status) && (
             <>
               <button
                 onClick={() => handleMeetingAction(meeting, 'join')}
@@ -490,7 +637,7 @@ const handleCreateMeeting = async () => {
               </button>
             </>
           )}
-          {meeting.status === 'im joining' && (
+          {(meeting.status === 'approved' || meeting.status === 'im joining') && (
             <button
               onClick={() => handleMeetingAction(meeting, 'notjoin')}
               className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -498,7 +645,7 @@ const handleCreateMeeting = async () => {
               Not joining
             </button>
           )}
-          {meeting.status === 'not joining' && (
+          {(meeting.status === 'rejected' || meeting.status === 'not joining') && (
             <button
               onClick={() => handleMeetingAction(meeting, 'join')}
               className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -571,19 +718,40 @@ const handleCreateMeeting = async () => {
                       meeting.status || 'pending'
                     )}`}
                   >
-                    {(meeting.status || 'pending').charAt(0).toUpperCase() + (meeting.status || 'pending').slice(1)}
+                    {(() => {
+                      const status = meeting.status || 'pending';
+                      switch (status.toLowerCase()) {
+                        case 'approved':
+                          return 'Approved';
+                        case 'rejected':
+                          return 'Rejected';
+                        case 'pending':
+                          return 'Pending';
+                        case 'im joining':
+                          return 'I\'m Joining';
+                        case 'not joining':
+                          return 'Not Joining';
+                        default:
+                          return status.charAt(0).toUpperCase() + status.slice(1);
+                      }
+                    })()}
                   </span>
                 </td>
                 {showActions && (
                   <td className="py-3 px-6 relative">
-                    <div className="relative">
+                    <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => setShowActionMenu(showActionMenu === meeting.id ? null : meeting.id)}
-                        className="text-gray-600 hover:text-gray-800 text-xl font-bold"
+                        onClick={() => handleEditMeeting(meeting)}
+                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                       >
-                        ⋮
+                        Edit
                       </button>
-                      {renderActionMenu(meeting)}
+                      <button
+                        onClick={() => showDeleteConfirmation(meeting)}
+                        className="text-red-600 hover:text-red-800 text-sm font-medium"
+                      >
+                        Delete
+                      </button>
                     </div>
                   </td>
                 )}
@@ -694,8 +862,8 @@ const handleCreateMeeting = async () => {
 
           {/* Filters Section */}
           <div className="bg-[#13274C] rounded-lg p-6 mb-8">
-            <div className="flex justify-center gap-6">
-              <div className="w-[400px] xl:w-[500px] 2xl:w-[600px]">
+            <div className="flex justify-center gap-6 flex-wrap">
+              <div className="w-[300px] xl:w-[400px] 2xl:w-[500px]">
                 <div className="bg-[#FFC300] rounded-lg px-4 py-2">
                   <label className="block text-[#13274C] text-sm font-medium mb-1">
                     Host Name
@@ -713,7 +881,7 @@ const handleCreateMeeting = async () => {
                   </select>
                 </div>
               </div>
-              <div className="w-[400px] xl:w-[500px] 2xl:w-[600px]">
+              <div className="w-[300px] xl:w-[400px] 2xl:w-[500px]">
                 <div className="bg-[#FFC300] rounded-lg px-4 py-2">
                   <label className="block text-[#13274C] text-sm font-medium mb-1">
                     Date Range
@@ -731,96 +899,54 @@ const handleCreateMeeting = async () => {
                   </select>
                 </div>
               </div>
+              
+              {/* Custom Date Range Inputs */}
+              {selectedDateRange === 'Custom' && (
+                <div className="w-full flex justify-center gap-4 mt-4">
+                  <div className="w-[200px]">
+                    <div className="bg-[#FFC300] rounded-lg px-4 py-2">
+                      <label className="block text-[#13274C] text-sm font-medium mb-1">
+                        Start Date
+                      </label>
+                      <input
+                        type="date"
+                        value={customDateRange.startDate}
+                        onChange={(e) => setCustomDateRange({ ...customDateRange, startDate: e.target.value })}
+                        className="w-full bg-white rounded-md py-1 px-2 text-sm border-none focus:outline-none focus:ring-1 focus:ring-[#13274C]"
+                      />
+                    </div>
+                  </div>
+                  <div className="w-[200px]">
+                    <div className="bg-[#FFC300] rounded-lg px-4 py-2">
+                      <label className="block text-[#13274C] text-sm font-medium mb-1">
+                        End Date
+                      </label>
+                      <input
+                        type="date"
+                        value={customDateRange.endDate}
+                        onChange={(e) => setCustomDateRange({ ...customDateRange, endDate: e.target.value })}
+                        className="w-full bg-white rounded-md py-1 px-2 text-sm border-none focus:outline-none focus:ring-1 focus:ring-[#13274C]"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
 
-          {/* Tabs */}
-          <div className="flex mb-6">
-            <button
-              className={`flex-1 py-3 px-6 text-center rounded-tl-lg rounded-bl-lg ${
-                activeTab === 'upcoming'
-                  ? 'bg-[#13274C] text-white'
-                  : 'bg-[#FFC300] text-[#13274C]'
-              }`}
-              onClick={() => setActiveTab('upcoming')}
-            >
-              Upcoming
-            </button>
-            <button
-              className={`flex-1 py-3 px-6 text-center rounded-tr-lg rounded-br-lg ${
-                activeTab === 'archived'
-                  ? 'bg-[#13274C] text-white'
-                  : 'bg-[#FFC300] text-[#13274C]'
-              }`}
-              onClick={() => setActiveTab('archived')}
-            >
-              Archived
-            </button>
+            {/* Filter Results Summary */}
+            <div className="mt-4 text-center">
+              <span className="text-white text-sm">
+                Showing {meetings.length} meeting{meetings.length !== 1 ? 's' : ''} 
+                {selectedFaculty !== 'All' && ` by ${selectedFaculty}`}
+                {selectedDateRange !== 'Custom' && ` for ${selectedDateRange.toLowerCase()}`}
+                {selectedDateRange === 'Custom' && customDateRange.startDate && customDateRange.endDate && 
+                  ` from ${customDateRange.startDate} to ${customDateRange.endDate}`}
+              </span>
+            </div>
           </div>
 
           {/* Meetings Table */}
           {renderMeetingTable(meetings)}
-
-          {/* User Created Meetings */}
-          {userMeetings.length > 0 && (
-            <div className="mt-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Created Meetings</h2>
-              <div className="bg-white rounded-lg shadow overflow-hidden">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-[#FFC300]">
-                      <th className="text-left py-3 px-6 text-sm font-semibold">Date/Time</th>
-                      <th className="text-left py-3 px-6 text-sm font-semibold">Topic</th>
-                      <th className="text-left py-3 px-6 text-sm font-semibold">Host Name</th>
-                      <th className="text-left py-3 px-6 text-sm font-semibold">Location</th>
-                      <th className="text-left py-3 px-6 text-sm font-semibold">Status</th>
-                      <th className="text-left py-3 px-6 text-sm font-semibold">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {userMeetings.map((meeting) => (
-                      <tr key={meeting.id} className="border-b border-gray-100">
-                        <td className="py-3 px-6 text-sm text-gray-600">
-                          {meeting.date} {meeting.time}
-                        </td>
-                        <td className="py-3 px-6 text-sm text-gray-600">{meeting.topic}</td>
-                        <td className="py-3 px-6 text-sm text-gray-600">{meeting.host_name}</td>
-                        <td className="py-3 px-6 text-sm text-gray-600">
-                          {meeting.is_online ? 'Online Meeting' : meeting.location}
-                        </td>
-                        <td className="py-3 px-6">
-                          <span
-                            className={`px-3 py-1 text-sm font-medium rounded-full ${getStatusStyle(
-                              meeting.status || 'pending'
-                            )}`}
-                          >
-                            {(meeting.status || 'pending').charAt(0).toUpperCase() + (meeting.status || 'pending').slice(1)}
-                          </span>
-                        </td>
-                        <td className="py-3 px-6 space-x-2">
-                          <button
-                            onClick={() => {
-                              setMeetingToUpdate({ ...meeting });
-                              setShowUpdateDialog(true);
-                            }}
-                            className="text-blue-600 hover:text-blue-800 mr-2"
-                          >
-                            Update
-                          </button>
-                          <button
-                            onClick={() => handleDeleteMeeting(meeting.id)}
-                            className="text-red-600 hover:text-red-800"
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
@@ -909,51 +1035,16 @@ const handleCreateMeeting = async () => {
                 />
               </div>
 
-              {/* Location Section */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Location Type</label>
-                  <select
-                    value={newMeeting.is_online}
-                    onChange={(e) => {
-                      const isOnline = e.target.value === 'true';
-                      setNewMeeting({
-                        ...newMeeting,
-                        is_online: isOnline,
-                        location: '',
-                        meeting_link: ''
-                      });
-                    }}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm bg-white"
-                  >
-                    <option value="false">In-Person</option>
-                    <option value="true">Online</option>
-                  </select>
-                </div>
-
-                {newMeeting.is_online ? (
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Meeting Link</label>
-                    <input
-                      type="text"
-                      value={newMeeting.meeting_link}
-                      onChange={(e) => setNewMeeting({ ...newMeeting, meeting_link: e.target.value })}
-                      placeholder="Enter meeting link (e.g., https://meet.google.com/...)"
-                      className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
-                    />
-                  </div>
-                ) : (
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Room Number</label>
-                    <input
-                      type="text"
-                      value={newMeeting.location}
-                      onChange={(e) => setNewMeeting({ ...newMeeting, location: e.target.value })}
-                      placeholder="Enter room number (e.g., Room 301)"
-                      className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
-                    />
-                  </div>
-                )}
+              {/* Location */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Location</label>
+                <input
+                  type="text"
+                  value={newMeeting.location}
+                  onChange={(e) => setNewMeeting({ ...newMeeting, location: e.target.value })}
+                  placeholder="Enter meeting location"
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
+                />
               </div>
             </div>
 
@@ -1028,51 +1119,30 @@ const handleCreateMeeting = async () => {
                 />
               </div>
 
-              {/* Location Section */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Location Type</label>
-                  <select
-                    value={meetingToUpdate.is_online}
-                    onChange={(e) => {
-                      const isOnline = e.target.value === 'true';
-                      setMeetingToUpdate({
-                        ...meetingToUpdate,
-                        is_online: isOnline,
-                        location: isOnline ? meetingToUpdate.location : '',
-                        meeting_link: isOnline ? meetingToUpdate.meeting_link : ''
-                      });
-                    }}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm bg-white"
-                  >
-                    <option value="false">In-Person</option>
-                    <option value="true">Online</option>
-                  </select>
-                </div>
+              {/* Location */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Location</label>
+                <input
+                  type="text"
+                  value={meetingToUpdate.location || ''}
+                  onChange={(e) => setMeetingToUpdate({ ...meetingToUpdate, location: e.target.value })}
+                  placeholder="Enter meeting location"
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
+                />
+              </div>
 
-                {meetingToUpdate.is_online ? (
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Meeting Link</label>
-                    <input
-                      type="text"
-                      value={meetingToUpdate.meeting_link || ''}
-                      onChange={(e) => setMeetingToUpdate({ ...meetingToUpdate, meeting_link: e.target.value })}
-                      placeholder="Enter meeting link (e.g., https://meet.google.com/...)"
-                      className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
-                    />
-                  </div>
-                ) : (
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Room Number</label>
-                    <input
-                      type="text"
-                      value={meetingToUpdate.location || ''}
-                      onChange={(e) => setMeetingToUpdate({ ...meetingToUpdate, location: e.target.value })}
-                      placeholder="Enter room number (e.g., Room 301)"
-                      className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
-                    />
-                  </div>
-                )}
+              {/* Status */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                <select
+                  value={meetingToUpdate.status || 'pending'}
+                  onChange={(e) => setMeetingToUpdate({ ...meetingToUpdate, status: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-[#13274C] focus:ring-1 focus:ring-[#13274C] transition duration-150 text-gray-900 text-sm"
+                >
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </select>
               </div>
             </div>
 
@@ -1089,6 +1159,54 @@ const handleCreateMeeting = async () => {
                 className="px-6 py-2.5 bg-[#13274C] text-white text-sm font-medium rounded-lg hover:bg-opacity-90 transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#13274C] disabled:opacity-50"
               >
                 {isLoading ? 'Updating...' : 'Update Meeting'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      {showDeleteDialog && meetingToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl max-w-md w-full mx-4 shadow-2xl">
+            <div className="flex items-center mb-4">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Delete Meeting</h3>
+              <p className="text-sm text-gray-600 mb-2">
+                Are you sure you want to delete this meeting?
+              </p>
+              <div className="bg-gray-50 p-3 rounded-lg mb-4">
+                <p className="text-sm font-medium text-gray-900">{meetingToDelete.topic}</p>
+                <p className="text-xs text-gray-600">
+                  {meetingToDelete.date} at {meetingToDelete.time} - Host: {meetingToDelete.host_name}
+                </p>
+              </div>
+              <p className="text-xs text-red-600 mb-6">
+                This action cannot be undone.
+              </p>
+            </div>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => {
+                  setShowDeleteDialog(false);
+                  setMeetingToDelete(null);
+                }}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition duration-150"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDeleteMeeting(meetingToDelete.id)}
+                disabled={isLoading}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition duration-150 disabled:opacity-50"
+              >
+                {isLoading ? 'Deleting...' : 'Delete Meeting'}
               </button>
             </div>
           </div>
