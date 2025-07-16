@@ -40,7 +40,7 @@ export default function ResearchOpportunities() {
             widespread adoption.
           </p>
           <Link
-            to="/"
+            to={"/research-areas" as string}
             className="text-[#FFB606] font-medium mt-6 text-xl hover:underline"
           >
             Explore our research areas →
@@ -79,7 +79,10 @@ export default function ResearchOpportunities() {
           }  gap-6`}
         >
           {researchNews.map((news, i) => (
-            <div key={i} className={`p-6 relative bg-white/20 shadow-lg shadow-[#f6f4fd] rounded-xl`}>
+            <div
+              key={i}
+              className={`p-6 relative bg-white/20 shadow-lg shadow-[#f6f4fd] rounded-xl`}
+            >
               <div className="bg-[#2B1472] p-3 w-min rounded-full mb-3">
                 <Medal className="w-6 h-6 text-white" />
               </div>
@@ -96,7 +99,7 @@ export default function ResearchOpportunities() {
         </div>
         <div className="text-right">
           <Link
-            to="/"
+            to={"/award_and_research_highlights" as string}
             className="text-lg font-semibold text-[#2B1472] hover:underline"
           >
             View all research news →

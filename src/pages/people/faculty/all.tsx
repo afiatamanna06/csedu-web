@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getInitials } from "@/utils/get-initials";
 import { FileUser, Link2 } from "lucide-react";
+import { useFaculty } from "@/hooks/use-faculty";
 
 interface Faculty {
   name: string;
@@ -90,6 +91,9 @@ const allInterests = [
 export default function FacultyMembers() {
   const [selectedRanks, setSelectedRanks] = useState<string[]>([]);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const { data, isSuccess } = useFaculty();
+
+  if (isSuccess) console.log("Faculty Data:", data);
 
   const toggleFilter = (
     value: string,
@@ -174,14 +178,17 @@ export default function FacultyMembers() {
         <div className="flex-1">
           <div className="grid gap-8 lg:gap-x-20 sm:grid-cols-2 lg:grid-cols-3 w-full">
             {filtered.map((faculty, i) => (
-              <Card key={i} className="shadow-lg shadow-[#e5ddff] border-none rounded-2xl flex flex-col p-0">
+              <Card
+                key={i}
+                className="shadow-lg shadow-[#e5ddff] border-none rounded-2xl flex flex-col p-0"
+              >
                 {faculty.photo ? (
                   <div className="pt-4 px-4 overflow-hidden">
                     <img
-                    src={faculty.photo}
-                    alt={faculty.name}
-                    className="w-full h-[20rem] lg:h-[18rem] rounded-xl object-cover"
-                  />
+                      src={faculty.photo}
+                      alt={faculty.name}
+                      className="w-full h-[20rem] lg:h-[18rem] rounded-xl object-cover"
+                    />
                   </div>
                 ) : (
                   <Avatar className="mb-4">
@@ -203,7 +210,9 @@ export default function FacultyMembers() {
                       <FileUser size={22} />
                     </button>
                   </div>
-                  <Button className="mt-1 px-8 py-3 bg-[#2B1472] rounded-[6px] font-semibold cursor-pointer hover:bg-[#1a0d4c] text-white transition-colors">View</Button>
+                  <Button className="mt-1 px-8 py-3 bg-[#2B1472] rounded-[6px] font-semibold cursor-pointer hover:bg-[#1a0d4c] text-white transition-colors">
+                    View
+                  </Button>
                 </div>
               </Card>
             ))}
