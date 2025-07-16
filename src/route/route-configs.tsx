@@ -55,6 +55,7 @@ import StudentProfile from "@/pages/profile/student-profile";
 
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
 import Course from "@/pages/dashboard/student/course";
+import AdminAdmission from "@/pages/admin/admission/admin-admission";
 
 
 export const routeConfigs = [
@@ -266,6 +267,10 @@ export const routeConfigs = [
       {
         path: "events/editevents",
         component: EditEvents,
+      },
+      {
+        path: "admission",
+        component: AdminAdmission,
       },
       {
         path: "settings",

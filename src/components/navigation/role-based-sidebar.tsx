@@ -32,6 +32,7 @@ const sidebarLinks: Record<string, SidebarLink[]> = {
     { label: "Payments", path: "/dashboard/admin/payments" },
     { label: "Notices", path: "/dashboard/admin/notices" },
     { label: "Events", path: "/dashboard/admin/events" },
+    { label: "Admission", path: "/dashboard/admin/admission" },
     { label: "Settings", path: "/dashboard/admin/settings" },
   ],
 
