@@ -37,6 +37,7 @@ import AddEvents from "@/pages/admin/events/addevents";
 import EditEvents from "@/pages/admin/events/editevents";
 
 import FeeStructure from "@/pages/dashboard/fee-structure";
+import EquipmentBooking from "@/pages/dashboard/equipment-booking";
 
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
 import Course from "@/pages/dashboard/student/course";
@@ -127,8 +128,8 @@ export const routeConfigs = [
         component: FeeStructure,
       },
       {
-        path: "equipment-fees",
-        component: Placeholder,
+        path: "equipment-booking",
+        component: EquipmentBooking,
       },
       {
         path: "exam-routine",

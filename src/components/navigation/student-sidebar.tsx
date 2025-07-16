@@ -4,7 +4,7 @@ const links = [
   { label: "Overview", path: "/dashboard/student/overview" },
   { label: "Courses", path: "/dashboard/student/courses" },
   { label: "Results", path: "/dashboard/student/results" },
-  { label: "Fee Structure", path: "/dashboard/student/fee-structure" },
+  { label: "Equipment Booking", path: "/dashboard/student/equipment-booking" },
   { label: "Settings", path: "/dashboard/student/settings" },
 ];
 
