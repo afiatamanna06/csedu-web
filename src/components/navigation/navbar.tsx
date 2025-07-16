@@ -94,10 +94,13 @@ export const Navbar: React.FC = () => {
     {
       name: "Login",
       submenu: [
-        { name: "Faculty Login", href: "/login/faculty" },
-        { name: "Student Login", href: "/login/student" },
-        { name: "Admin Login", href: "/login/admin" },
-        { name: "Alumni Login", href: "/login/alumni" },
+        // { name: "Faculty Login", href: "/login/faculty" },
+        // { name: "Student Login", href: "/login/student" },
+        // { name: "Admin Login", href: "/login/admin" },
+        // { name: "Alumni Login", href: "/login/alumni" },
+        { name: "Login", href: "/login" },
+        { name: "Admin Signup", href: "/admin/signup" },
+        { name: "Student/Faculty Signup", href:"/signup"}
       ],
     },
     { name: "Contact", href: "/contact" },

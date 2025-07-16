@@ -16,12 +16,17 @@ import About from "@/pages/about/about";
 import Calender from "@/pages/academic/calender";
 
 import { Placeholder } from "@/components/placeholder";
-import {
-  AdminLogin,
-  AlumniLogin,
-  FacultyLogin,
-  StudentLogin,
-} from "@/pages/auth/login/login";
+// import {
+//   AdminLogin,
+//   AlumniLogin,
+//   FacultyLogin,
+//   StudentLogin,
+// } from "@/pages/auth/login/login";
+
+// -------------
+import { LoginPage } from "@/pages/auth/login/login";
+import { Signup, AdminSignup } from "@/pages/auth/signup/signup";
+// ------------
 
 import StudentOverview from "@/pages/dashboard/student/overview";
 import FacultyMembers from "@/pages/people/faculty/all";
@@ -108,10 +113,18 @@ export const routeConfigs = [
   { path: "/news/events/$eventId", component: EventDetails },
 
   // Login
-  { path: "/login/faculty", component: FacultyLogin },
-  { path: "/login/student", component: StudentLogin },
-  { path: "/login/admin", component: AdminLogin },
-  { path: "/login/alumni", component: AlumniLogin },
+  // { path: "/login/faculty", component: FacultyLogin },
+  // { path: "/login/student", component: StudentLogin },
+  // { path: "/login/admin", component: AdminLogin },
+  // { path: "/login/alumni", component: AlumniLogin },
+
+// -------------
+  { path: "/login", component: LoginPage },
+  { path: "/signup", component: Signup },
+  { path: "/admin/signup", component: AdminSignup },
+
+// ---------------
+
 
     //admission
   { path: "/admission", component: Admission },
