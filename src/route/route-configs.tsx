@@ -33,8 +33,6 @@ import AddEvents from "@/pages/admin/events/addevents";
 import EditEvents from "@/pages/admin/events/editevents";
 
 import FeeStructure from "@/pages/dashboard/fee-structure";
-<<<<<<< HEAD
-=======
 import EquipmentBooking from "@/pages/dashboard/equipment-booking";
 
 import Admission from "@/pages/admission/admission";
@@ -51,7 +49,6 @@ import ResearchFacilities from "@/pages/research/research-facilities";
 import FacultyProfile from "@/pages/profile/faculty-profile";
 import StudentProfile from "@/pages/profile/student-profile";
 
->>>>>>> main
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
 import Course from "@/pages/dashboard/student/course";
 
@@ -115,19 +112,17 @@ export const routeConfigs = [
   { path: "/news/events", component: Events },
   { path: "/news/events/$eventId", component: EventDetails },
 
-<<<<<<< HEAD
 
   // Auth routes
   { path: "/login", component: LoginPage },
   { path: "/signup", component: Signup },
   { path: "/admin/signup", component: AdminSignup },
-=======
+
   // Login
-  { path: "/login/faculty", component: FacultyLogin },
-  { path: "/login/student", component: StudentLogin },
-  { path: "/login/admin", component: AdminLogin },
-  { path: "/login/alumni", component: AlumniLogin },
->>>>>>> main
+  // { path: "/login/faculty", component: FacultyLogin },
+  // { path: "/login/student", component: StudentLogin },
+  // { path: "/login/admin", component: AdminLogin },
+  // { path: "/login/alumni", component: AlumniLogin },
 
     //admission
   { path: "/admission", component: Admission },
@@ -191,10 +186,7 @@ export const routeConfigs = [
         path: "semester-routine",
         component: SemesterRoutine,
       },
-<<<<<<< HEAD
-=======
 
->>>>>>> main
       {
         path: "settings",
         component: Placeholder,
