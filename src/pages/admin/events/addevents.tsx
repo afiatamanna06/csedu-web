@@ -1,6 +1,6 @@
+import axios from "axios";
 import React, { useState } from "react";
-import { Calendar,  MapPin, Clock, Tag, Mail, Image as ImageIcon } from "lucide-react";
-// import { useNavigate } from "@tanstack/react-router";
+import { Calendar, MapPin, Clock, Tag, Mail, Image as ImageIcon } from "lucide-react";
 import { toast } from "react-toastify";
 import { eventCategories } from "../../../assets/assets";
 
@@ -31,7 +31,17 @@ const AddEvents: React.FC = () => {
     contactEmail: "",
   });
 
-//   const navigate = useNavigate();
+  const getAuthToken = () => {
+    return localStorage.getItem("token") || sessionStorage.getItem("token");
+  };
+
+  const getAuthHeaders = () => {
+    const token = getAuthToken();
+    return {
+      "Accept": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    };
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -41,29 +51,70 @@ const AddEvents: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would send formData to backend or update global state
-    setFormData({
-      title: "",
-      description: "",
-      detailedDescription: "",
-      image: null,
-      tags: "",
-      registrationOpen: false,
-      registrationClosed: false,
-      maxAttendees: 0,
-      currentAttendees: 0,
-      category: "workshop",
-      organizer: "",
-      date: new Date().toISOString().split("T")[0],
-      startTime: "",
-      endTime: "",
-      location: "",
-      registrationDeadline: "",
-      contactEmail: "",
-    });
-    toast.success("Event added successfully!");
+
+    const form = new FormData();
+    form.append("title", formData.title);
+    form.append("date", formData.date);
+    form.append("start_time", formData.startTime);
+    form.append("end_time", formData.endTime);
+    form.append("location", formData.location);
+    form.append("description", formData.description);
+    form.append("detailed_description", formData.detailedDescription);
+    form.append("category", formData.category);
+    form.append("organizer", formData.organizer);
+    form.append("registration_deadline", formData.registrationDeadline);
+    form.append("contact_email", formData.contactEmail);
+    form.append("max_attendees", String(formData.maxAttendees));
+    // Tags: split by comma and append each as tags
+    formData.tags
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => tag)
+      .forEach((tag) => form.append("tags", tag));
+    // Image is required
+    if (formData.image) {
+      form.append("image", formData.image);
+    } else {
+      toast.error("Event image is required.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/event/create",
+        form,
+        {
+          headers: {
+            ...getAuthHeaders(),
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      toast.success("Event added successfully!");
+      setFormData({
+        title: "",
+        description: "",
+        detailedDescription: "",
+        image: null,
+        tags: "",
+        registrationOpen: false,
+        registrationClosed: false,
+        maxAttendees: 0,
+        currentAttendees: 0,
+        category: "workshop",
+        organizer: "",
+        date: new Date().toISOString().split("T")[0],
+        startTime: "",
+        endTime: "",
+        location: "",
+        registrationDeadline: "",
+        contactEmail: "",
+      });
+    } catch (error: any) {
+      toast.error(error.response?.data?.detail || "Failed to add event.");
+    }
   };
 
   const handleReset = () => {
