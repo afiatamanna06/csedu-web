@@ -13,6 +13,7 @@ import Degree from "@/pages/programs/degree";
 import type { RouteComponent } from "@tanstack/react-router";
 
 import About from "@/pages/about/about";
+import Calender from "@/pages/academic/calender";
 
 import { Placeholder } from "@/components/placeholder";
 import {
@@ -38,6 +39,7 @@ import EditEvents from "@/pages/admin/events/editevents";
 import FeeStructure from "@/pages/dashboard/fee-structure";
 
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
+import Course from "@/pages/dashboard/student/course";
 
 export const routeConfigs = [
   // Base
@@ -55,7 +57,7 @@ export const routeConfigs = [
   // Academic
   { path: "/academic/programs", component: Placeholder },
   { path: "/academic/courses", component: Placeholder },
-  { path: "/academic/calendar", component: Placeholder },
+  { path: "/academic/calendar", component: Calender },
   { path: "/academic/exam-schedule", component: Placeholder },
 
   // Admission
@@ -134,7 +136,7 @@ export const routeConfigs = [
       },
       {
         path: "courses",
-        component: Placeholder,
+        component: Course,
       },
       {
         path: "semester-routine",
