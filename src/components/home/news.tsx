@@ -98,7 +98,7 @@ const News = () => {
           </div>
           <div className="mt-8 text-right">
             <Link
-              to="/"
+              to={"/news/events" as string}
               className="font-medium text-[#2B1472] text-lg hover:underline"
             >
               See all news and events →

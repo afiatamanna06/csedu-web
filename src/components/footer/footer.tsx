@@ -7,17 +7,17 @@ const quickLinks = [
     section: "Quick Links",
     links: [
       { label: "About", path: "/about/history" },
-      { label: "Academic", path: "/academic" },
+      { label: "Academic", path: "/academic/programs" },
+      { label: "Admission", path: "/admission" },
       { label: "Research Areas", path: "/research-areas" },
-      { label: "Publications", path: "/publications" },
     ],
   },
   {
     section: "Quick Links",
     links: [
       { label: "Faculty", path: "/people/faculty" },
-      { label: "Scholarship and Financial Aids", path: "/scholarships" },
-      { label: "Foreign Student Admission Fees", path: "/foreign-admissions" },
+      { label: "Announcements", path: "/news/notice" },
+      { label: "Publications", path: "/publications" },
     ],
   },
 ];
