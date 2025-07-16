@@ -6,7 +6,7 @@ export default function Contact() {
           <h2 className="text-2xl font-bold text-[#13274C] mb-4">Contact Us</h2>
           <p className="text-gray-700 mb-6 ml-4 md:ml-12">
             We'd love to hear from you! Please use the form below to get in touch with the Department 
-            of Computer Science and Engineering at University X.
+            of Computer Science and Engineering at University of Dhaka.
           </p>
         </section>
 
