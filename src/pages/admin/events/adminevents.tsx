@@ -1,16 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Plus, Edit, Trash2 } from 'lucide-react';
-import { sampleEvents } from '../../../assets/assets';
-import type { Event } from '../../../assets/assets';
 import DeleteEventConfirmModal from '@/components/admin/events/deleteeventconfirmmodal';
 import { useNavigate } from '@tanstack/react-router';
 
+type Event = {
+  id: number;
+  title: string;
+  category: string;
+  date: string;
+  location: string;
+  organizer: string;
+  // add other fields as needed
+};
+
 const AdminEvents: React.FC = () => {
-  const [events, setEvents] = useState<Event[]>(sampleEvents);
-  // const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [events, setEvents] = useState<Event[]>([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        const response = await axios.get("http://localhost:8000/event/all", {
+          headers: {
+            "Accept": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+        });
+        setEvents(response.data);
+      } catch (error) {
+        // Optionally handle error
+        setEvents([]);
+      }
+    };
+    fetchEvents();
+  }, []);
 
   const handleDeleteEvent = (eventId: number) => {
     setEvents(events.filter(event => event.id !== eventId));
