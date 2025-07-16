@@ -8,7 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, X, Search } from "lucide-react";
+import { Menu, X, Search, ChevronDown } from "lucide-react";
 import Banner from "../banner/banner";
 
 type NavItem = {
@@ -24,10 +24,7 @@ export const Navbar: React.FC = () => {
     { name: "Home", href: "/" },
     {
       name: "About",
-      submenu: [
-        { name: "History", href: "/about/history" },
-        { name: "Mission and Vision", href: "/about/mission-vision" },
-      ],
+      submenu: [{ name: "History", href: "/about/history" }],
     },
     {
       name: "Academic",
@@ -50,11 +47,12 @@ export const Navbar: React.FC = () => {
       submenu: [
         {
           name: "Faculty Members",
-          submenu: [
-            { name: "All", href: "/people/faculty/all" },
-            { name: "Position", href: "/people/faculty/position" },
-            { name: "Research", href: "/people/faculty/research" },
-          ],
+          href: "/people/faculty",
+          // submenu: [
+          //   { name: "All", href: "/people/faculty/all" },
+          //   { name: "Position", href: "/people/faculty/position" },
+          //   { name: "Research", href: "/people/faculty/research" },
+          // ],
         },
         { name: "Officers and Staffs", href: "/people/staffs" },
       ],
@@ -119,7 +117,9 @@ export const Navbar: React.FC = () => {
             {/* Mobile Search */}
             <Sheet>
               <SheetTrigger asChild>
-                <Search className="mr-2" />
+                <button className="mr-2 bg-[#2B1472] p-2.5 rounded-md hover:bg-[#1a0d4c] transition-colors">
+                  <Search className="text-white" />
+                </button>
               </SheetTrigger>
               <SheetContent className="backdrop-blur-lg bg-white">
                 <SheetHeader>
@@ -151,7 +151,9 @@ export const Navbar: React.FC = () => {
           <div className="hidden lg:flex">
             <Sheet>
               <SheetTrigger asChild>
-                <Search className="mr-2" />
+                <button className="mr-2 bg-[#2B1472] p-2.5 rounded-md hover:bg-[#1a0d4c] transition-colors">
+                  <Search className="text-white" />
+                </button>
               </SheetTrigger>
               <SheetContent>
                 <SheetHeader>
@@ -171,7 +173,11 @@ export const Navbar: React.FC = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden bg-white border-t shadow-sm max-h-[80vh] overflow-auto">
             {navItems.map((item, index) => (
-              <MobileMenuItem key={index} item={item} />
+              <MobileMenuItem
+                key={index}
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                item={item}
+              />
             ))}
           </div>
         )}
@@ -191,7 +197,9 @@ const DesktopMenuItem: React.FC<{ item: NavItem }> = ({ item }) => {
 
   return (
     <div className="relative group">
-      <button className="hover:text-blue-600 transition">{item.name}</button>
+      <button className="hover:text-blue-600 transition flex flex-row items-center gap-1">
+        {item.name} <ChevronDown size={18} />
+      </button>
       <div className="absolute left-0 top-full bg-white shadow-md rounded-md opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200">
         {item.submenu.map((sub, idx) => (
           <div key={idx} className="relative group">
@@ -227,12 +235,19 @@ const DesktopMenuItem: React.FC<{ item: NavItem }> = ({ item }) => {
   );
 };
 
-const MobileMenuItem: React.FC<{ item: NavItem }> = ({ item }) => {
+const MobileMenuItem: React.FC<{ item: NavItem; onClick: () => void }> = ({
+  item,
+  onClick,
+}) => {
   const [open, setOpen] = React.useState(false);
 
   if (!item.submenu) {
     return (
-      <Link to={item.href!} className="block px-4 py-2 hover:bg-gray-100">
+      <Link
+        to={item.href!}
+        onClick={onClick}
+        className="block px-4 py-2 hover:bg-gray-100"
+      >
         {item.name}
       </Link>
     );
@@ -253,12 +268,13 @@ const MobileMenuItem: React.FC<{ item: NavItem }> = ({ item }) => {
               {!sub.submenu ? (
                 <Link
                   to={sub.href!}
+                  onClick={onClick}
                   className="block px-4 py-2 hover:bg-gray-100"
                 >
                   {sub.name}
                 </Link>
               ) : (
-                <MobileSubMenu item={sub} />
+                <MobileSubMenu item={sub} onClick={onClick} />
               )}
             </div>
           ))}
@@ -268,7 +284,10 @@ const MobileMenuItem: React.FC<{ item: NavItem }> = ({ item }) => {
   );
 };
 
-const MobileSubMenu: React.FC<{ item: NavItem }> = ({ item }) => {
+const MobileSubMenu: React.FC<{ item: NavItem; onClick: () => void }> = ({
+  item,
+  onClick,
+}) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -285,6 +304,7 @@ const MobileSubMenu: React.FC<{ item: NavItem }> = ({ item }) => {
             <Link
               key={idx}
               to={sub.href!}
+              onClick={onClick}
               className="block px-4 py-2 hover:bg-gray-100"
             >
               {sub.name}

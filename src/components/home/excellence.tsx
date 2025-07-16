@@ -1,18 +1,21 @@
+import { useRouter } from "@tanstack/react-router";
+
 export const ExcellenceInEducation = () => {
+  const router = useRouter();
   return (
-    <div className="container mx-auto mt-[10rem] md:mt-[7rem] lg:mt-[6rem] px-4 sm:px-6 lg:px-8 py-12">
+    <div className="container mx-auto mt-[14rem] md:mt-[6rem] lg:mt-[7rem] px-4 sm:px-6 lg:px-8 py-12">
       <div className="flex flex-col lg:flex-row gap-8 w-[100%] justify-between">
         {/* Left Column - Text Content */}
         <div className="lg:w-1/2 xl:w-[45rem]">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+          <h1 className="text-lg font-semibold text-[#2B1472] mb-4 leading-3">
             Excellence in Education
           </h1>
 
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-6">
             About Department of Computer Science and Engineering
           </h2>
 
-          <p className="text-gray-700 mb-6 leading-relaxed">
+          <p className="text-[#444444] mb-6 leading-relaxed">
             The Department of Computer Science and Engineering of University of
             Dhaka (CSEDU) under the Faculty of Engineering and Technology (FoET)
             fosters quality education and research endeavors in diverse fields
@@ -30,7 +33,12 @@ export const ExcellenceInEducation = () => {
             for regional and national level competitive programming contests.
           </p>
 
-          <button className="mt-8 px-6 py-2 border border-gray-900 text-gray-900 rounded hover:bg-gray-50 transition-colors">
+          <button
+            onClick={() => {
+              router.navigate({ to: "/about/history" as string });
+            }}
+            className="mt-1 px-8 py-3 bg-[#2B1472] rounded-[6px] font-semibold cursor-pointer hover:bg-[#1a0d4c] text-white transition-colors"
+          >
             Read more
           </button>
         </div>
@@ -40,12 +48,12 @@ export const ExcellenceInEducation = () => {
           <img
             src="/exellence1.png" // Replace with your actual image path
             alt="CSEDU Department"
-            className="w-[15rem] xl:w-[17rem] h-[25rem] mt-20 object-cover rounded-lg"
+            className="w-[15rem] xl:w-[17rem] h-[25rem] mt-20 object-cover rounded-[5px]"
           />
           <img
             src="/cultural.jpg" // Replace with your actual image path
             alt="CSEDU Department"
-            className="w-[15rem] xl:w-[17rem] h-[25rem] mt-1 object-cover rounded-lg"
+            className="w-[15rem] xl:w-[17rem] h-[25rem] mt-1 object-cover rounded-[5px]"
           />
         </div>
       </div>

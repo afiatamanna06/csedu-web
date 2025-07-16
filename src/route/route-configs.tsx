@@ -7,7 +7,6 @@ import Events from "@/pages/events/events";
 import EventDetails from "@/pages/events/eventdetails";
 import StudentActivity from "@/pages/studentactivity/studentactivity";
 
-
 import Profile from "@/pages/profile/profile";
 import Programs from "@/pages/programs/programs";
 import Degree from "@/pages/programs/degree";
@@ -40,17 +39,14 @@ import FeeStructure from "@/pages/dashboard/fee-structure";
 
 import SemesterRoutine from "@/pages/dashboard/student/semester-routine";
 
-
 export const routeConfigs = [
   // Base
   { path: "/", component: Home },
   { path: "/contact", component: Contact },
 
-
   { path: "/profile", component: Profile },
   { path: "/programs", component: Programs },
   { path: "/degree", component: Degree },
-
 
   // About
   { path: "/about/history", component: About },
@@ -67,9 +63,10 @@ export const routeConfigs = [
   { path: "/admission/graduate", component: Placeholder },
 
   // People
-  { path: "/people/faculty/all", component: FacultyMembers },
-  { path: "/people/faculty/position", component: FacultyMembers },
-  { path: "/people/faculty/research", component: FacultyMembers },
+  // { path: "/people/faculty/all", component: FacultyMembers },
+  // { path: "/people/faculty/position", component: FacultyMembers },
+  // { path: "/people/faculty/research", component: FacultyMembers },
+  { path: "/people/faculty", component: FacultyMembers },
   { path: "/people/staffs", component: OfficersAndStaff },
 
   // Research
@@ -89,14 +86,12 @@ export const routeConfigs = [
   { path: "/alumni/achievements", component: Placeholder },
   { path: "/alumni/events", component: Placeholder },
 
-
   // News
   { path: "news/notice", component: Notice },
   { path: "news/notice/archived", component: Notice },
   { path: "news/notice/$noticeId", component: NoticeDetails },
   { path: "/news/events", component: Events },
   { path: "/news/events/$eventId", component: EventDetails },
-
 
   // Login
   { path: "/login/faculty", component: FacultyLogin },
@@ -145,7 +140,7 @@ export const routeConfigs = [
         path: "semester-routine",
         component: SemesterRoutine,
       },
-    
+
       {
         path: "settings",
         component: Placeholder,
@@ -270,7 +265,6 @@ export const routeConfigs = [
       },
     ],
   },
-
 ] as const satisfies ReadonlyArray<{
   path: string;
   component: RouteComponent;
