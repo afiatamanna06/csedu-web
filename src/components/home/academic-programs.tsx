@@ -8,6 +8,7 @@ import {
   GraduationCap,
   School,
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 type Program = {
   title: string;
@@ -145,12 +146,12 @@ export default function AcademicPrograms() {
 
                     {/* Program link */}
                     {isActive && program.link && (
-                      <a
-                        href={program.link}
+                      <Link
+                        to={program.link}
                         className="mt-3 inline-block text-[#FFB606] text-lg font-medium hover:underline"
                       >
                         See program details →
-                      </a>
+                      </Link>
                     )}
                   </div>
                 </div>
