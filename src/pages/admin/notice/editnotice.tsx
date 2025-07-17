@@ -3,6 +3,7 @@ import { Calendar, User, MapPin, Clock, FileText } from "lucide-react";
 import { useSearch } from "@tanstack/react-router";
 import { sampleNotices, type Notice } from "../../../assets/assets"; // adjust path if needed
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const EditNotice = () => {
   const search = useSearch({ from: "__root__" });
@@ -51,10 +52,41 @@ const EditNotice = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Add update logic here
-    toast.success("Notice updated successfully!");
+
+    const form = new FormData();
+    form.append("title", formData.title);
+    form.append("description", formData.description);
+    form.append("detailed_description", formData.detailedDescription);
+    form.append("category", formData.category);
+    form.append("date", formData.date);
+    form.append("expiry_date", formData.expiryDate);
+    form.append("author", formData.author);
+    form.append("location", formData.location);
+    form.append("time", formData.time);
+    if (formData.pdfFile) {
+      form.append("pdf_file", formData.pdfFile);
+    }
+
+    try {
+      const token =
+        localStorage.getItem("token") || sessionStorage.getItem("token");
+      const response = await axios.put(
+        `http://localhost:8000/notice/update/${formData.id}`,
+        form,
+        {
+          headers: {
+            Accept: "application/json",
+            ...(token && { Authorization: `Bearer ${token}` }),
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      toast.success(response.data.message || "Notice updated successfully!");
+    } catch (error: any) {
+      toast.error(error.response?.data?.detail || "Failed to update notice.");
+    }
   };
 
   const handleReset = () => {

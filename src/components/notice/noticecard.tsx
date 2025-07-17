@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useNavigate } from "@tanstack/react-router"
+import { pdf1 } from "@/assets/assets"
 import type { Notice } from "@/assets/assets"
 import "../../styles/colors.css"
 
@@ -25,16 +26,14 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice, isArchived = false }) =
   const handleDownloadPDF = (e: React.MouseEvent) => {
     e.stopPropagation()
 
-    if (notice.pdfFile) {
-      const url = URL.createObjectURL(notice.pdfFile)
+    if (pdf1) {
       const link = document.createElement("a")
-      link.href = url
+      link.href = pdf1 // Use the URL directly
       link.download = `${notice.title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.pdf`
       link.target = "_blank"
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
-      URL.revokeObjectURL(url)
     } else {
       alert("PDF not available for this notice")
     }

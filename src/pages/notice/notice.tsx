@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from '@tanstack/react-router';
 import NoticeCard from '@/components/notice/noticecard';
 import Pagination from '@/components/pagination/pagination';
-import { sampleNotices, noticeCategories} from '@/assets/assets';
+import { noticeCategories } from '@/assets/assets';
 import { getActiveNotices, getArchivedNotices } from '@/utils/noticeutils';
+import axios from 'axios';
 
 const Notice: React.FC = () => {
   const location = useLocation();
-  
-  // Check if current path is archived
   const isArchivedPage = location.pathname === '/news/notice/archived';
   const [showArchived, setShowArchived] = useState(isArchivedPage);
-  
+
+  const [notices, setNotices] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState('newest');
@@ -20,15 +20,26 @@ const Notice: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  // Update showArchived when route changes
   useEffect(() => {
     setShowArchived(isArchivedPage);
   }, [isArchivedPage]);
 
-  // Reset page when switching between active and archived
   useEffect(() => {
     setCurrentPage(1);
   }, [showArchived]);
+
+  // Fetch notices from API
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/notice/all');
+        setNotices(response.data);
+      } catch (error) {
+        setNotices([]);
+      }
+    };
+    fetchNotices();
+  }, []);
 
   // Generate years from 2005 to current year
   const currentYear = new Date().getFullYear();
@@ -79,7 +90,7 @@ const Notice: React.FC = () => {
   };
 
   // Use active or archived notices based on showArchived state
-  const noticesToShow = showArchived ? getArchivedNotices(sampleNotices) : getActiveNotices(sampleNotices);
+  const noticesToShow = showArchived ? getArchivedNotices(notices) : getActiveNotices(notices);
 
   const filteredNotices = noticesToShow.filter(notice => {
     const matchesCategory = selectedCategory === 'all' || notice.category === selectedCategory;

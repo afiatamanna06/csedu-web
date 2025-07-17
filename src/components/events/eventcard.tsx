@@ -64,12 +64,6 @@ const EventCard: React.FC<EventCardProps> = ({ event, onRegister, onViewDetails 
             alt={event.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          {/* Category Badge */}
-          {/* <div className="absolute top-3 right-3">
-            <span className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-full capitalize">
-              {event.category}
-            </span>
-          </div> */}
         </div>
       )}
 

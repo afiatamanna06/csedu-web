@@ -1,29 +1,59 @@
 "use client"
 
-import type React from "react"
-
+import React, { useEffect, useState } from "react"
+import axios from "axios"
+import { sampleNotices, type Notice } from "../../assets/assets"
 import { useParams } from "@tanstack/react-router"
 import { Calendar, MapPin, Clock, User, ChevronLeft, Share2, Printer } from "lucide-react"
-import { sampleNotices, type Notice } from "../../assets/assets"
 import { isExpired } from "../../utils/dateutils"
 import LatestNotice from "../../components/notice/latestnotice"
 
 const NoticeDetails = () => {
   const { noticeId } = useParams({ from: "__root__" })
 
-  // Find the notice item by ID - using sampleNotices
-  const notice = sampleNotices.find((item) => item.id === Number.parseInt(noticeId))
+  const [notice, setNotice] = useState<Notice | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchNotice = async () => {
+      setLoading(true)
+      try {
+        const response = await axios.get(`http://localhost:8000/notice/${noticeId}`)
+        setNotice(response.data)
+        setError(null)
+      } catch (err: any) {
+        setNotice(null)
+        setError(
+          err.response?.data?.detail ||
+          "Notice not found."
+        )
+      }
+      setLoading(false)
+    }
+    fetchNotice()
+  }, [noticeId])
 
   // Check if notice is archived based on expiry date
   const noticeIsArchived = isExpired(notice?.expiryDate)
 
-  // If notice not found, show error message
-  if (!notice) {
+  // Check loading and error states
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Loading...</h2>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !notice) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Notice Not Found</h2>
-          <p className="text-gray-600 mb-6">The requested notice could not be found.</p>
+          <p className="text-gray-600 mb-6">{error || "The requested notice could not be found."}</p>
           <button
             onClick={() => (window.location.href = "/news/notice")}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

@@ -8,8 +8,8 @@ import policy from './policy.png';
 import faculty from './faculty.png';
 import security from './security.png';
 import calender from './calendar.png';
-import pdf1 from './pdf1.pdf';
-import pdf2 from './pdf2.pdf';
+export const pdf1 = new URL("./pdf1.pdf", import.meta.url).href
+export const pdf2 = new URL("./pdf2.pdf", import.meta.url).href
 
 export const assets = {
   iftar,
@@ -77,7 +77,7 @@ export const sampleEvents: Event[] = [
   {
     id: 1,
     title: "React Workshop 2025",
-    date: "2025-06-15",
+    date: "2025-12-15",
     startTime: "10:00",
     endTime: "16:00",
     location: "Computer Lab A",
