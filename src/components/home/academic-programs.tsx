@@ -24,12 +24,12 @@ const programs: Program[] = [
     duration:
       "4 years of undergraduate program with 150 minimum required credits",
     description: [
-      "1.5 years of graduate program",
-      "Consists of 2 semesters",
-      "36 minimum required credits",
+      "4 years of undergraduate program with 150 minimum required credits",
+      "Consists of 8 semesters",
+      "150 minimum required credits",
     ],
     image: "/cultural.jpg", // Replace with your actual image path
-    link: "#",
+    link: "/academic/programs",
     icon: <GraduationCap size={40} />,
   },
   {
@@ -42,42 +42,42 @@ const programs: Program[] = [
     ],
     icon: <FileBadge size={40} />,
     image: "/cultural.jpg", // Replace with your actual image path
-    link: "#",
+    link: "/academic/programs",
   },
   {
     title: "Professional Masters in Information and Cybersecurity (PMICS)",
-    duration: "1.5 years of graduate program with 36 minimum required credits",
+    duration:
+      "Duration of the program is one year and six month (three semesters).",
     description: [
-      "1.5 years of graduate program",
-      "Consists of 2 semesters",
-      "36 minimum required credits",
+      "Duration of the program is one year and six month (three semesters). ",
+      "Consists of 3 semesters",
+      "The program will be consisting of 36 credits of which 27 credits will be course work and 9 credits will be project work.",
     ],
     image: "/cultural.jpg", // Replace with your actual image path
-    link: "#",
+    link: "/academic/programs",
     icon: <Briefcase size={40} />,
   },
   {
     title: "MPhil in Computer Science and Engineering",
     duration: "2 years of MPhil program with 36 scholarship opportunities",
     description: [
-      "1.5 years of graduate program",
-      "Consists of 2 semesters",
-      "36 minimum required credits",
+      "2 years of MPhil program with 36 scholarship opportunities",
+      "1st year is for coursework and the thesis work is done in the 2nd year",
+      "MPhil researchers should complete 2 theory courses, each of 100 marks, or 4 theory courses, each of 50 marks in his/her first year",
     ],
     image: "/cultural.jpg", // Replace with your actual image path
-    link: "#",
+    link: "/academic/programs",
     icon: <FileSearch2 size={40} />,
   },
   {
     title: "PhD in Computer Science and Engineering",
     duration: "4 years of PhD program with 5 scholarship opportunities",
     description: [
-      "1.5 years of graduate program",
-      "Consists of 2 semesters",
-      "36 minimum required credits",
+      "4 years of PhD program with 5 scholarship opportunities",
+      "Registered PhD researchers should complete 3 theory courses, each of 3 credit hours",
     ],
     image: "/cultural.jpg", // Replace with your actual image path
-    link: "#",
+    link: "/academic/programs",
     icon: <School size={40} />,
   },
 ];
