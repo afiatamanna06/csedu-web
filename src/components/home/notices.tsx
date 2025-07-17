@@ -26,21 +26,20 @@ const Notices = () => {
       </h3>
       <div className="my-10">
         {notices.map((notice, index) => (
-          <div
-            key={index}
-            className="border-t-2 cursor-pointer border-gray-100 hover:bg-[#fbf7ff] hover:border-t-2 hover:border-[#2B14728f] hover:shadow-lg hover:shadow-[#e8e0ff] group transition"
-          >
-            <Link
-              to="/"
-              className="flex items-center justify-between gap-4 py-4 px-2 md:px-6 text-xl font-bold group-hover:text-[#2B1472] group-hover:underline"
-            >
-              <div>{notice.title}</div>
-              <ArrowRight className="min-w-5 group-hover:text-[#2B1472]" />
-            </Link>
-            <p className="text-sm text-gray-500 px-2 md:px-6 pb-5">
-              {notice.date}
-            </p>
-          </div>
+          <Link to={"/news/notice" as string} key={index}>
+            <div className="border-t-2 cursor-pointer border-gray-100 hover:bg-[#fbf7ff] hover:border-t-2 hover:border-[#2B14728f] hover:shadow-lg hover:shadow-[#e8e0ff] group transition">
+              <Link
+                to={"/news/notice" as string}
+                className="flex items-center justify-between gap-4 py-4 px-2 md:px-6 text-xl font-bold group-hover:text-[#2B1472] group-hover:underline"
+              >
+                <div>{notice.title}</div>
+                <ArrowRight className="min-w-5 group-hover:text-[#2B1472]" />
+              </Link>
+              <p className="text-sm text-gray-500 px-2 md:px-6 pb-5">
+                {notice.date}
+              </p>
+            </div>
+          </Link>
         ))}
       </div>
       <div className="flex justify-center">

@@ -76,23 +76,22 @@ const News = () => {
                 })
                 .split(" ");
               return (
-                <div
-                  key={index}
-                  className="bg-[#f9f9ff] cursor-pointer shadow-lg shadow-[#e8e8ff] rounded-md p-4 flex gap-4 transition"
-                >
-                  <div className="bg-[#E3DDF6] w-[7rem] h-[5rem] text-[#2B1472] flex flex-col justify-center items-center px-3 py-1 rounded-md">
-                    <div className="w-min">
-                      <div className="text-xs font-semibold min-w-[3rem] text-center">
-                        {month}, {day}
-                      </div>
+                <Link to={"/news/events" as string} key={index}>
+                  <div className="bg-[#f9f9ff] mb-6 cursor-pointer shadow-lg shadow-[#e8e8ff] rounded-md p-4 flex gap-4 transition">
+                    <div className="bg-[#E3DDF6] w-[7rem] h-[5rem] text-[#2B1472] flex flex-col justify-center items-center px-3 py-1 rounded-md">
+                      <div className="w-min">
+                        <div className="text-xs font-semibold min-w-[3rem] text-center">
+                          {month}, {day}
+                        </div>
 
-                      <div className="text-xs text-center">2025</div>
+                        <div className="text-xs text-center">2025</div>
+                      </div>
+                    </div>
+                    <div className="text-base md:text-xl leading-snug">
+                      {item.title}
                     </div>
                   </div>
-                  <div className="text-base md:text-xl leading-snug">
-                    {item.title}
-                  </div>
-                </div>
+                </Link>
               );
             })}
           </div>
