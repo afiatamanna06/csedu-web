@@ -131,7 +131,7 @@ const AdminNotice: React.FC = () => {
                   </div>
                 </div>
                 <p className="text-xs text-gray-500 px-2 md:px-6 pb-3">
-                  Published on: {notice.date} • Author: {notice.author} • Expires: {notice.expiryDate}
+                  Published on: {notice.date} • Author: {notice.author}
                 </p>
               </div>
             ))}
