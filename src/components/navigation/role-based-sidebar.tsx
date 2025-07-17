@@ -27,12 +27,14 @@ const sidebarLinks: Record<string, SidebarLink[]> = {
   admin: [
     { label: "Overview", path: "/dashboard/admin/overview" },
     { label: "Users", path: "/dashboard/admin/users" },
+    { label: "Add Routine", path: "/dashboard/admin/add-routine" },
     { label: "Rooms", path: "/dashboard/admin/rooms" },
     { label: "Courses", path: "/dashboard/admin/courses" },
     { label: "Exams", path: "/dashboard/admin/exams" },
     { label: "Payments", path: "/dashboard/admin/payments" },
     { label: "Notices", path: "/dashboard/admin/notices" },
     { label: "Events", path: "/dashboard/admin/events" },
+    { label: "Mail Inbox", path: "/dashboard/admin/mail" },
     { label: "Settings", path: "/dashboard/admin/settings" },
   ],
 

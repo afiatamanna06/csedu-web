@@ -30,6 +30,8 @@ import AddNotice from "@/pages/admin/notice/addnotice";
 import EditNotice from "@/pages/admin/notice/editnotice";
 import AdminEvents from "@/pages/admin/events/adminevents";
 import AddEvents from "@/pages/admin/events/addevents";
+import AddRoutine from "@/pages/dashboard/admin/add-routine";
+import MailInbox from "@/pages/dashboard/admin/mail";
 import EditEvents from "@/pages/admin/events/editevents";
 
 import FeeStructure from "@/pages/dashboard/fee-structure";
@@ -295,6 +297,14 @@ export const routeConfigs = [
       {
         path: "events/editevents",
         component: EditEvents,
+      },
+      {
+        path: "add-routine",
+        component: AddRoutine,
+      },
+      {
+        path: "mail",
+        component: MailInbox,
       },
       {
         path: "settings",
