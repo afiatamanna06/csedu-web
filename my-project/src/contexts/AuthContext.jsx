@@ -22,14 +22,26 @@ useEffect(() => {
           role: decoded.role
         });
       } else {
-        // Token expired, clean up
+        // Token expired, clean up and redirect
         localStorage.removeItem('token');
         setCurrentUser(null);
+        // Redirect to login if we're not already on login/signup pages
+        if (window.location.pathname !== '/login' && 
+            window.location.pathname !== '/signup' && 
+            window.location.pathname !== '/') {
+          window.location.href = '/login';
+        }
       }
     } catch (error) {
       console.error('Token decode error:', error);
       localStorage.removeItem('token');
       setCurrentUser(null);
+      // Redirect to login on token decode error
+      if (window.location.pathname !== '/login' && 
+          window.location.pathname !== '/signup' && 
+          window.location.pathname !== '/') {
+        window.location.href = '/login';
+      }
     }
   }
   setLoading(false);
@@ -430,6 +442,8 @@ const addTeacher = async (teacherData) => {
   const logout = () => {
     localStorage.removeItem('token');
     setCurrentUser(null);
+    // Redirect to login page after logout
+    window.location.href = '/login';
   };
 
   const value = {

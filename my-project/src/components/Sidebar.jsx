@@ -62,7 +62,18 @@ const Sidebar = () => {
             }`}
           >
             <span className="mr-3">📅</span>
-            Bookings
+            Add Room
+          </Link>
+          <Link
+            to="/show-bookings"
+            className={`flex items-center px-4 py-2 rounded-lg ${
+              isActive('/show-bookings') 
+                ? 'bg-[#FFC300] text-[#13274C]' 
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            <span className="mr-3">📅</span>
+            Show Bookings
           </Link>
           <Link
             to="/admin/create-examschedule"
@@ -72,14 +83,24 @@ const Sidebar = () => {
                 : 'text-gray-700 hover:bg-gray-100'
             }`}
           >
-            <span className="mr-3">�</span>
-            Create Exam Schedule
+            <span className="mr-3">👥Create Exam Schedule</span>
+          </Link>
+          <Link
+            to="/achievements"
+            className={`flex items-center px-4 py-2 rounded-lg ${
+              isActive('/achievements') 
+                ? 'bg-[#FFC300] text-[#13274C]' 
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
+          >👥Achievements
           </Link>
           <button 
             onClick={handleLogout}
             className="w-full flex items-center px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100"
           >
             <span className="mr-3">🚪</span>
+            
+
             Logout
           </button>
         </nav>

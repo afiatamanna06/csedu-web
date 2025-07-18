@@ -7,6 +7,7 @@ import GradeInput from "./Pages/GradeInput";
 import RoomAvailability from "./Pages/RoomAvailability";
 import BookRoom from "./Pages/BookRoom";
 import BookingRequests from "./Pages/BookingRequests";
+import ShowBookings from "./Pages/ShowBookings";
 import MeetingList from "./Pages/MeetingList";
 import AdminDashboard from "./Pages/AdminDashboard";
 import Achievements from "./Pages/Achievements";
@@ -44,7 +45,9 @@ function App() {
             path="/grade-input" 
             element={
               <ProtectedRoute requiredRole="Teacher">
-                <GradeManagement />
+                <TeacherLayout>
+                  <GradeInput />
+                </TeacherLayout>
               </ProtectedRoute>
             } 
           />
@@ -90,6 +93,16 @@ function App() {
               <ProtectedRoute requiredRole="Admin">
                 <SidebarLayout>
                   <BookingRequests />
+                </SidebarLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/show-bookings"
+            element={
+              <ProtectedRoute>
+                <SidebarLayout>
+                  <ShowBookings />
                 </SidebarLayout>
               </ProtectedRoute>
             }
@@ -235,6 +248,12 @@ function App() {
                           className="block w-full bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded transition-colors text-center"
                         >
                           Booking Requests (Admin)
+                        </Link>
+                        <Link
+                          to="/show-bookings"
+                          className="block w-full bg-cyan-400 hover:bg-cyan-500 text-white px-4 py-2 rounded transition-colors text-center"
+                        >
+                          Show All Bookings
                         </Link>
                       </div>
                     </div>

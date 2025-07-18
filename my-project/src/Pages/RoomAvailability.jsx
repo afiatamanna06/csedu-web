@@ -165,6 +165,9 @@ const RoomAvailability = () => {
       params.append('start_time_filter', formatTimeForBackend(selectedStartTime));
       params.append('end_time_filter', formatTimeForBackend(selectedEndTime));
       
+      // Add status filter to only show available rooms
+      params.append('status', 'available');
+      
       if (selectedLocation !== "All") {
         params.append('location', selectedLocation);
       }
@@ -177,14 +180,16 @@ const RoomAvailability = () => {
         headers: getAuthHeaders()
       });
 
-      // Transform backend data to frontend format
-      const transformedRooms = response.data.map(room => ({
-        room_id: room.id,
-        location: room.location,
-        capacity: room.capacity,
-        status: 'available', // Rooms returned from filter are available
-        bookings: []
-      }));
+      // Transform backend data to frontend format - only available rooms
+      const transformedRooms = response.data
+        .filter(room => room.status === 'available' || !room.status) // Filter for available rooms
+        .map(room => ({
+          room_id: room.id,
+          location: room.location,
+          capacity: room.capacity,
+          status: 'available', // Ensure status is set to available
+          bookings: []
+        }));
 
       setRoomData(transformedRooms);
       
@@ -202,7 +207,7 @@ const RoomAvailability = () => {
         });
       } else {
         setMessage({ 
-          text: 'Failed to load rooms. Please try again.', 
+          text: 'Failed to load available rooms. Please try again.', 
           type: 'error' 
         });
       }
@@ -460,7 +465,7 @@ const RoomAvailability = () => {
               ) : !isLoadingRooms ? (
                 <tr>
                   <td colSpan="5" className="py-8 text-center text-gray-500">
-                    No rooms available for the selected date and time.
+                    No available rooms found for the selected date and time.
                   </td>
                 </tr>
               ) : null}

@@ -13,7 +13,7 @@ const MeetingList = () => {
 
   // Existing state
   const [selectedFaculty, setSelectedFaculty] = useState('All');
-  const [selectedDateRange, setSelectedDateRange] = useState('This Week');
+  const [selectedDateRange, setSelectedDateRange] = useState('All'); // ✅ Changed from 'This Week' to 'All'
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState(null);
   const [dialogAction, setDialogAction] = useState('');
@@ -598,7 +598,7 @@ const handleCreateMeeting = async () => {
   // Get unique host names for filter
   const filterOptions = {
     faculty: ['All', ...new Set(allMeetings.map(m => m.host_name))],
-    dateRange: ['Today', 'This Week', 'This Month', 'Custom']
+    dateRange: ['All', 'Today', 'This Week', 'This Month', 'Custom'] // ✅ Added 'All' as first option
   };
 
   // Filter meetings by creator (you'll need to add this field to your backend)

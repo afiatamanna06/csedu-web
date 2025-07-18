@@ -35,7 +35,7 @@ export default function Signup() {
         navigate('/student/dashboard');
       } else {
         await teacherSignup(signupData);
-        navigate('/teacher/dashboard');
+        navigate('/dashboard/faculty');
       }
     } catch (error) {
       setError(error.message || 'Failed to create an account');
