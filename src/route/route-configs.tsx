@@ -14,6 +14,7 @@ import type { RouteComponent } from "@tanstack/react-router";
 
 import About from "@/pages/about/about";
 import Calender from "@/pages/academic/calender";
+import AdminAdmission from "@/pages/admin/admission/admin-admission";
 
 import { Placeholder } from "@/components/placeholder";
 // import {
@@ -279,6 +280,10 @@ export const routeConfigs = [
       {
         path: "events/editevents",
         component: EditEvents,
+      },
+      {
+        path: "admission",
+        component: AdminAdmission,
       },
       {
         path: "settings",
