@@ -6,7 +6,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-*.html linguist-detectable=false
+
+*.tsx linguist-detectable=false
+*.ts linguist-detectable=false
 
 node_modules
 csedu-web
